@@ -64,8 +64,8 @@ a {
 .logo {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 0.3rem;
+  align-items: center;
+  gap: 0.25rem;
   text-decoration: none;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -73,7 +73,7 @@ a {
 
 .logo-mark {
   display: block;
-  height: 2.2rem;
+  height: 3.4rem;
   width: auto;
 }
 
