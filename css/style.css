@@ -24,7 +24,7 @@ html {
 }
 
 html.has-snap-scroll {
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
 }
 
 @media (prefers-reduced-motion: reduce) {
