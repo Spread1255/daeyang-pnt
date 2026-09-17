@@ -23,16 +23,6 @@ html {
   scroll-behavior: smooth;
 }
 
-html.has-snap-scroll {
-  scroll-snap-type: y proximity;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html.has-snap-scroll {
-    scroll-snap-type: none;
-  }
-}
-
 body {
   margin: 0;
   font-family: "Malgun Gothic", "Segoe UI", sans-serif;
@@ -244,8 +234,6 @@ h3 {
 
 .snap-panel {
   position: relative;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
   height: 100vh;
   height: 100svh;
   overflow: hidden;
