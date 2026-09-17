@@ -23,6 +23,16 @@ html {
   scroll-behavior: smooth;
 }
 
+html.has-snap-scroll {
+  scroll-snap-type: y mandatory;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.has-snap-scroll {
+    scroll-snap-type: none;
+  }
+}
+
 body {
   margin: 0;
   font-family: "Malgun Gothic", "Segoe UI", sans-serif;
@@ -227,27 +237,13 @@ h3 {
   background: var(--navy-alt);
 }
 
-.snap-stage {
-  position: relative;
-  height: 100vh;
-  height: 100svh;
-  min-height: 32rem;
-}
-
 .snap-track {
-  height: 100%;
-  overflow-y: auto;
-  scroll-snap-type: y mandatory;
+  position: relative;
   background: var(--navy-alt);
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.snap-track::-webkit-scrollbar {
-  display: none;
 }
 
 .snap-panel {
+  position: relative;
   scroll-snap-align: start;
   scroll-snap-stop: always;
   height: 100vh;
@@ -256,17 +252,6 @@ h3 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .snap-stage {
-    height: auto;
-    min-height: 0;
-  }
-
-  .snap-track {
-    height: auto;
-    overflow: visible;
-    scroll-snap-type: none;
-  }
-
   .snap-panel {
     height: auto;
     min-height: 100vh;

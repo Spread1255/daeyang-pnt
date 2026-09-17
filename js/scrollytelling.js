@@ -37,7 +37,6 @@
       scale: 1.12,
       ease: "none",
       scrollTrigger: {
-        scroller: track,
         trigger: hero,
         start: "top top",
         end: "bottom top",
@@ -50,7 +49,6 @@
       opacity: 0,
       ease: "none",
       scrollTrigger: {
-        scroller: track,
         trigger: hero,
         start: "top top",
         end: "bottom top",
@@ -63,7 +61,6 @@
         opacity: 0,
         ease: "none",
         scrollTrigger: {
-          scroller: track,
           trigger: hero,
           start: "top top",
           end: "15% top",
@@ -93,7 +90,6 @@
     }, 0.1);
 
     ScrollTrigger.create({
-      scroller: track,
       trigger: panel,
       start: "top center",
       end: "bottom center",
