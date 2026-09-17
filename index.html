@@ -3,88 +3,167 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>대양피엔티㈜ | 분체도료 전문</title>
-  <meta name="description" content="건축, 가전, 자동차 부품용 분체도료. 에폭시, 폴리에스터, 하이브리드 및 맞춤 색상.">
+  <title data-i18n="meta.home.title">대양피엔티㈜ | 분체도료 전문</title>
+  <meta name="description" data-i18n-content="meta.home.desc" content="건축, 가전, 자동차 부품용 분체도료. 에폭시, 폴리에스터, 하이브리드 및 맞춤 색상.">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="has-color-finder">
   <header class="site-header">
     <a class="logo" href="index.html">대양피엔티㈜<span>DAEYANG P&amp;T</span></a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">메뉴</button>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-i18n="common.menu">메뉴</button>
     <nav id="site-nav" class="site-nav">
-      <a href="index.html" aria-current="page">홈</a>
-      <a href="products.html">제품</a>
-      <a href="shop.html">구매</a>
-      <a href="colors.html">색상표</a>
-      <a href="applications.html">적용 분야</a>
-      <a href="about.html">회사소개</a>
-      <a class="nav-cta" href="contact.html">견적 문의</a>
+      <a href="index.html" aria-current="page" data-i18n="nav.home">홈</a>
+      <a href="products.html" data-i18n="nav.products">제품</a>
+      <a href="shop.html" data-i18n="nav.buy">구매</a>
+      <a href="colors.html" data-i18n="nav.colors">색상표</a>
+      <a href="applications.html" data-i18n="nav.applications">적용 분야</a>
+      <a href="about.html" data-i18n="nav.about">회사소개</a>
+      <a class="nav-cta" href="contact.html" data-i18n="nav.contact">견적 문의</a>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="ko">KO</button>
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="ja">JA</button>
+        <button type="button" data-lang="zh">ZH</button>
+      </div>
     </nav>
   </header>
 
   <main>
-    <section class="hero">
-      <p class="eyebrow">Powder Coatings</p>
-      <h1>금속을 지키는 도막,<br>현장에서 통하는 분체도료</h1>
-      <p class="lede">무용제 분체도료로 내식·내후·내화학성을 맞춥니다. 표준 색상부터 라인 맞춤 배합까지 생산합니다.</p>
-      <div class="hero-actions">
-        <a class="btn" href="products.html">제품 보기</a>
-        <a class="btn btn-ghost" href="shop.html">구매 선접수</a>
+    <section class="snap-stage">
+      <div class="snap-track" id="snapTrack">
+        <div class="snap-panel scroll-hero">
+          <div class="scroll-hero-bg"></div>
+          <div class="scroll-hero-content">
+            <p class="eyebrow">Powder Coatings</p>
+            <h1 data-i18n-html="home.hero.title">금속을 지키는 도막,<br>현장에서 통하는 분체도료</h1>
+            <p class="lede" data-i18n="home.hero.lede">무용제 분체도료로 내식·내후·내화학성을 맞춥니다. 표준 색상부터 라인 맞춤 배합까지 생산합니다.</p>
+            <div class="hero-actions">
+              <a class="btn" href="products.html" data-i18n="home.hero.btn1">제품 보기</a>
+              <a class="btn btn-ghost" href="shop.html" data-i18n="home.hero.btn2">구매 선접수</a>
+            </div>
+          </div>
+          <div class="scroll-hero-cue" aria-hidden="true"><span></span></div>
+        </div>
+
+        <div class="snap-panel story-panel story-panel--intro">
+          <div class="story-media">
+            <div class="story-media-layer"></div>
+          </div>
+          <div class="story-copy">
+            <p class="eyebrow">Our Company</p>
+            <h2 data-i18n="home.story.intro.h2">회사 소개</h2>
+            <p data-i18n="home.story.intro.p">대양피엔티㈜는 1993년 창업 이래 분체도료 한 우물을 파온 제조기업입니다. 김포 본사와 포천 1·2공장을 통해 안정적인 생산 체계를 갖추고, 건축·가전·자동차·산업 설비 전 분야에 맞춤 분체도료를 공급합니다.</p>
+            <a class="story-link" href="about.html" data-i18n="home.story.intro.link">회사소개 자세히 보기</a>
+          </div>
+        </div>
+
+        <div class="snap-panel story-panel story-panel--value">
+          <div class="story-media">
+            <div class="story-media-layer"></div>
+          </div>
+          <div class="story-copy">
+            <p class="eyebrow">Our Philosophy</p>
+            <span class="value-step">01 / 03</span>
+            <h2 data-i18n="home.story.values.h2">기업이념</h2>
+            <p class="value-text" data-i18n="home.story.values.1">자원의 가치를 되살리는 기술로, 지속 가능한 미래를 만들어 갑니다.</p>
+          </div>
+        </div>
+
+        <div class="snap-panel story-panel story-panel--value">
+          <div class="story-media">
+            <div class="story-media-layer"></div>
+          </div>
+          <div class="story-copy">
+            <p class="eyebrow">Our Philosophy</p>
+            <span class="value-step">02 / 03</span>
+            <h2 data-i18n="home.story.values.h2">기업이념</h2>
+            <p class="value-text" data-i18n="home.story.values.2">사람과 자연을 위한 친환경 경영으로, 더 넓은 세계를 향해 나아갑니다.</p>
+          </div>
+        </div>
+
+        <div class="snap-panel story-panel story-panel--value">
+          <div class="story-media">
+            <div class="story-media-layer"></div>
+          </div>
+          <div class="story-copy">
+            <p class="eyebrow">Our Philosophy</p>
+            <span class="value-step">03 / 03</span>
+            <h2 data-i18n="home.story.values.h2">기업이념</h2>
+            <p class="value-text" data-i18n="home.story.values.3">지속적인 연구개발로 제품의 가치를 높이고, 더 나은 기술로 고객과 함께 성장합니다.</p>
+          </div>
+        </div>
+
+        <div class="snap-panel story-panel story-panel--vision">
+          <div class="story-media">
+            <div class="story-media-layer"></div>
+          </div>
+          <div class="story-copy">
+            <p class="eyebrow">Business Vision</p>
+            <h2 data-i18n="home.story.vision.h2">사업비전</h2>
+            <p data-i18n="home.story.vision.p1">분체도료는 100% 고형분의 환경친화적 도료로서 VOC 배출 규제에 따른 휘발성 액상 도료의 대체품으로 매년 사용량이 증가하는 매력적인 도료 산업 시장이다.</p>
+            <p data-i18n="home.story.vision.p2">분체도료 소비의 증가에 따라 발생되는 폐분체도료의 양도 증가하고 있으며, 이를 재활용하여 활용할 수 있는 여러 방법이 연구되고 있다.</p>
+            <p data-i18n="home.story.vision.p3">자사는 분체도료 제조의 기술력을 확보하였으며, 이를 바탕으로 기존 분체도료 시장에서 우월한 가격 경쟁력을 확보하여 소비자와 생산자 간의 신뢰를 바탕으로 상호 이익 실현에 중심이 되어 국내 분체도료 시장의 벤치마킹 선두 모델로 성장할 것이다.</p>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="stats">
-      <div><strong>VOC 저감</strong><span>용제형 대비 현장 환경 부담을 줄입니다</span></div>
-      <div><strong>RAL / 맞춤색</strong><span>광택·질감·메탈릭까지 지정 가능</span></div>
-      <div><strong>라인 대응</strong><span>정전 스프레이 · 경화 조건 기술 지원</span></div>
+    <section class="stats" id="home-stats">
+      <div><strong data-i18n="home.stats.1.strong">VOC 저감</strong><span data-i18n="home.stats.1.desc">용제형 대비 현장 환경 부담을 줄입니다</span></div>
+      <div><strong data-i18n="home.stats.2.strong">RAL / 맞춤색</strong><span data-i18n="home.stats.2.desc">광택·질감·메탈릭까지 지정 가능</span></div>
+      <div><strong data-i18n="home.stats.3.strong">라인 대응</strong><span data-i18n="home.stats.3.desc">정전 스프레이 · 경화 조건 기술 지원</span></div>
     </section>
 
-    <section class="section">
-      <h2>주요 제품군</h2>
-      <p class="section-lead">제품코드 1~5를 3개 군으로 묶고, DY#1~DY#6으로 분류합니다.</p>
+    <section class="section" id="home-products">
+      <h2 data-i18n="home.products.h2">주요 제품군</h2>
+      <p class="section-lead" data-i18n="home.products.lead">제품코드 1~5를 3개 군으로 묶고, DY#1~DY#6으로 분류합니다.</p>
       <div class="cards cards-3">
         <article class="card">
-          <h3>용도형</h3>
-          <p><strong>DY#1</strong> 내장형 · <strong>DY#2</strong> 외장형</p>
+          <h3 data-i18n="home.card1.h3">용도형</h3>
+          <p data-i18n-html="home.card1.p"><strong>DY#1</strong> 내장형 · <strong>DY#2</strong> 외장형</p>
         </article>
         <article class="card">
-          <h3>스트럭쳐</h3>
-          <p><strong>DY#3</strong> 스트럭쳐</p>
+          <h3 data-i18n="home.card2.h3">스트럭쳐</h3>
+          <p data-i18n-html="home.card2.p"><strong>DY#3</strong> 스트럭쳐</p>
         </article>
         <article class="card">
-          <h3>특수 마감</h3>
-          <p><strong>DY#4</strong> 텍스쳐 · <strong>DY#5</strong> 메탈릭 · <strong>DY#6</strong> 함마톤</p>
+          <h3 data-i18n="home.card3.h3">특수 마감</h3>
+          <p data-i18n-html="home.card3.p"><strong>DY#4</strong> 텍스쳐 · <strong>DY#5</strong> 메탈릭 · <strong>DY#6</strong> 함마톤</p>
         </article>
       </div>
     </section>
 
-    <section class="section process">
-      <h2>도장 공정에 맞춘 공급</h2>
+    <section class="section process" id="home-process">
+      <h2 data-i18n="home.process.h2">도장 공정에 맞춘 공급</h2>
       <ol class="steps">
-        <li><span>01</span>전처리 확인 — 탈지·인산염·쇼트 조건</li>
-        <li><span>02</span>도료 선정 — 수지, 광택, 색상, 막두께</li>
-        <li><span>03</span>도포 — 정전 스프레이, 회수 라인 대응</li>
-        <li><span>04</span>경화 — 권장 오븐 온도와 유지 시간</li>
+        <li data-i18n-html="home.process.step1"><span>01</span>전처리 확인 — 탈지·인산염·쇼트 조건</li>
+        <li data-i18n-html="home.process.step2"><span>02</span>도료 선정 — 수지, 광택, 색상, 막두께</li>
+        <li data-i18n-html="home.process.step3"><span>03</span>도포 — 정전 스프레이, 회수 라인 대응</li>
+        <li data-i18n-html="home.process.step4"><span>04</span>경화 — 권장 오븐 온도와 유지 시간</li>
       </ol>
     </section>
   </main>
 
-  <aside class="color-finder" aria-label="색상 검색">
-    <p class="color-finder-title">색상 검색</p>
-    <label class="visually-hidden" for="home-color-search">색상 코드 또는 이름</label>
-    <input id="home-color-search" type="search" placeholder="DY#1-BK001, SILVER…" autocomplete="off">
+  <aside class="color-finder" data-i18n-aria-label="home.colorfinder.aria" aria-label="색상 검색">
+    <p class="color-finder-title" data-i18n="home.colorfinder.title">색상 검색</p>
+    <label class="visually-hidden" for="home-color-search" data-i18n="home.colorfinder.label">색상 코드 또는 이름</label>
+    <input id="home-color-search" type="search" data-i18n-placeholder="common.colorSearchPlaceholder" placeholder="DY#1-BK001, SILVER…" autocomplete="off">
     <p id="home-color-count" class="color-finder-count"></p>
     <div id="home-color-results" class="color-finder-results"></div>
-    <a class="color-finder-more" href="colors.html">색상표 전체 보기</a>
+    <a class="color-finder-more" href="colors.html" data-i18n="home.colorfinder.more">색상표 전체 보기</a>
   </aside>
 
   <footer class="site-footer">
-    <p><strong>대양피엔티㈜</strong> · 분체도료</p>
+    <p><strong>대양피엔티㈜</strong> · <span data-i18n="footer.tagline">분체도료</span></p>
     <p>경기도 김포시 하성면 애기봉로 774번길 39-17,22 · TEL 031)987-8587 · FAX 031)982-8587</p>
-    <p class="fine">본 사이트는 포트폴리오용 가상 회사 예시입니다.</p>
+    <p class="fine" data-i18n="footer.fine">본 사이트는 포트폴리오용 가상 회사 예시입니다.</p>
   </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/colors.js"></script>
   <script src="js/main.js"></script>
   <script src="js/home-search.js"></script>
+  <script src="js/scrollytelling.js"></script>
 </body>
 </html>

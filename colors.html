@@ -3,62 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>색상표 | 대양피엔티㈜</title>
+  <title data-i18n="meta.colors.title">색상표 | 대양피엔티㈜</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="site-header">
     <a class="logo" href="index.html">대양피엔티㈜<span>DAEYANG P&amp;T</span></a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">메뉴</button>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-i18n="common.menu">메뉴</button>
     <nav id="site-nav" class="site-nav">
-      <a href="index.html">홈</a>
-      <a href="products.html">제품</a>
-      <a href="shop.html">구매</a>
-      <a href="colors.html" aria-current="page">색상표</a>
-      <a href="applications.html">적용 분야</a>
-      <a href="about.html">회사소개</a>
-      <a class="nav-cta" href="contact.html">견적 문의</a>
+      <a href="index.html" data-i18n="nav.home">홈</a>
+      <a href="products.html" data-i18n="nav.products">제품</a>
+      <a href="shop.html" data-i18n="nav.buy">구매</a>
+      <a href="colors.html" aria-current="page" data-i18n="nav.colors">색상표</a>
+      <a href="applications.html" data-i18n="nav.applications">적용 분야</a>
+      <a href="about.html" data-i18n="nav.about">회사소개</a>
+      <a class="nav-cta" href="contact.html" data-i18n="nav.contact">견적 문의</a>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="ko">KO</button>
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="ja">JA</button>
+        <button type="button" data-lang="zh">ZH</button>
+      </div>
     </nav>
   </header>
 
   <main>
     <section class="page-hero">
       <p class="eyebrow">Color chart</p>
-      <h1>색상표</h1>
+      <h1 data-i18n="colors.h1">색상표</h1>
     </section>
 
     <section class="section">
       <div class="filters">
-        <label>시리즈
+        <label><span data-i18n="colors.filter.series">시리즈</span>
           <select id="filter-series">
-            <option value="">전체</option>
-            <option value="1">DY#1 내장형</option>
-            <option value="2">DY#2 외장형</option>
-            <option value="3">DY#3 스트럭쳐</option>
-            <option value="4">DY#4 텍스쳐</option>
-            <option value="5">DY#5 메탈릭</option>
-            <option value="6">DY#6 함마톤</option>
+            <option value="" data-i18n="colors.filter.all">전체</option>
+            <option value="1" data-i18n="shop.series.1">DY#1 내장형</option>
+            <option value="2" data-i18n="shop.series.2">DY#2 외장형</option>
+            <option value="3" data-i18n="shop.series.3">DY#3 스트럭쳐</option>
+            <option value="4" data-i18n="shop.series.4">DY#4 텍스쳐</option>
+            <option value="5" data-i18n="shop.series.5">DY#5 메탈릭</option>
+            <option value="6" data-i18n="shop.series.6">DY#6 함마톤</option>
           </select>
         </label>
-        <label>색상
+        <label><span data-i18n="colors.filter.color">색상</span>
           <select id="filter-color">
-            <option value="">전체</option>
+            <option value="" data-i18n="colors.filter.all">전체</option>
           </select>
         </label>
-        <label>검색
-          <input id="filter-search" type="search" placeholder="DY#1-BK001, SILVER…">
+        <label><span data-i18n="colors.filter.search">검색</span>
+          <input id="filter-search" type="search" data-i18n-placeholder="common.colorSearchPlaceholder" placeholder="DY#1-BK001, SILVER…">
         </label>
         <p id="color-count" class="count"></p>
       </div>
       <div id="color-grid" class="swatch-grid"></div>
-      <p class="note">본 색상표는 실제 공급 도료와 작업 공정에 따라 색차가 있을 수 있습니다. 원본: 대양피앤티 제품코드 1~5.</p>
+      <p class="note" data-i18n="colors.note">본 색상표는 실제 공급 도료와 작업 공정에 따라 색차가 있을 수 있습니다. 원본: 대양피앤티 제품코드 1~5.</p>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p><strong>대양피엔티㈜</strong> · 분체도료</p>
+    <p><strong>대양피엔티㈜</strong> · <span data-i18n="footer.tagline">분체도료</span></p>
     <p>경기도 김포시 하성면 애기봉로 774번길 39-17,22 · TEL 031)987-8587</p>
   </footer>
+  <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
   <script src="js/colors.js"></script>
   <script src="js/color-page.js"></script>

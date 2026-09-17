@@ -7,6 +7,18 @@
     return;
   }
 
+  function t(key) {
+    return window.I18N ? window.I18N.t(key) : key;
+  }
+
+  function seriesName(id) {
+    return window.I18N ? window.I18N.seriesName(id) : (window.SERIES_NAMES[id] || "");
+  }
+
+  function colorName(code) {
+    return window.I18N ? window.I18N.colorName(code) : (window.COLOR_NAMES[code] || "");
+  }
+
   const items = window.COLOR_CHART.map(function (row) {
     const code = row[1];
     const match = code.match(/^DY#(\d+)-([A-Z]{2})(\d+)$/);
@@ -18,8 +30,6 @@
       name: row[2],
       series: series,
       color: color,
-      seriesName: window.SERIES_NAMES[series] || "",
-      colorName: window.COLOR_NAMES[color] || "",
       img: "images/chips/" + String(row[0]).padStart(3, "0") + ".jpg"
     };
   });
@@ -28,9 +38,9 @@
     return [
       item.code,
       item.name,
-      item.seriesName,
+      seriesName(item.series),
       item.color,
-      item.colorName,
+      colorName(item.color),
       "DY#" + item.series
     ].join(" ").toLowerCase();
   }
@@ -51,14 +61,14 @@
       return haystack(item).indexOf(q) !== -1;
     });
 
-    countEl.textContent = filtered.length + "색";
+    countEl.textContent = t("colors.count").replace("{n}", filtered.length);
     results.hidden = false;
     results.replaceChildren();
 
     if (!filtered.length) {
       const empty = document.createElement("p");
       empty.className = "color-finder-empty";
-      empty.textContent = "일치하는 색상이 없습니다.";
+      empty.textContent = t("colors.empty");
       results.appendChild(empty);
       return;
     }
@@ -73,13 +83,16 @@
         '<span class="color-finder-item-text">' +
         '<strong>' + item.code + "</strong>" +
         '<em>' + item.name + "</em>" +
-        '<small>' + item.seriesName + " · " + item.color + " " + item.colorName + "</small>" +
+        '<small>' + seriesName(item.series) + " · " + item.color + " " + colorName(item.color) + "</small>" +
         "</span>";
       results.appendChild(link);
     });
   }
 
   input.addEventListener("input", function () {
+    render(input.value);
+  });
+  window.addEventListener("i18n:change", function () {
     render(input.value);
   });
 })();

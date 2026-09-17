@@ -4,16 +4,13 @@
   const qtyEl = document.getElementById("shop-qty");
   const colorEl = document.getElementById("shop-color");
   const infoEl = document.getElementById("shop-info");
-  const compareEl = document.getElementById("shop-compare");
-  const captionEl = document.getElementById("shop-compare-caption");
   const buyForm = document.getElementById("shop-form");
-  const targets = window.COMPARE_TARGETS || [];
   if (!seriesEl || !window.DAEYANG_PRICES) {
     return;
   }
 
-  function won(n) {
-    return n.toLocaleString("ko-KR") + "원";
+  function t(key) {
+    return window.I18N ? window.I18N.t(key) : key;
   }
 
   function fillColors(series) {
@@ -24,7 +21,7 @@
     colorEl.replaceChildren();
     const any = document.createElement("option");
     any.value = "";
-    any.textContent = "색상 미지정";
+    any.textContent = t("shop.color.unspecified");
     colorEl.appendChild(any);
     window.COLOR_CHART.forEach(function (row) {
       const code = row[1];
@@ -68,73 +65,28 @@
 
   function renderInfo(s) {
     infoEl.replaceChildren();
+    const seriesName = window.I18N ? window.I18N.seriesName(s.series) : s.item.name;
+    const use = window.I18N ? window.I18N.priceUse(s.series) : s.item.use;
+    const finish = window.I18N ? window.I18N.priceFinish(s.series) : s.item.finish;
+    const info = window.I18N ? window.I18N.priceInfo(s.series) : s.item.info;
+    const pack = t(s.pack === "20" ? "shop.pack.20" : "shop.pack.300");
     const title = document.createElement("p");
     title.className = "shop-info-title";
-    title.textContent = s.item.code + " " + s.item.name;
+    title.textContent = s.item.code + " " + seriesName;
     infoEl.appendChild(title);
-    addInfo("용도", s.item.use);
-    addInfo("마감", s.item.finish);
-    addInfo("설명", s.item.info);
-    addInfo("포장", s.pack === "20" ? "소량 20kg" : "산업 300kg");
-    addInfo("수량", s.qty + "포 · " + s.kg.toLocaleString("ko-KR") + "kg");
-    addInfo("금액", "선접수 후 통보");
-  }
-
-  function renderCompare(s) {
-    const ranked = targets.map(function (target) {
-      const price = target.prices[s.series];
-      if (!price) {
-        return null;
-      }
-      const theirUnit = s.pack === "20" ? price.pack20 : price.bulk;
-      return {
-        target: target,
-        theirUnit: theirUnit,
-        theirTotal: theirUnit * s.kg,
-        gap: Math.abs(theirUnit - s.unit)
-      };
-    }).filter(Boolean).sort(function (a, b) {
-      return b.gap - a.gap;
-    }).slice(0, 5);
-
-    if (captionEl) {
-      captionEl.textContent = "국내 " + targets.length + "종 중 시세 차이가 큰 5종 · " +
-        s.item.code + " " + (s.pack === "20" ? "20kg" : "300kg");
-    }
-
-    compareEl.replaceChildren();
-    ranked.forEach(function (item, index) {
-      const row = document.createElement("article");
-      row.className = "shop-compare-row is-on";
-      const head = document.createElement("div");
-      head.className = "shop-compare-head";
-      const title = document.createElement("strong");
-      title.textContent = (index + 1) + ". " + item.target.name;
-      const meta = document.createElement("span");
-      meta.textContent = item.target.note;
-      head.appendChild(title);
-      head.appendChild(meta);
-      const nums = document.createElement("div");
-      nums.className = "shop-compare-nums";
-      const theirs = document.createElement("p");
-      const unitLabel = document.createElement("em");
-      unitLabel.textContent = won(item.theirUnit) + "/kg";
-      const totalLabel = document.createElement("small");
-      totalLabel.textContent = won(item.theirTotal);
-      theirs.appendChild(unitLabel);
-      theirs.appendChild(totalLabel);
-      nums.appendChild(theirs);
-      row.appendChild(head);
-      row.appendChild(nums);
-      compareEl.appendChild(row);
-    });
+    addInfo(t("shop.info.use"), use);
+    addInfo(t("shop.info.finish"), finish);
+    addInfo(t("shop.info.desc"), info);
+    addInfo(t("shop.info.pack"), pack);
+    const locale = window.I18N ? { ko: "ko-KR", en: "en-US", ja: "ja-JP", zh: "zh-CN" }[window.I18N.lang()] : "ko-KR";
+    addInfo(t("shop.info.qty"), t("shop.info.qtyValue").replace("{qty}", s.qty).replace("{kg}", s.kg.toLocaleString(locale)));
+    addInfo(t("shop.info.price"), t("shop.info.priceValue"));
   }
 
   function render() {
     const s = state();
     fillColors(s.series);
     renderInfo(s);
-    renderCompare(s);
   }
 
   const params = new URLSearchParams(window.location.search);
@@ -159,7 +111,7 @@
     const s = state();
     const color = colorEl ? colorEl.value : "";
     const quote = {
-      product: s.item.code + " " + s.item.name,
+      product: s.item.code + " " + (window.I18N ? window.I18N.seriesName(s.series) : s.item.name),
       series: s.series,
       pack: s.pack,
       qty: s.qty,
@@ -184,4 +136,6 @@
   if (params.get("color") && colorEl) {
     colorEl.value = params.get("color");
   }
+
+  window.addEventListener("i18n:change", render);
 })();

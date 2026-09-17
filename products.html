@@ -3,103 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>제품 | 대양피엔티㈜</title>
+  <title data-i18n="meta.products.title">제품 | 대양피엔티㈜</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="site-header">
     <a class="logo" href="index.html">대양피엔티㈜<span>DAEYANG P&amp;T</span></a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">메뉴</button>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-i18n="common.menu">메뉴</button>
     <nav id="site-nav" class="site-nav">
-      <a href="index.html">홈</a>
-      <a href="products.html" aria-current="page">제품</a>
-      <a href="shop.html">구매</a>
-      <a href="colors.html">색상표</a>
-      <a href="applications.html">적용 분야</a>
-      <a href="about.html">회사소개</a>
-      <a class="nav-cta" href="contact.html">견적 문의</a>
+      <a href="index.html" data-i18n="nav.home">홈</a>
+      <a href="products.html" aria-current="page" data-i18n="nav.products">제품</a>
+      <a href="shop.html" data-i18n="nav.buy">구매</a>
+      <a href="colors.html" data-i18n="nav.colors">색상표</a>
+      <a href="applications.html" data-i18n="nav.applications">적용 분야</a>
+      <a href="about.html" data-i18n="nav.about">회사소개</a>
+      <a class="nav-cta" href="contact.html" data-i18n="nav.contact">견적 문의</a>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="ko">KO</button>
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="ja">JA</button>
+        <button type="button" data-lang="zh">ZH</button>
+      </div>
     </nav>
   </header>
 
   <main>
     <section class="page-hero">
       <p class="eyebrow">Products</p>
-      <h1>제품</h1>
+      <h1 data-i18n="products.h1">제품</h1>
     </section>
 
     <section class="section">
       <div class="cards cards-3">
         <article class="card" id="use">
-          <p class="eyebrow">제품군 01</p>
-          <h2>용도형</h2>
-          <p>실내·옥외 하지와 노출 조건에 맞춘 기본 시리즈입니다.</p>
+          <p class="eyebrow" data-i18n="products.card1.eyebrow">제품군 01</p>
+          <h2 data-i18n="products.card1.h2">용도형</h2>
+          <p data-i18n="products.card1.p">실내·옥외 하지와 노출 조건에 맞춘 기본 시리즈입니다.</p>
           <ul class="code-list">
-            <li><strong>DY#1</strong> 내장형 — 실내용. 내식·내화학, 가전·기계·내부 부품</li>
-            <li><strong>DY#2</strong> 외장형 — 옥외용. 내후·색상 유지, 창호·펜스·건축 외장</li>
+            <li data-i18n-html="products.card1.li1"><strong>DY#1</strong> 내장형 — 실내용. 내식·내화학, 가전·기계·내부 부품</li>
+            <li data-i18n-html="products.card1.li2"><strong>DY#2</strong> 외장형 — 옥외용. 내후·색상 유지, 창호·펜스·건축 외장</li>
           </ul>
         </article>
         <article class="card" id="structure">
-          <p class="eyebrow">제품군 02</p>
-          <h2>스트럭쳐</h2>
-          <p>요철 있는 구조 마감으로 스크래치와 지문을 가립니다.</p>
+          <p class="eyebrow" data-i18n="products.card2.eyebrow">제품군 02</p>
+          <h2 data-i18n="products.card2.h2">스트럭쳐</h2>
+          <p data-i18n="products.card2.p">요철 있는 구조 마감으로 스크래치와 지문을 가립니다.</p>
           <ul class="code-list">
-            <li><strong>DY#3</strong> 스트럭쳐 — 링클·구조 질감, 설비함·가구·산업 패널</li>
+            <li data-i18n-html="products.card2.li1"><strong>DY#3</strong> 스트럭쳐 — 링클·구조 질감, 설비함·가구·산업 패널</li>
           </ul>
         </article>
         <article class="card" id="finish">
-          <p class="eyebrow">제품군 03</p>
-          <h2>특수 마감</h2>
-          <p>질감·광택 연출용 시리즈입니다. 색상은 샘플 매칭이 가능합니다.</p>
+          <p class="eyebrow" data-i18n="products.card3.eyebrow">제품군 03</p>
+          <h2 data-i18n="products.card3.h2">특수 마감</h2>
+          <p data-i18n="products.card3.p">질감·광택 연출용 시리즈입니다. 색상은 샘플 매칭이 가능합니다.</p>
           <ul class="code-list">
-            <li><strong>DY#4</strong> 텍스쳐 — 샌드·미세 요철</li>
-            <li><strong>DY#5</strong> 메탈릭 — 금속 입자 외관</li>
-            <li><strong>DY#6</strong> 함마톤 — 해머톤(타격 무늬) 마감</li>
+            <li data-i18n-html="products.card3.li1"><strong>DY#4</strong> 텍스쳐 — 샌드·미세 요철</li>
+            <li data-i18n-html="products.card3.li2"><strong>DY#5</strong> 메탈릭 — 금속 입자 외관</li>
+            <li data-i18n-html="products.card3.li3"><strong>DY#6</strong> 함마톤 — 해머톤(타격 무늬) 마감</li>
           </ul>
         </article>
       </div>
       <p class="hero-actions">
-        <a class="btn" href="shop.html">구매 선접수</a>
+        <a class="btn" href="shop.html" data-i18n="products.buybtn">구매 선접수</a>
       </p>
     </section>
 
     <section class="section">
-      <h2>코드 한눈에</h2>
+      <h2 data-i18n="products.table.h2">코드 한눈에</h2>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>제품군</th>
-              <th>코드</th>
-              <th>분류</th>
+              <th data-i18n="products.table.th1">제품군</th>
+              <th data-i18n="products.table.th2">코드</th>
+              <th data-i18n="products.table.th3">분류</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td rowspan="2">용도형</td>
+              <td rowspan="2" data-i18n="products.table.use">용도형</td>
               <td>DY#1</td>
-              <td>내장형</td>
+              <td data-i18n="products.table.interior">내장형</td>
             </tr>
             <tr>
               <td>DY#2</td>
-              <td>외장형</td>
+              <td data-i18n="products.table.exterior">외장형</td>
             </tr>
             <tr>
-              <td>스트럭쳐</td>
+              <td data-i18n="products.table.structure">스트럭쳐</td>
               <td>DY#3</td>
-              <td>스트럭쳐</td>
+              <td data-i18n="products.table.structure">스트럭쳐</td>
             </tr>
             <tr>
-              <td rowspan="3">특수 마감</td>
+              <td rowspan="3" data-i18n="products.table.finish">특수 마감</td>
               <td>DY#4</td>
-              <td>텍스쳐</td>
+              <td data-i18n="products.table.texture">텍스쳐</td>
             </tr>
             <tr>
               <td>DY#5</td>
-              <td>메탈릭</td>
+              <td data-i18n="products.table.metallic">메탈릭</td>
             </tr>
             <tr>
               <td>DY#6</td>
-              <td>함마톤</td>
+              <td data-i18n="products.table.hammertone">함마톤</td>
             </tr>
           </tbody>
         </table>
@@ -108,10 +114,11 @@
   </main>
 
   <footer class="site-footer">
-    <p><strong>대양피엔티㈜</strong> · 분체도료</p>
+    <p><strong>대양피엔티㈜</strong> · <span data-i18n="footer.tagline">분체도료</span></p>
     <p>경기도 김포시 하성면 애기봉로 774번길 39-17,22 · TEL 031)987-8587 · FAX 031)982-8587</p>
-    <p class="fine">본 사이트는 포트폴리오용 가상 회사 예시입니다.</p>
+    <p class="fine" data-i18n="footer.fine">본 사이트는 포트폴리오용 가상 회사 예시입니다.</p>
   </footer>
+  <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

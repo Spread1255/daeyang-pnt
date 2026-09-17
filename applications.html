@@ -3,61 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>적용 분야 | 대양피엔티㈜</title>
+  <title data-i18n="meta.applications.title">적용 분야 | 대양피엔티㈜</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="site-header">
     <a class="logo" href="index.html">대양피엔티㈜<span>DAEYANG P&amp;T</span></a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">메뉴</button>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-i18n="common.menu">메뉴</button>
     <nav id="site-nav" class="site-nav">
-      <a href="index.html">홈</a>
-      <a href="products.html">제품</a>
-      <a href="shop.html">구매</a>
-      <a href="colors.html">색상표</a>
-      <a href="applications.html" aria-current="page">적용 분야</a>
-      <a href="about.html">회사소개</a>
-      <a class="nav-cta" href="contact.html">견적 문의</a>
+      <a href="index.html" data-i18n="nav.home">홈</a>
+      <a href="products.html" data-i18n="nav.products">제품</a>
+      <a href="shop.html" data-i18n="nav.buy">구매</a>
+      <a href="colors.html" data-i18n="nav.colors">색상표</a>
+      <a href="applications.html" aria-current="page" data-i18n="nav.applications">적용 분야</a>
+      <a href="about.html" data-i18n="nav.about">회사소개</a>
+      <a class="nav-cta" href="contact.html" data-i18n="nav.contact">견적 문의</a>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="ko">KO</button>
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="ja">JA</button>
+        <button type="button" data-lang="zh">ZH</button>
+      </div>
     </nav>
   </header>
 
   <main>
     <section class="page-hero">
       <p class="eyebrow">Applications</p>
-      <h1>적용 분야</h1>
+      <h1 data-i18n="applications.h1">적용 분야</h1>
     </section>
 
     <section class="section">
       <div class="cards">
         <article class="card">
-          <h3>건축 자재</h3>
-          <p>알루미늄 창호, 커튼월, 난간, 펜스. 내후성 폴리에스터로 색차와 초킹을 관리합니다.</p>
+          <h3 data-i18n="applications.card1.h3">건축 자재</h3>
+          <p data-i18n="applications.card1.p">알루미늄 창호, 커튼월, 난간, 펜스. 내후성 폴리에스터로 색차와 초킹을 관리합니다.</p>
           <div class="card-photos">
-            <img src="images/app-building-stair.jpg" alt="분체도장 강재 난간과 계단">
-            <img src="images/app-building-fence.jpg" alt="분체도장 펜스와 대문">
+            <img src="images/app-building-stair.jpg" data-i18n-alt="applications.card1.img1alt" alt="분체도장 강재 난간과 계단">
+            <img src="images/app-building-fence.jpg" data-i18n-alt="applications.card1.img2alt" alt="분체도장 펜스와 대문">
           </div>
         </article>
         <article class="card">
-          <h3>가전·가구</h3>
-          <p>냉장고 패널, 선반, 사무가구. 하이브리드로 외관과 내스크래치를 맞춥니다.</p>
+          <h3 data-i18n="applications.card2.h3">가전·가구</h3>
+          <p data-i18n="applications.card2.p">냉장고 패널, 선반, 사무가구. 하이브리드로 외관과 내스크래치를 맞춥니다.</p>
+          <div class="card-photos card-photos--3">
+            <img src="images/app-appliance-fridge.jpg" data-i18n-alt="applications.card2.img1alt" alt="분체도장 냉장고 패널">
+            <img src="images/app-appliance-shelf.jpg" data-i18n-alt="applications.card2.img2alt" alt="분체도장 금속 선반">
+            <img src="images/app-appliance-office.jpg" data-i18n-alt="applications.card2.img3alt" alt="분체도장 사무가구">
+          </div>
         </article>
         <article class="card">
-          <h3>자동차</h3>
-          <p>섀시, 휠, 브래킷. 내식성과 내칩핑이 필요한 부품에 에폭시 또는 프라이머 시스템을 제안합니다.</p>
+          <h3 data-i18n="applications.card3.h3">자동차</h3>
+          <p data-i18n="applications.card3.p">섀시, 휠, 브래킷. 내식성과 내칩핑이 필요한 부품에 에폭시 또는 프라이머 시스템을 제안합니다.</p>
+          <div class="card-photos card-photos--3">
+            <img src="images/app-auto-chassis.jpg" data-i18n-alt="applications.card3.img1alt" alt="분체도장 자동차 섀시">
+            <img src="images/app-auto-wheel.jpg" data-i18n-alt="applications.card3.img2alt" alt="분체도장 자동차 휠">
+            <img src="images/app-auto-bracket.jpg" data-i18n-alt="applications.card3.img3alt" alt="분체도장 자동차 브래킷">
+          </div>
         </article>
         <article class="card">
-          <h3>산업 설비</h3>
-          <p>전기함, 배관, 랙. 후막 방식과 내화학 사양으로 유지보수 주기를 늘립니다.</p>
+          <h3 data-i18n="applications.card4.h3">산업 설비</h3>
+          <p data-i18n="applications.card4.p">전기함, 배관, 랙. 후막 방식과 내화학 사양으로 유지보수 주기를 늘립니다.</p>
+          <div class="card-photos card-photos--3">
+            <img src="images/app-industry-cabinet.jpg" data-i18n-alt="applications.card4.img1alt" alt="분체도장 전기함">
+            <img src="images/app-industry-pipe.jpg" data-i18n-alt="applications.card4.img2alt" alt="분체도장 배관">
+            <img src="images/app-industry-rack.jpg" data-i18n-alt="applications.card4.img3alt" alt="분체도장 산업용 랙">
+          </div>
         </article>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p><strong>대양피엔티㈜</strong> · 분체도료</p>
+    <p><strong>대양피엔티㈜</strong> · <span data-i18n="footer.tagline">분체도료</span></p>
     <p>경기도 김포시 하성면 애기봉로 774번길 39-17,22 · TEL 031)987-8587 · FAX 031)982-8587</p>
-    <p class="fine">본 사이트는 포트폴리오용 가상 회사 예시입니다.</p>
+    <p class="fine" data-i18n="footer.fine">본 사이트는 포트폴리오용 가상 회사 예시입니다.</p>
   </footer>
+  <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

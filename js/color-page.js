@@ -21,13 +21,34 @@
     };
   });
 
-  const colors = Object.keys(window.COLOR_NAMES);
-  colors.forEach(function (key) {
-    const opt = document.createElement("option");
-    opt.value = key;
-    opt.textContent = key + " · " + window.COLOR_NAMES[key];
-    colorSel.appendChild(opt);
-  });
+  const colorKeys = Object.keys(window.COLOR_NAMES);
+
+  function fillColorOptions() {
+    const current = colorSel.value;
+    while (colorSel.options.length > 1) {
+      colorSel.remove(1);
+    }
+    colorKeys.forEach(function (key) {
+      const opt = document.createElement("option");
+      opt.value = key;
+      opt.textContent = key + " · " + (window.I18N ? window.I18N.colorName(key) : window.COLOR_NAMES[key]);
+      colorSel.appendChild(opt);
+    });
+    colorSel.value = current;
+  }
+  fillColorOptions();
+
+  function t(key) {
+    return window.I18N ? window.I18N.t(key) : key;
+  }
+
+  function seriesName(id) {
+    return window.I18N ? window.I18N.seriesName(id) : (window.SERIES_NAMES[id] || "");
+  }
+
+  function colorName(code) {
+    return window.I18N ? window.I18N.colorName(code) : (window.COLOR_NAMES[code] || "");
+  }
 
   function render() {
     const series = seriesSel.value;
@@ -45,7 +66,7 @@
       }
       return true;
     });
-    countEl.textContent = filtered.length + "색";
+    countEl.textContent = t("colors.count").replace("{n}", filtered.length);
     grid.replaceChildren();
     filtered.forEach(function (item) {
       const article = document.createElement("article");
@@ -54,11 +75,11 @@
         '<img src="' + item.img + '" alt="' + item.code + '">' +
         '<p class="swatch-code">' + item.code + "</p>" +
         '<p class="swatch-meta">' +
-        (window.SERIES_NAMES[item.series] || "") +
+        seriesName(item.series) +
         " · " +
         item.color +
         " " +
-        (window.COLOR_NAMES[item.color] || "") +
+        colorName(item.color) +
         "</p>" +
         '<p class="swatch-name">' + item.name + "</p>";
       grid.appendChild(article);
@@ -68,6 +89,10 @@
   seriesSel.addEventListener("change", render);
   colorSel.addEventListener("change", render);
   searchEl.addEventListener("input", render);
+  window.addEventListener("i18n:change", function () {
+    fillColorOptions();
+    render();
+  });
 
   const params = new URLSearchParams(window.location.search);
   const initial = params.get("q");

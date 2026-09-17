@@ -3,75 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>구매 | 대양피엔티㈜</title>
+  <title data-i18n="meta.shop.title">구매 | 대양피엔티㈜</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="site-header">
     <a class="logo" href="index.html">대양피엔티㈜<span>DAEYANG P&amp;T</span></a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">메뉴</button>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-i18n="common.menu">메뉴</button>
     <nav id="site-nav" class="site-nav">
-      <a href="index.html">홈</a>
-      <a href="products.html">제품</a>
-      <a href="shop.html" aria-current="page">구매</a>
-      <a href="colors.html">색상표</a>
-      <a href="applications.html">적용 분야</a>
-      <a href="about.html">회사소개</a>
-      <a class="nav-cta" href="contact.html">견적 문의</a>
+      <a href="index.html" data-i18n="nav.home">홈</a>
+      <a href="products.html" data-i18n="nav.products">제품</a>
+      <a href="shop.html" aria-current="page" data-i18n="nav.buy">구매</a>
+      <a href="colors.html" data-i18n="nav.colors">색상표</a>
+      <a href="applications.html" data-i18n="nav.applications">적용 분야</a>
+      <a href="about.html" data-i18n="nav.about">회사소개</a>
+      <a class="nav-cta" href="contact.html" data-i18n="nav.contact">견적 문의</a>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="ko">KO</button>
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="ja">JA</button>
+        <button type="button" data-lang="zh">ZH</button>
+      </div>
     </nav>
   </header>
 
   <main>
     <section class="page-hero">
       <p class="eyebrow">Buy</p>
-      <h1>구매</h1>
+      <h1 data-i18n="shop.h1">구매</h1>
     </section>
 
     <section class="section shop-grid">
-      <form id="shop-form" class="shop-buy" aria-label="분체도료 구매 선접수">
-        <p class="eyebrow">선접수</p>
-        <h2>제품 선택</h2>
-        <label>시리즈
+      <form id="shop-form" class="shop-buy" data-i18n-aria-label="shop.form.aria" aria-label="분체도료 구매 선접수">
+        <p class="eyebrow" data-i18n="shop.form.eyebrow">선접수</p>
+        <h2 data-i18n="shop.form.h2">제품 선택</h2>
+        <label><span data-i18n="shop.form.series">시리즈</span>
           <select id="shop-series" name="series">
-            <option value="1">DY#1 내장형</option>
-            <option value="2">DY#2 외장형</option>
-            <option value="3">DY#3 스트럭쳐</option>
-            <option value="4">DY#4 텍스쳐</option>
-            <option value="5">DY#5 메탈릭</option>
-            <option value="6">DY#6 함마톤</option>
+            <option value="1" data-i18n="shop.series.1">DY#1 내장형</option>
+            <option value="2" data-i18n="shop.series.2">DY#2 외장형</option>
+            <option value="3" data-i18n="shop.series.3">DY#3 스트럭쳐</option>
+            <option value="4" data-i18n="shop.series.4">DY#4 텍스쳐</option>
+            <option value="5" data-i18n="shop.series.5">DY#5 메탈릭</option>
+            <option value="6" data-i18n="shop.series.6">DY#6 함마톤</option>
           </select>
         </label>
-        <label>포장
+        <label><span data-i18n="shop.form.pack">포장</span>
           <select id="shop-pack" name="pack">
-            <option value="20">소량 20kg</option>
-            <option value="300">산업 300kg</option>
+            <option value="20" data-i18n="shop.pack.20">소량 20kg</option>
+            <option value="300" data-i18n="shop.pack.300">산업 300kg</option>
           </select>
         </label>
-        <label>수량(포)
+        <label><span data-i18n="shop.form.qty">수량(포)</span>
           <input id="shop-qty" name="qty" type="number" min="1" step="1" value="1">
         </label>
-        <label>색상
+        <label><span data-i18n="shop.form.color">색상</span>
           <select id="shop-color" name="color"></select>
         </label>
         <div id="shop-info" class="shop-info"></div>
-        <button class="btn" type="submit">구매 선접수</button>
-        <p class="note">대양 금액은 선접수 후 통보합니다. 오른쪽은 업계 추정가입니다.</p>
+        <button class="btn" type="submit" data-i18n="shop.form.submit">구매 선접수</button>
+        <p class="note" data-i18n="shop.form.note">대양 금액은 선접수 후 통보합니다.</p>
       </form>
-
-      <aside class="shop-compare" aria-label="업계 가격 비교">
-        <p class="eyebrow">업계 비교</p>
-        <h2>타사 추정가</h2>
-        <p id="shop-compare-caption" class="shop-note"></p>
-        <div id="shop-compare"></div>
-      </aside>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p><strong>대양피엔티㈜</strong> · 분체도료</p>
+    <p><strong>대양피엔티㈜</strong> · <span data-i18n="footer.tagline">분체도료</span></p>
     <p>경기도 김포시 하성면 애기봉로 774번길 39-17,22 · TEL 031)987-8587 · FAX 031)982-8587</p>
-    <p class="fine">본 사이트는 포트폴리오용 가상 회사 예시입니다.</p>
+    <p class="fine" data-i18n="footer.fine">본 사이트는 포트폴리오용 가상 회사 예시입니다.</p>
   </footer>
+  <script src="js/i18n.js"></script>
   <script src="js/colors.js"></script>
   <script src="js/prices.js"></script>
   <script src="js/main.js"></script>

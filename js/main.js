@@ -27,15 +27,21 @@
       productSel.value = match.value;
     }
   }
+  function t(key) {
+    return window.I18N ? window.I18N.t(key) : key;
+  }
+
   if (message && (params.get("kg") || params.get("preorder"))) {
     const lines = [
-      "구매 선접수입니다. 금액은 접수 후 통보해 주세요.",
-      "제품: " + (product || "-"),
-      "포장: " + (params.get("pack") === "300" ? "산업 300kg" : "소량 20kg"),
-      "수량: " + (params.get("qty") || "-") + "포 / " + (params.get("kg") || "-") + "kg"
+      t("contact.prefill.line1"),
+      t("contact.prefill.product") + " " + (product || "-"),
+      t("contact.prefill.pack") + " " + (params.get("pack") === "300" ? t("shop.pack.300") : t("shop.pack.20")),
+      t("contact.prefill.qty") + " " + t("contact.prefill.qtyUnit")
+        .replace("{qty}", params.get("qty") || "-")
+        .replace("{kg}", params.get("kg") || "-")
     ];
     if (params.get("color")) {
-      lines.push("색상: " + params.get("color"));
+      lines.push(t("contact.prefill.color") + " " + params.get("color"));
     }
     message.value = lines.join("\n");
   }
@@ -47,6 +53,6 @@
     saved.push({ ...data, at: new Date().toISOString() });
     localStorage.setItem("daeyang.pnt.inquiries", JSON.stringify(saved));
     form.reset();
-    status.textContent = "선접수되었습니다. 금액은 접수 확인 후 안내합니다.";
+    status.textContent = t("contact.status.submitted");
   });
 })();
