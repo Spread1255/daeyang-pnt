@@ -98,7 +98,7 @@ a {
   top: var(--header-h);
   left: 0;
   right: 0;
-  height: 12rem;
+  height: 9.5rem;
   background: var(--night);
   box-shadow: 0 16px 32px rgb(0 0 0 / 0.22);
   opacity: 0;
@@ -117,7 +117,7 @@ a {
 
 .nav-mega-col {
   position: absolute;
-  top: 2.25rem;
+  top: 0.85rem;
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
