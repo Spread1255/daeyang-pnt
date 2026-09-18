@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="meta.colors.title">색상표 | 대양피엔티㈜</title>
+  <title data-i18n="meta.aboutVision.title">사업비전 | 대양피엔티㈜</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
         <a href="about.html" data-i18n="nav.about">회사소개</a>
         <div class="nav-dropdown">
           <a href="about.html" data-i18n="nav.about">회사소개</a>
-          <a href="about-vision.html" data-i18n="nav.aboutVision">사업비전</a>
+          <a href="about-vision.html" aria-current="page" data-i18n="nav.aboutVision">사업비전</a>
           <a href="about-info.html" data-i18n="nav.aboutInfo">회사정보</a>
           <a href="about-history.html" data-i18n="nav.aboutHistory">회사연혁</a>
         </div>
@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="nav-item">
-        <a href="colors.html" aria-current="page" data-i18n="nav.colors">색상표</a>
+        <a href="colors.html" data-i18n="nav.colors">색상표</a>
         <div class="nav-dropdown nav-dropdown--single">
           <a href="colors.html" data-i18n="nav.colors">색상표</a>
         </div>
@@ -57,45 +57,30 @@
 
   <main>
     <section class="page-hero">
-      <p class="eyebrow">Color chart</p>
-      <h1 data-i18n="colors.h1">색상표</h1>
+      <a class="crumb" href="about.html" data-i18n="nav.about">회사소개</a>
+      <p class="eyebrow">Business Vision</p>
+      <h1 data-i18n="home.story.vision.h2">사업비전</h1>
     </section>
 
     <section class="section">
-      <div class="filters">
-        <label><span data-i18n="colors.filter.series">시리즈</span>
-          <select id="filter-series">
-            <option value="" data-i18n="colors.filter.all">전체</option>
-            <option value="1" data-i18n="shop.series.1">DY#1 내장형</option>
-            <option value="2" data-i18n="shop.series.2">DY#2 외장형</option>
-            <option value="3" data-i18n="shop.series.3">DY#3 스트럭쳐</option>
-            <option value="4" data-i18n="shop.series.4">DY#4 텍스쳐</option>
-            <option value="5" data-i18n="shop.series.5">DY#5 메탈릭</option>
-            <option value="6" data-i18n="shop.series.6">DY#6 함마톤</option>
-          </select>
-        </label>
-        <label><span data-i18n="colors.filter.color">색상</span>
-          <select id="filter-color">
-            <option value="" data-i18n="colors.filter.all">전체</option>
-          </select>
-        </label>
-        <label><span data-i18n="colors.filter.search">검색</span>
-          <input id="filter-search" type="search" data-i18n-placeholder="common.colorSearchPlaceholder" placeholder="DY#1-BK001, SILVER…">
-        </label>
-        <p id="color-count" class="count"></p>
-      </div>
-      <div id="color-grid" class="swatch-grid"></div>
-      <p class="note" data-i18n="colors.note">본 색상표는 실제 공급 도료와 작업 공정에 따라 색차가 있을 수 있습니다. 원본: 대양피앤티 제품코드 1~5.</p>
+      <article class="story-panel story-panel--vision about-story">
+        <div class="story-media">
+          <img src="images/app-industry-rack.jpg" data-i18n-alt="home.story.vision.imgAlt" alt="분체도료 산업 전경">
+        </div>
+        <div class="story-copy">
+          <p data-i18n="home.story.vision.p1">분체도료는 100% 고형분의 환경친화적 도료로서 VOC 배출 규제에 따른 휘발성 액상 도료의 대체품으로 매년 사용량이 증가하는 매력적인 도료 산업 시장이다.</p>
+          <p data-i18n="home.story.vision.p2">분체도료 소비의 증가에 따라 발생되는 폐분체도료의 양도 증가하고 있으며, 이를 재활용하여 활용할 수 있는 여러 방법이 연구되고 있다.</p>
+          <p data-i18n="home.story.vision.p3">자사는 분체도료 제조의 기술력을 확보하였으며, 이를 바탕으로 기존 분체도료 시장에서 우월한 가격 경쟁력을 확보하여 소비자와 생산자 간의 신뢰를 바탕으로 상호 이익 실현에 중심이 되어 국내 분체도료 시장의 벤치마킹 선두 모델로 성장할 것이다.</p>
+        </div>
+      </article>
     </section>
   </main>
 
   <footer class="site-footer">
     <p><strong>대양피엔티㈜</strong> · <span data-i18n="footer.tagline">분체도료</span></p>
-    <p>경기도 김포시 하성면 애기봉로 774번길 39-17,22 · TEL 031)987-8587</p>
+    <p>경기도 김포시 하성면 애기봉로 774번길 39-17,22 · TEL 031)987-8587 · FAX 031)982-8587</p>
   </footer>
   <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/colors.js"></script>
-  <script src="js/color-page.js"></script>
 </body>
 </html>

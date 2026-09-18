@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="meta.colors.title">색상표 | 대양피엔티㈜</title>
+  <title data-i18n="meta.aboutInfo.title">회사정보 | 대양피엔티㈜</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
         <div class="nav-dropdown">
           <a href="about.html" data-i18n="nav.about">회사소개</a>
           <a href="about-vision.html" data-i18n="nav.aboutVision">사업비전</a>
-          <a href="about-info.html" data-i18n="nav.aboutInfo">회사정보</a>
+          <a href="about-info.html" aria-current="page" data-i18n="nav.aboutInfo">회사정보</a>
           <a href="about-history.html" data-i18n="nav.aboutHistory">회사연혁</a>
         </div>
       </div>
@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="nav-item">
-        <a href="colors.html" aria-current="page" data-i18n="nav.colors">색상표</a>
+        <a href="colors.html" data-i18n="nav.colors">색상표</a>
         <div class="nav-dropdown nav-dropdown--single">
           <a href="colors.html" data-i18n="nav.colors">색상표</a>
         </div>
@@ -57,45 +57,58 @@
 
   <main>
     <section class="page-hero">
-      <p class="eyebrow">Color chart</p>
-      <h1 data-i18n="colors.h1">색상표</h1>
+      <a class="crumb" href="about.html" data-i18n="nav.about">회사소개</a>
+      <p class="eyebrow">Company Info</p>
+      <h1 data-i18n="about.info.h2">회사 정보</h1>
     </section>
 
     <section class="section">
-      <div class="filters">
-        <label><span data-i18n="colors.filter.series">시리즈</span>
-          <select id="filter-series">
-            <option value="" data-i18n="colors.filter.all">전체</option>
-            <option value="1" data-i18n="shop.series.1">DY#1 내장형</option>
-            <option value="2" data-i18n="shop.series.2">DY#2 외장형</option>
-            <option value="3" data-i18n="shop.series.3">DY#3 스트럭쳐</option>
-            <option value="4" data-i18n="shop.series.4">DY#4 텍스쳐</option>
-            <option value="5" data-i18n="shop.series.5">DY#5 메탈릭</option>
-            <option value="6" data-i18n="shop.series.6">DY#6 함마톤</option>
-          </select>
-        </label>
-        <label><span data-i18n="colors.filter.color">색상</span>
-          <select id="filter-color">
-            <option value="" data-i18n="colors.filter.all">전체</option>
-          </select>
-        </label>
-        <label><span data-i18n="colors.filter.search">검색</span>
-          <input id="filter-search" type="search" data-i18n-placeholder="common.colorSearchPlaceholder" placeholder="DY#1-BK001, SILVER…">
-        </label>
-        <p id="color-count" class="count"></p>
+      <div class="table-wrap">
+        <table class="info-table">
+          <tbody>
+            <tr>
+              <th data-i18n="about.info.name">상호</th>
+              <td>(주)대양피앤티</td>
+            </tr>
+            <tr>
+              <th data-i18n="about.info.ceo">대표자</th>
+              <td>정영일</td>
+            </tr>
+            <tr>
+              <th data-i18n="about.info.regno">사업자등록번호</th>
+              <td>137-81-39878</td>
+            </tr>
+            <tr>
+              <th data-i18n="about.info.address">소재지</th>
+              <td>경기도 김포시 하성면 애기봉로 774번길 39-17,22 (하성면 원산리 185-14,15)</td>
+            </tr>
+            <tr>
+              <th data-i18n="about.info.factory1">제1공장</th>
+              <td>포천시 일동면 화동로 1544-165</td>
+            </tr>
+            <tr>
+              <th data-i18n="about.info.factory2">제2공장</th>
+              <td>포천시 일동면 화동로 1544-6</td>
+            </tr>
+            <tr>
+              <th>TEL</th>
+              <td>031)987-8587</td>
+            </tr>
+            <tr>
+              <th>FAX</th>
+              <td>031)982-8587</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div id="color-grid" class="swatch-grid"></div>
-      <p class="note" data-i18n="colors.note">본 색상표는 실제 공급 도료와 작업 공정에 따라 색차가 있을 수 있습니다. 원본: 대양피앤티 제품코드 1~5.</p>
     </section>
   </main>
 
   <footer class="site-footer">
     <p><strong>대양피엔티㈜</strong> · <span data-i18n="footer.tagline">분체도료</span></p>
-    <p>경기도 김포시 하성면 애기봉로 774번길 39-17,22 · TEL 031)987-8587</p>
+    <p>경기도 김포시 하성면 애기봉로 774번길 39-17,22 · TEL 031)987-8587 · FAX 031)982-8587</p>
   </footer>
   <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/colors.js"></script>
-  <script src="js/color-page.js"></script>
 </body>
 </html>

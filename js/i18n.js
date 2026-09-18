@@ -15,6 +15,9 @@
       "nav.colors": "색상표",
       "nav.applications": "적용 분야",
       "nav.about": "회사소개",
+      "nav.aboutVision": "사업비전",
+      "nav.aboutInfo": "회사정보",
+      "nav.aboutHistory": "회사연혁",
       "nav.contact": "견적 문의",
 
       "footer.tagline": "분체도료",
@@ -32,6 +35,9 @@
       "meta.colors.title": "색상표 | 대양피엔티㈜",
       "meta.applications.title": "적용 분야 | 대양피엔티㈜",
       "meta.about.title": "회사소개 | 대양피엔티㈜",
+      "meta.aboutVision.title": "사업비전 | 대양피엔티㈜",
+      "meta.aboutInfo.title": "회사정보 | 대양피엔티㈜",
+      "meta.aboutHistory.title": "회사연혁 | 대양피엔티㈜",
       "meta.contact.title": "견적 문의 | 대양피엔티㈜",
 
       "home.hero.title": "금속을 지키는 도막,<br>현장에서 통하는 분체도료",
@@ -290,6 +296,9 @@
       "nav.colors": "Colors",
       "nav.applications": "Applications",
       "nav.about": "About",
+      "nav.aboutVision": "Business Vision",
+      "nav.aboutInfo": "Company Info",
+      "nav.aboutHistory": "Company History",
       "nav.contact": "Get a Quote",
 
       "footer.tagline": "Powder Coatings",
@@ -307,6 +316,9 @@
       "meta.colors.title": "Color Chart | DAEYANG P&T",
       "meta.applications.title": "Applications | DAEYANG P&T",
       "meta.about.title": "About Us | DAEYANG P&T",
+      "meta.aboutVision.title": "Business Vision | DAEYANG P&T",
+      "meta.aboutInfo.title": "Company Info | DAEYANG P&T",
+      "meta.aboutHistory.title": "Company History | DAEYANG P&T",
       "meta.contact.title": "Request a Quote | DAEYANG P&T",
 
       "home.hero.title": "Coatings that protect metal,<br>powder coatings that work on site",
@@ -565,6 +577,9 @@
       "nav.colors": "カラーチャート",
       "nav.applications": "用途",
       "nav.about": "会社概要",
+      "nav.aboutVision": "事業ビジョン",
+      "nav.aboutInfo": "会社情報",
+      "nav.aboutHistory": "沿革",
       "nav.contact": "見積依頼",
 
       "footer.tagline": "粉体塗料",
@@ -582,6 +597,9 @@
       "meta.colors.title": "カラーチャート | DAEYANG P&T",
       "meta.applications.title": "用途 | DAEYANG P&T",
       "meta.about.title": "会社概要 | DAEYANG P&T",
+      "meta.aboutVision.title": "事業ビジョン | DAEYANG P&T",
+      "meta.aboutInfo.title": "会社情報 | DAEYANG P&T",
+      "meta.aboutHistory.title": "沿革 | DAEYANG P&T",
       "meta.contact.title": "見積依頼 | DAEYANG P&T",
 
       "home.hero.title": "金属を守る塗膜、<br>現場で通用する粉体塗料",
@@ -840,6 +858,9 @@
       "nav.colors": "色卡",
       "nav.applications": "应用领域",
       "nav.about": "公司简介",
+      "nav.aboutVision": "事业愿景",
+      "nav.aboutInfo": "公司信息",
+      "nav.aboutHistory": "公司沿革",
       "nav.contact": "报价咨询",
 
       "footer.tagline": "粉末涂料",
@@ -857,6 +878,9 @@
       "meta.colors.title": "色卡 | DAEYANG P&T",
       "meta.applications.title": "应用领域 | DAEYANG P&T",
       "meta.about.title": "公司简介 | DAEYANG P&T",
+      "meta.aboutVision.title": "事业愿景 | DAEYANG P&T",
+      "meta.aboutInfo.title": "公司信息 | DAEYANG P&T",
+      "meta.aboutHistory.title": "公司沿革 | DAEYANG P&T",
       "meta.contact.title": "报价咨询 | DAEYANG P&T",
 
       "home.hero.title": "守护金属的涂层，<br>现场适用的粉末涂料",
