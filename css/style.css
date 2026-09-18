@@ -127,28 +127,19 @@ a {
 .nav-mega-col a {
   padding: 0.3rem 0.15rem;
   border-radius: 0.3rem;
+  font-family: inherit;
   font-size: 0.95rem;
   font-weight: 400;
+  font-style: normal;
+  text-transform: none;
+  letter-spacing: normal;
+  color: #f4efe6;
   white-space: nowrap;
 }
 
 .nav-mega-col a:hover,
 .nav-mega-col a:focus-visible {
   background: rgb(244 232 214 / 0.1);
-}
-
-.nav-mega-col--about a:first-child {
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.45rem;
-  border-bottom: 1px solid rgb(244 232 214 / 0.18);
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.nav-mega-col--about a:first-child:hover,
-.nav-mega-col--about a:first-child:focus-visible {
-  background: transparent;
-  color: var(--accent-dark);
 }
 
 .nav-cta {
