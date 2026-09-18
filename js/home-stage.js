@@ -2,6 +2,7 @@
   const stage = document.getElementById("homeStage");
   const windowEl = document.getElementById("homeWindow");
   const heroEl = document.getElementById("homeStageHero");
+  const heroBgEl = document.getElementById("homeStageBgHero");
   const cue = document.querySelector(".home-stage-cue");
   if (!stage || !windowEl) {
     return;
@@ -35,6 +36,9 @@
       heroEl.style.opacity = String(1 - ease);
       heroEl.style.pointerEvents = ease > 0.5 ? "none" : "auto";
     }
+    if (heroBgEl) {
+      heroBgEl.style.opacity = String(1 - ease);
+    }
   }
 
   function tick() {
@@ -50,6 +54,9 @@
     }
     if (heroEl) {
       heroEl.style.display = "none";
+    }
+    if (heroBgEl) {
+      heroBgEl.style.display = "none";
     }
     return;
   }

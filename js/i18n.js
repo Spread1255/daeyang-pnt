@@ -75,6 +75,7 @@
       "home.window.lead": "이미지를 눌러 해당 분체도료로 들어갑니다.",
       "home.window.all": "제품 전체 보기",
       "home.stage.bgAlt": "분체도료 칼라 파우더",
+      "home.stage.heroBgAlt": "금속을 지키는 분체도료",
 
       "home.story.intro.h2": "회사 소개",
       "home.story.intro.p": "대양피엔티㈜는 1993년 창업 이래 분체도료 한 우물을 파온 제조기업입니다. 김포 본사와 포천 1·2공장을 통해 안정적인 생산 체계를 갖추고, 건축·가전·자동차·산업 설비 전 분야에 맞춤 분체도료를 공급합니다.",
@@ -349,6 +350,7 @@
       "home.window.lead": "Tap an image to enter that powder coating line.",
       "home.window.all": "View all products",
       "home.stage.bgAlt": "Powder coating color pigments",
+      "home.stage.heroBgAlt": "Powder coating that protects metal",
 
       "home.story.intro.h2": "Our Company",
       "home.story.intro.p": "Since its founding in 1993, DAEYANG P&T has focused solely on powder coatings. With a stable production system across our Gimpo headquarters and Pocheon Factories 1 and 2, we supply custom powder coatings for construction, appliances, automotive, and industrial equipment.",
@@ -623,6 +625,7 @@
       "home.window.lead": "画像を押すと該当する粉体塗料に入ります。",
       "home.window.all": "製品一覧を見る",
       "home.stage.bgAlt": "粉体塗料カラーパウダー",
+      "home.stage.heroBgAlt": "金属を守る粉体塗料",
 
       "home.story.intro.h2": "会社紹介",
       "home.story.intro.p": "大陽P&Tは1993年の創業以来、粉体塗料一筋に歩んできた製造企業です。金浦本社と抱川第1・第2工場による安定した生産体制のもと、建築・家電・自動車・産業設備の全分野に合わせた粉体塗料を供給しています。",
@@ -897,6 +900,7 @@
       "home.window.lead": "点击图片进入对应粉末涂料。",
       "home.window.all": "查看全部产品",
       "home.stage.bgAlt": "粉末涂料色粉",
+      "home.stage.heroBgAlt": "守护金属的粉末涂料",
 
       "home.story.intro.h2": "公司简介",
       "home.story.intro.p": "大洋P&T自1993年创立以来，专注于粉末涂料制造。凭借金浦总部与抱川第一、第二工厂构成的稳定生产体系，为建筑、家电、汽车、工业设备等全领域供应定制粉末涂料。",

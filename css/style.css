@@ -1363,6 +1363,20 @@ th {
   background: #f4f1ec url("../images/home-powder-colors.jpg") 62% 42% / cover no-repeat;
 }
 
+.home-stage-bg-hero {
+  position: absolute;
+  inset: 0;
+  background: #0c1a33 url("../images/home-hero-metal.jpg") center / cover no-repeat;
+  will-change: opacity;
+}
+
+.home-stage-bg-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(8 14 28 / 0.35), rgb(8 14 28 / 0.22) 45%, rgb(8 14 28 / 0.42));
+}
+
 .home-stage-hero {
   position: absolute;
   inset: 0;
@@ -1377,22 +1391,16 @@ th {
 
 .home-stage-hero-inner {
   max-width: 36rem;
-  color: #171717;
+  color: #f4efe6;
 }
 
 .home-stage-hero .eyebrow {
   color: var(--accent);
 }
 
-.home-stage-hero h1 {
-  margin: 0.3rem 0 0.7rem;
-  text-shadow: 0 2px 20px rgb(255 255 255 / 0.85), 0 1px 4px rgb(255 255 255 / 0.9);
-}
-
 .home-stage-hero .lede {
   margin: 0 auto 1.3rem;
-  color: #3f3b36;
-  text-shadow: 0 1px 12px rgb(255 255 255 / 0.8);
+  color: rgb(244 239 230 / 0.88);
 }
 
 .home-stage-hero .hero-actions {
@@ -1400,13 +1408,13 @@ th {
 }
 
 .home-stage-hero .btn-ghost {
-  color: #171717;
-  border-color: rgb(23 23 23 / 0.35);
+  color: #f4efe6;
+  border-color: rgb(244 239 230 / 0.45);
 }
 
 .home-stage-hero .btn-ghost:hover,
 .home-stage-hero .btn-ghost:focus-visible {
-  background: rgb(23 23 23 / 0.08);
+  background: rgb(244 239 230 / 0.12);
 }
 
 .home-stage-cue {
@@ -1416,7 +1424,7 @@ th {
   z-index: 2;
   width: 1.5rem;
   height: 2.4rem;
-  border: 2px solid rgb(40 40 40 / 0.35);
+  border: 2px solid rgb(244 239 230 / 0.45);
   border-radius: 999px;
   transform: translateX(-50%);
 }
@@ -1427,7 +1435,7 @@ th {
   height: 0.48rem;
   margin: 0.4rem auto 0;
   border-radius: 999px;
-  background: rgb(40 40 40 / 0.55);
+  background: #f4efe6;
   animation: scroll-cue 1.8s ease-in-out infinite;
 }
 
