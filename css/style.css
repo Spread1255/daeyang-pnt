@@ -1648,7 +1648,7 @@ th {
   justify-content: center;
   min-height: 5.5rem;
   padding: 1rem;
-  background: var(--panel);
+  background: #fff;
   border: 1px solid var(--line);
   border-radius: 0.75rem;
   text-decoration: none;
