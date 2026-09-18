@@ -117,8 +117,7 @@ a {
 
 .nav-mega-col {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 2.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
@@ -129,27 +128,26 @@ a {
   padding: 0.3rem 0.15rem;
   border-radius: 0.3rem;
   font-size: 0.95rem;
+  font-weight: 400;
   white-space: nowrap;
 }
 
-.nav-mega-col a:first-child {
-  margin-bottom: 0.5rem;
-  padding: 0 0.15rem 0.45rem;
-  border-bottom: 1px solid rgb(244 232 214 / 0.18);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.nav-mega-col a:not(:first-child):hover,
-.nav-mega-col a:not(:first-child):focus-visible {
+.nav-mega-col a:hover,
+.nav-mega-col a:focus-visible {
   background: rgb(244 232 214 / 0.1);
 }
 
-.nav-mega-col a:first-child:hover,
-.nav-mega-col a:first-child:focus-visible {
+.nav-mega-col--about a:first-child {
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid rgb(244 232 214 / 0.18);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.nav-mega-col--about a:first-child:hover,
+.nav-mega-col--about a:first-child:focus-visible {
+  background: transparent;
   color: var(--accent-dark);
 }
 
