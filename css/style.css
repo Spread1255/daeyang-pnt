@@ -1632,8 +1632,9 @@ th {
   padding: 0;
 }
 
-.about-nav {
+.section.about-nav {
   padding-bottom: 0;
+  background: #fff;
 }
 
 .about-nav-grid {
