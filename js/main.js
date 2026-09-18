@@ -9,6 +9,32 @@
     });
   }
 
+  const header = document.querySelector(".site-header");
+  const triggers = document.querySelectorAll(".nav-trigger");
+  const cols = document.querySelectorAll(".nav-mega-col");
+
+  function layoutNavMega() {
+    if (header) {
+      document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+    }
+    if (window.innerWidth <= 800) {
+      return;
+    }
+    triggers.forEach(function (trigger, i) {
+      const col = cols[i];
+      if (!col) {
+        return;
+      }
+      col.style.left = trigger.getBoundingClientRect().left + "px";
+    });
+  }
+
+  if (header && triggers.length && cols.length) {
+    layoutNavMega();
+    window.addEventListener("resize", layoutNavMega);
+    window.addEventListener("load", layoutNavMega);
+  }
+
   const form = document.getElementById("inquiry-form");
   const status = document.getElementById("form-status");
   if (!form || !status) {
