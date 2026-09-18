@@ -1262,7 +1262,11 @@ th {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.85rem;
-  padding: 0 max(1.5rem, calc((100% - 68rem) / 2)) 1.5rem;
+  padding: 1.5rem max(1.5rem, calc((100% - 68rem) / 2));
+  background: #fff;
+}
+
+.product-switch + .section {
   background: #fff;
 }
 
