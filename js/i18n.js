@@ -35,8 +35,8 @@
       "meta.contact.title": "견적 문의 | 대양피엔티㈜",
 
       "home.hero.title": "금속을 지키는 도막,<br>현장에서 통하는 분체도료",
-      "home.hero.lede": "제품군을 고르면 해당 분체도료 칼라칩을 바로 볼 수 있습니다.",
-      "home.hero.btn1": "제품 칼라 보기",
+      "home.hero.lede": "무용제 분체도료로 내식·내후·내화학성을 맞춥니다. 표준 색상부터 라인 맞춤 배합까지 생산합니다.",
+      "home.hero.btn1": "제품 보기",
       "home.hero.btn2": "구매 선접수",
       "home.stats.1.strong": "VOC 저감",
       "home.stats.1.desc": "용제형 대비 현장 환경 부담을 줄입니다",
@@ -309,8 +309,8 @@
       "meta.contact.title": "Request a Quote | DAEYANG P&T",
 
       "home.hero.title": "Coatings that protect metal,<br>powder coatings that work on site",
-      "home.hero.lede": "Choose a product line to browse its powder coating color chips.",
-      "home.hero.btn1": "View product colors",
+      "home.hero.lede": "Solvent-free powder coatings tailored for corrosion, weather, and chemical resistance. We produce everything from standard colors to line-matched custom formulations.",
+      "home.hero.btn1": "View Products",
       "home.hero.btn2": "Pre-order",
       "home.stats.1.strong": "VOC Reduction",
       "home.stats.1.desc": "Reduces on-site environmental burden compared to solvent-based coatings",
@@ -583,8 +583,8 @@
       "meta.contact.title": "見積依頼 | DAEYANG P&T",
 
       "home.hero.title": "金属を守る塗膜、<br>現場で通用する粉体塗料",
-      "home.hero.lede": "製品群を選ぶと、該当する粉体塗料のカラーチップをすぐに確認できます。",
-      "home.hero.btn1": "製品カラーを見る",
+      "home.hero.lede": "無溶剤の粉体塗料で耐食性・耐候性・耐薬品性を調整します。標準色からライン仕様の配合まで生産します。",
+      "home.hero.btn1": "製品を見る",
       "home.hero.btn2": "購入予約",
       "home.stats.1.strong": "VOC低減",
       "home.stats.1.desc": "溶剤型に比べ現場の環境負荷を減らします",
@@ -857,8 +857,8 @@
       "meta.contact.title": "报价咨询 | DAEYANG P&T",
 
       "home.hero.title": "守护金属的涂层，<br>现场适用的粉末涂料",
-      "home.hero.lede": "选择产品系列后，即可查看对应粉末涂料色卡。",
-      "home.hero.btn1": "查看产品色卡",
+      "home.hero.lede": "采用无溶剂粉末涂料，满足耐蚀、耐候、耐化学性需求。从标准色到产线定制配方均可生产。",
+      "home.hero.btn1": "查看产品",
       "home.hero.btn2": "预订购买",
       "home.stats.1.strong": "VOC减排",
       "home.stats.1.desc": "相比溶剂型涂料，减轻现场环境负担",
