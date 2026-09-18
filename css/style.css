@@ -117,8 +117,8 @@ a {
   z-index: 20;
 }
 
-.nav-item:hover .nav-dropdown,
-.nav-item:focus-within .nav-dropdown {
+.site-nav:hover .nav-dropdown,
+.site-nav:focus-within .nav-dropdown {
   opacity: 1;
   visibility: visible;
   transform: translate(-50%, 0);
