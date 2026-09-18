@@ -33,6 +33,7 @@
     layoutNavMega();
     window.addEventListener("resize", layoutNavMega);
     window.addEventListener("load", layoutNavMega);
+    window.addEventListener("i18n:change", layoutNavMega);
   }
 
   const form = document.getElementById("inquiry-form");
