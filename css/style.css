@@ -1259,27 +1259,46 @@ th {
 }
 
 .product-switch {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  padding: 0 max(1.5rem, calc((100% - 68rem) / 2)) 0.25rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.85rem;
+  padding: 0 max(1.5rem, calc((100% - 68rem) / 2)) 1.5rem;
+  background: #fff;
 }
 
 .product-switch a {
-  text-decoration: none;
-  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.5rem;
+  padding: 0.75rem 1rem;
   background: var(--panel);
-  color: var(--muted);
-  border-radius: 999px;
-  padding: 0.4rem 0.9rem;
-  font-size: 0.92rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  text-decoration: none;
+  text-align: center;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.98rem;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.product-switch a:hover,
+.product-switch a:focus-visible {
+  border-color: var(--accent);
+  background: rgb(224 122 40 / 0.08);
 }
 
 .product-switch a[aria-current="page"] {
-  background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
-  font-weight: 700;
+  background: rgb(224 122 40 / 0.1);
+  color: var(--accent-dark);
+}
+
+@media (max-width: 560px) {
+  .product-switch {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .product-spotlight {
