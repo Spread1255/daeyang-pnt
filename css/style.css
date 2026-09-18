@@ -75,6 +75,7 @@ a {
 }
 
 .site-nav {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -91,48 +92,55 @@ a {
   font-weight: 700;
 }
 
-.nav-item {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.nav-dropdown {
+.nav-mega {
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translate(-50%, -4px);
+  left: 0;
+  right: 0;
   display: flex;
-  flex-direction: column;
-  min-width: 9rem;
+  flex-wrap: wrap;
+  gap: 1.5rem 2.5rem;
   margin-top: 0.6rem;
-  padding: 0.4rem;
+  padding: 1.1rem 1.5rem;
   background: var(--night);
   border: 1px solid rgb(244 232 214 / 0.16);
-  border-radius: 0.6rem;
+  border-radius: 0.75rem;
   box-shadow: 0 12px 28px rgb(0 0 0 / 0.28);
   opacity: 0;
   visibility: hidden;
+  transform: translateY(-4px);
   transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
   z-index: 20;
 }
 
-.site-nav:hover .nav-dropdown,
-.site-nav:focus-within .nav-dropdown {
+.site-nav:hover .nav-mega,
+.site-nav:focus-within .nav-mega {
   opacity: 1;
   visibility: visible;
-  transform: translate(-50%, 0);
+  transform: translateY(0);
 }
 
-.nav-dropdown a {
-  padding: 0.5rem 0.7rem;
+.nav-mega-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 8rem;
+}
+
+.nav-mega-col a {
+  padding: 0.35rem 0.5rem;
   border-radius: 0.4rem;
   font-size: 0.92rem;
   white-space: nowrap;
 }
 
-.nav-dropdown a:hover,
-.nav-dropdown a:focus-visible {
+.nav-mega-col a:first-child {
+  font-weight: 700;
+  color: var(--accent-dark);
+}
+
+.nav-mega-col a:hover,
+.nav-mega-col a:focus-visible {
   background: rgb(244 232 214 / 0.1);
 }
 
@@ -1654,13 +1662,9 @@ th {
     display: flex;
   }
 
-  .nav-item {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .nav-dropdown {
+  .nav-mega {
     position: static;
+    flex-direction: column;
     transform: none;
     margin-top: 0.2rem;
     margin-left: 0.75rem;
@@ -1670,15 +1674,20 @@ th {
     box-shadow: none;
     opacity: 1;
     visibility: visible;
+    gap: 0.2rem;
   }
 
-  .nav-dropdown a {
+  .nav-mega-col a {
     padding: 0.35rem 0;
     font-size: 0.92rem;
     color: rgb(244 232 214 / 0.75);
   }
 
-  .nav-dropdown--single {
+  .nav-mega-col--single {
+    display: none;
+  }
+
+  .nav-mega-col--about a:first-child {
     display: none;
   }
 
