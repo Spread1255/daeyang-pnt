@@ -98,8 +98,9 @@ a {
   left: 0;
   right: 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem 2.5rem;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 1.25rem;
   margin-top: 0.6rem;
   padding: 1.1rem 1.5rem;
   background: var(--night);
@@ -124,7 +125,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  min-width: 8rem;
+  min-width: 0;
 }
 
 .nav-mega-col a {
