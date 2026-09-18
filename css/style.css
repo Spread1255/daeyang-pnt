@@ -1116,68 +1116,39 @@ th {
   padding-bottom: 1.25rem;
 }
 
-.product-index {
+.section.product-index {
   padding-top: 0;
+  background: #fff;
 }
 
 .product-cats {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.85rem;
 }
 
 .product-cat {
   position: relative;
-  min-height: 22rem;
-  border-radius: 1rem;
-  overflow: hidden;
-  text-decoration: none;
-  color: #f4efe6;
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  padding: 1.5rem 1.35rem;
+  background: var(--panel);
   border: 1px solid var(--line);
-  isolation: isolate;
+  border-radius: 0.9rem;
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.15s ease, transform 0.15s ease;
 }
 
-.product-cat-media {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  transform: scale(1.04);
-  transition: transform 0.55s ease;
-}
-
-.product-cat-media::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgb(12 14 22 / 0.18) 0%, rgb(12 14 22 / 0.55) 48%, rgb(12 14 22 / 0.88) 100%);
-}
-
-.product-cat--interior .product-cat-media {
-  background-image: url("../images/app-appliance-fridge.jpg");
-}
-
-.product-cat--exterior .product-cat-media {
-  background-image: url("../images/app-building-fence.jpg");
-}
-
-.product-cat--pattern .product-cat-media {
-  background-image: url("../images/app-industry-cabinet.jpg");
-}
-
-.product-cat--functional .product-cat-media {
-  background-image: url("../images/app-industry-pipe.jpg");
+.product-cat:hover,
+.product-cat:focus-visible {
+  border-color: var(--accent);
+  transform: translateY(-2px);
 }
 
 .product-cat-copy {
-  position: relative;
-  z-index: 1;
   display: grid;
-  gap: 0.2rem;
-  padding: 1.4rem 1.35rem 1.25rem;
-  width: 100%;
+  gap: 0.3rem;
 }
 
 .product-cat-copy .eyebrow {
@@ -1186,14 +1157,13 @@ th {
 
 .product-cat-copy h2 {
   margin: 0.1rem 0 0.15rem;
-  font-size: clamp(1.6rem, 3vw, 2.15rem);
-  letter-spacing: -0.03em;
+  font-size: clamp(1.15rem, 1.6vw, 1.35rem);
+  letter-spacing: -0.02em;
 }
 
 .product-cat-copy p {
   margin: 0;
-  color: rgb(244 239 230 / 0.85);
-  max-width: 22rem;
+  color: var(--muted);
 }
 
 .product-cat-num {
@@ -1202,7 +1172,7 @@ th {
   right: 1.2rem;
   font-size: 0.78rem;
   letter-spacing: 0.16em;
-  color: rgb(244 239 230 / 0.72);
+  color: var(--muted);
 }
 
 .product-cat-more {
@@ -1218,11 +1188,6 @@ th {
 .product-cat-more::after {
   content: "→";
   transition: transform 0.2s ease;
-}
-
-.product-cat:hover .product-cat-media,
-.product-cat:focus-visible .product-cat-media {
-  transform: scale(1.1);
 }
 
 .product-cat:hover .product-cat-more::after,
@@ -1753,11 +1718,8 @@ th {
   }
 
   .product-cats {
+    grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
-  }
-
-  .product-cat {
-    min-height: 16.5rem;
   }
 
   .about-values {
@@ -1773,9 +1735,5 @@ th {
 @media (max-width: 560px) {
   .product-cats {
     grid-template-columns: 1fr;
-  }
-
-  .product-cat {
-    min-height: 15rem;
   }
 }
