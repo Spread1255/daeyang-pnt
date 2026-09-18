@@ -5,17 +5,17 @@
 }
 
 :root {
-  --bg: #3a7ec2;
-  --ink: #f4efe6;
-  --muted: #efe4d2;
-  --panel: rgb(12 14 22 / 0.48);
-  --line: rgb(244 232 214 / 0.28);
+  --bg: #ffffff;
+  --ink: #1c1c1c;
+  --muted: #5b5752;
+  --panel: rgb(0 0 0 / 0.035);
+  --line: rgb(0 0 0 / 0.12);
   --accent: #e07a28;
-  --accent-dark: #f3e6c8;
+  --accent-dark: #c45a2a;
   --navy: transparent;
-  --navy-alt: rgb(255 236 210 / 0.1);
-  --silver: #f4efe6;
-  --field: rgb(12 14 22 / 0.62);
+  --navy-alt: rgb(0 0 0 / 0.03);
+  --silver: #1c1c1c;
+  --field: rgb(0 0 0 / 0.035);
   --night: #0c0e14;
 }
 
@@ -31,18 +31,6 @@ body {
   line-height: 1.6;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background-color: var(--bg);
-  background-image: url("../images/dusk-sky.jpg");
-  background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
-}
-
 a {
   color: inherit;
 }
@@ -55,7 +43,7 @@ a {
   padding: 0.85rem 1.5rem;
   border-bottom: 1px solid rgb(244 232 214 / 0.12);
   background: var(--night);
-  color: var(--silver);
+  color: #f4efe6;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -83,7 +71,7 @@ a {
   font-size: 0.9rem;
   font-weight: 500;
   letter-spacing: 0.12em;
-  color: var(--muted);
+  color: #efe4d2;
 }
 
 .site-nav {
@@ -113,9 +101,9 @@ a {
 .nav-toggle {
   display: none;
   font: inherit;
-  border: 1px solid var(--line);
-  background: var(--panel);
-  color: var(--silver);
+  border: 1px solid rgb(244 232 214 / 0.28);
+  background: rgb(12 14 22 / 0.48);
+  color: #f4efe6;
   padding: 0.4rem 0.7rem;
   border-radius: 0.4rem;
   cursor: pointer;
@@ -132,9 +120,9 @@ a {
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  border: 1px solid var(--line);
-  background: var(--panel);
-  color: var(--muted);
+  border: 1px solid rgb(244 232 214 / 0.28);
+  background: rgb(12 14 22 / 0.48);
+  color: #efe4d2;
   padding: 0.3rem 0.55rem;
   border-radius: 999px;
   cursor: pointer;
@@ -153,9 +141,36 @@ a {
   max-width: none;
   margin: 0;
   padding: 3rem max(1.5rem, calc((100% - 68rem) / 2));
+}
+
+.section {
   background: transparent;
-  color: var(--silver);
-  text-shadow: 0 1px 10px rgb(12 16 28 / 0.28);
+  color: var(--ink);
+}
+
+.page-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 16rem;
+  background: #0c1a33 url("../images/page-hero-band.jpg") center / cover no-repeat;
+  color: #f4efe6;
+  text-shadow: 0 1px 10px rgb(12 16 28 / 0.35);
+  overflow: hidden;
+}
+
+.page-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(180deg, rgb(8 14 28 / 0.4), rgb(8 14 28 / 0.26) 55%, rgb(8 14 28 / 0.48));
+}
+
+.page-hero > * {
+  position: relative;
+  z-index: 1;
 }
 
 main > section:nth-of-type(even) {
@@ -168,6 +183,10 @@ main > section:nth-of-type(even) {
   letter-spacing: 0.16em;
   font-size: 0.75rem;
   color: var(--accent-dark);
+}
+
+.page-hero .eyebrow {
+  color: var(--accent);
 }
 
 h1 {
@@ -186,10 +205,14 @@ h3 {
   margin: 0 0 0.4rem;
 }
 
-.lede,
-.page-hero p {
+.lede {
   max-width: 40rem;
   color: var(--muted);
+}
+
+.page-hero p {
+  max-width: 40rem;
+  color: rgb(244 239 230 / 0.88);
 }
 
 .hero-actions {
@@ -682,7 +705,7 @@ th {
   padding: 1.5rem;
   text-align: center;
   background: var(--night);
-  color: var(--silver);
+  color: #f4efe6;
   font-size: 0.9rem;
 }
 
@@ -1058,7 +1081,7 @@ th {
   border-radius: 1rem;
   overflow: hidden;
   text-decoration: none;
-  color: inherit;
+  color: #f4efe6;
   display: flex;
   align-items: flex-end;
   border: 1px solid var(--line);
@@ -1118,7 +1141,7 @@ th {
 
 .product-cat-copy p {
   margin: 0;
-  color: var(--muted);
+  color: rgb(244 239 230 / 0.85);
   max-width: 22rem;
 }
 
@@ -1170,6 +1193,10 @@ th {
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 700;
+}
+
+.page-hero .crumb {
+  color: var(--accent);
 }
 
 .crumb::before {
@@ -1574,8 +1601,8 @@ th {
     align-items: stretch;
     padding: 1rem 1.5rem 1.25rem;
     background: var(--night);
-    color: var(--silver);
-    border-bottom: 1px solid var(--line);
+    color: #f4efe6;
+    border-bottom: 1px solid rgb(244 232 214 / 0.28);
   }
 
   .site-nav.is-open {
