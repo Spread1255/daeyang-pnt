@@ -85,7 +85,6 @@
       "home.colorfinder.label": "색상 코드 또는 이름",
       "home.colorfinder.more": "색상표 전체 보기",
 
-      "home.catalog.h2": "우리 제품",
       "home.catalog.colors": "제품 칼라",
       "home.catalog.lead": "내부용·외부용·무늬·기능성을 고르면 칼라를 확인할 수 있습니다.",
       "home.catalog.all": "전체",
@@ -268,15 +267,6 @@
       "about.history.2023": "연 매출 69억원 달성",
       "about.history.2024": "연 매출 72억원 달성",
       "about.history.2026": "대양피엔티 포천 제 2공장 3000평 (스마트 시설 확충 및 건물 증축)",
-      "about.benefits.h2": "분체도료의 장점",
-      "about.benefits.intro": "분체도료는 용제를 쓰지 않는 가루 형태의 도료입니다. 정전기로 금속에 붙인 뒤 오븐에서 녹여 도막을 만듭니다. 액상 도장 대비 아래 이점이 있습니다.",
-      "about.benefits.li1": "<strong>친환경</strong> — 용제가 없어 VOC를 크게 줄입니다. 작업장 냄새와 대기 배출 부담이 적습니다.",
-      "about.benefits.li2": "<strong>재료 효율</strong> — 날아간 분체를 회수해 다시 쓸 수 있어 손실이 적습니다.",
-      "about.benefits.li3": "<strong>도막 품질</strong> — 한 번에 두껍고 균일한 막을 올립니다. 흘러내림·핀홀이 적습니다.",
-      "about.benefits.li4": "<strong>내구성</strong> — 내식·내후·내화학·내충격이 우수해 건축 외장, 가전, 기계 부품에 맞습니다.",
-      "about.benefits.li5": "<strong>안전</strong> — 인화성 용제를 다루지 않아 화재·폭발 위험이 액상 도장보다 낮습니다.",
-      "about.benefits.li6": "<strong>외관</strong> — 무광·유광·텍스처·메탈릭 등 마감을 고를 수 있고, 색상 재현이 안정적입니다.",
-      "about.benefits.li7": "<strong>생산성</strong> — 경화 후 바로 후공정이 가능하고, 건조 대기 시간이 짧습니다.",
 
       "contact.h1": "견적 문의",
 
@@ -429,7 +419,6 @@
       "home.colorfinder.label": "Color code or name",
       "home.colorfinder.more": "View Full Color Chart",
 
-      "home.catalog.h2": "Our Products",
       "home.catalog.colors": "Product Colors",
       "home.catalog.lead": "Select interior, exterior, texture, or functional to view colors.",
       "home.catalog.all": "All",
@@ -612,15 +601,6 @@
       "about.history.2023": "Achieved annual revenue of KRW 6.9 billion",
       "about.history.2024": "Achieved annual revenue of KRW 7.2 billion",
       "about.history.2026": "DAEYANG P&T Pocheon Factory 2 expanded to 3,000 pyeong (smart facility upgrade and building expansion)",
-      "about.benefits.h2": "Advantages of Powder Coating",
-      "about.benefits.intro": "Powder coating is a solvent-free coating in powder form. It is electrostatically applied to metal, then melted in an oven to form a film. Compared to liquid coating, it offers the advantages below.",
-      "about.benefits.li1": "<strong>Eco-friendly</strong> — No solvents, greatly reducing VOCs. Less workplace odor and air-emission burden.",
-      "about.benefits.li2": "<strong>Material efficiency</strong> — Overspray powder can be recovered and reused, minimizing loss.",
-      "about.benefits.li3": "<strong>Film quality</strong> — Achieves a thick, uniform film in one pass, with less sagging and fewer pinholes.",
-      "about.benefits.li4": "<strong>Durability</strong> — Excellent corrosion, weather, chemical, and impact resistance, suited for building exteriors, appliances, and machine parts.",
-      "about.benefits.li5": "<strong>Safety</strong> — No handling of flammable solvents, so fire and explosion risk is lower than liquid coating.",
-      "about.benefits.li6": "<strong>Appearance</strong> — Choose from matte, gloss, textured, metallic and other finishes, with stable color reproduction.",
-      "about.benefits.li7": "<strong>Productivity</strong> — Post-processing can begin immediately after curing, with short drying wait times.",
 
       "contact.h1": "Request a Quote",
 
@@ -773,7 +753,6 @@
       "home.colorfinder.label": "カラーコードまたは名称",
       "home.colorfinder.more": "カラーチャート全体を見る",
 
-      "home.catalog.h2": "当社製品",
       "home.catalog.colors": "製品カラー",
       "home.catalog.lead": "内装用・外装用・模様・機能性を選ぶとカラーを確認できます。",
       "home.catalog.all": "すべて",
@@ -956,15 +935,6 @@
       "about.history.2023": "年間売上69億ウォン達成",
       "about.history.2024": "年間売上72億ウォン達成",
       "about.history.2026": "大陽P&T抱川第2工場3,000坪(スマート設備拡充及び増築)",
-      "about.benefits.h2": "粉体塗料の利点",
-      "about.benefits.intro": "粉体塗料は溶剤を使わない粉末状の塗料です。静電気で金属に付着させた後、オーブンで溶かして塗膜を形成します。液体塗装に比べ、以下の利点があります。",
-      "about.benefits.li1": "<strong>環境配慮</strong> — 溶剤がないためVOCを大幅に削減します。作業場の臭いと大気排出負荷が少ないです。",
-      "about.benefits.li2": "<strong>材料効率</strong> — 飛散した粉体を回収して再利用できるため、ロスが少ないです。",
-      "about.benefits.li3": "<strong>塗膜品質</strong> — 一度で厚く均一な膜を形成します。垂れやピンホールが少ないです。",
-      "about.benefits.li4": "<strong>耐久性</strong> — 耐食性・耐候性・耐薬品性・耐衝撃性に優れ、建築外装、家電、機械部品に適しています。",
-      "about.benefits.li5": "<strong>安全性</strong> — 引火性溶剤を扱わないため、火災・爆発のリスクが液体塗装より低いです。",
-      "about.benefits.li6": "<strong>外観</strong> — 艶消し・光沢・テクスチャー・メタリックなど仕上げを選べ、色の再現性が安定しています。",
-      "about.benefits.li7": "<strong>生産性</strong> — 硬化後すぐに後工程が可能で、乾燥待ち時間が短いです。",
 
       "contact.h1": "見積依頼",
 
@@ -1117,7 +1087,6 @@
       "home.colorfinder.label": "色号或名称",
       "home.colorfinder.more": "查看完整色卡",
 
-      "home.catalog.h2": "我们的产品",
       "home.catalog.colors": "产品色卡",
       "home.catalog.lead": "选择室内用、室外用、纹理或功能性即可查看颜色。",
       "home.catalog.all": "全部",
@@ -1300,15 +1269,6 @@
       "about.history.2023": "实现年销售额69亿韩元",
       "about.history.2024": "实现年销售额72亿韩元",
       "about.history.2026": "大洋P&T抱川第二工厂3,000坪(智能设施扩充及厂房增建)",
-      "about.benefits.h2": "粉末涂料的优势",
-      "about.benefits.intro": "粉末涂料是不含溶剂的粉状涂料，通过静电吸附于金属表面后，在烘箱中熔融成膜。与液体涂装相比具有以下优势。",
-      "about.benefits.li1": "<strong>环保</strong> — 不含溶剂，大幅降低VOC，减少车间异味及大气排放负担。",
-      "about.benefits.li2": "<strong>材料利用率高</strong> — 飘散的粉末可回收再利用，损耗较少。",
-      "about.benefits.li3": "<strong>涂层质量</strong> — 一次成膜厚实均匀，流挂与针孔较少。",
-      "about.benefits.li4": "<strong>耐久性</strong> — 耐蚀、耐候、耐化学、耐冲击性能优异，适用于建筑外墙、家电、机械零件。",
-      "about.benefits.li5": "<strong>安全性</strong> — 无需处理易燃溶剂，火灾与爆炸风险低于液体涂装。",
-      "about.benefits.li6": "<strong>外观</strong> — 可选哑光、亮光、纹理、金属等多种质感，颜色再现稳定。",
-      "about.benefits.li7": "<strong>生产效率</strong> — 固化后可立即进入后道工序，干燥等待时间短。",
 
       "contact.h1": "报价咨询",
 
