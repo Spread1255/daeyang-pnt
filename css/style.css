@@ -1839,6 +1839,10 @@ th {
   gap: 0.85rem;
 }
 
+.about-nav-grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
 .about-nav-card {
   display: flex;
   align-items: center;

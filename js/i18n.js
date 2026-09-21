@@ -288,7 +288,7 @@
 
       "careers.h1": "채용안내",
       "careers.lede": "대양피엔티㈜와 함께 성장할 인재를 찾습니다.",
-      "careers.body": "생산·품질관리·연구개발·영업 등 분야별로 수시 채용을 진행합니다. 채용 중인 포지션은 아래 분야를 참고해 주시고, 지원 및 문의는 견적문의 페이지를 통해 연락해 주세요.",
+      "careers.body": "생산·품질관리·연구개발·영업 등 분야별로 수시 채용을 진행합니다. 채용 중인 포지션은 아래 분야를 참고해 주시고, 지원 및 문의는 아래 채용 문의하기를 통해 연락해 주세요.",
       "careers.field1.h3": "생산·품질관리",
       "careers.field1.p": "분체도료 생산 공정 운영과 품질 검사를 담당합니다.",
       "careers.field2.h3": "연구개발",
@@ -607,7 +607,7 @@
 
       "careers.h1": "Careers",
       "careers.lede": "We're looking for people to grow with DAEYANG P&T.",
-      "careers.body": "We hire on a rolling basis across production/quality control, R&D, and sales. See the fields below, and reach out through the Request a Quote page for inquiries or applications.",
+      "careers.body": "We hire on a rolling basis across production/quality control, R&D, and sales. See the fields below, and reach out via the button below for inquiries or applications.",
       "careers.field1.h3": "Production & Quality Control",
       "careers.field1.p": "Operating the powder coating production line and quality inspection.",
       "careers.field2.h3": "Research & Development",
@@ -926,7 +926,7 @@
 
       "careers.h1": "採用案内",
       "careers.lede": "大陽P&Tと共に成長する人材を探しています。",
-      "careers.body": "生産・品質管理、研究開発、営業などの分野で随時採用を行っています。下記の分野をご参照のうえ、応募・お問い合わせは見積依頼ページよりご連絡ください。",
+      "careers.body": "生産・品質管理、研究開発、営業などの分野で随時採用を行っています。下記の分野をご参照のうえ、応募・お問い合わせは下記のボタンよりご連絡ください。",
       "careers.field1.h3": "生産・品質管理",
       "careers.field1.p": "粉体塗料の生産工程運営と品質検査を担当します。",
       "careers.field2.h3": "研究開発",
@@ -1245,7 +1245,7 @@
 
       "careers.h1": "招聘信息",
       "careers.lede": "大洋P&T正在寻找共同成长的人才。",
-      "careers.body": "我们在生产/品质管理、研发、销售等领域常年招聘。请参考下方各领域介绍，报名或咨询请通过报价咨询页面联系我们。",
+      "careers.body": "我们在生产/品质管理、研发、销售等领域常年招聘。请参考下方各领域介绍，报名或咨询请通过下方按钮联系我们。",
       "careers.field1.h3": "生产/品质管理",
       "careers.field1.p": "负责粉末涂料生产工艺运营及品质检验。",
       "careers.field2.h3": "研发",
