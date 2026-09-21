@@ -711,6 +711,75 @@ th {
   }
 }
 
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.cert-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  overflow: hidden;
+}
+
+.cert-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 3 / 4;
+  background: #f4f1ec;
+  overflow: hidden;
+}
+
+.cert-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cert-media iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.cert-info {
+  padding: 1.1rem 1.25rem 1.25rem;
+}
+
+.cert-info h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1.05rem;
+}
+
+.cert-info p {
+  margin: 0 0 0.65rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.cert-info a {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  text-decoration: none;
+}
+
+.cert-info a:hover,
+.cert-info a:focus-visible {
+  text-decoration: underline;
+}
+
+@media (max-width: 700px) {
+  .cert-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .prose p {
   max-width: 42rem;
 }
@@ -1837,10 +1906,6 @@ th {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.85rem;
-}
-
-.about-nav-grid--3 {
-  grid-template-columns: repeat(3, 1fr);
 }
 
 .about-nav-card {
