@@ -45,7 +45,6 @@
   const params = new URLSearchParams(window.location.search);
   const product = params.get("product");
   const productSel = form.querySelector('[name="product"]');
-  const message = form.querySelector('[name="message"]');
   if (product && productSel) {
     const match = Array.prototype.find.call(productSel.options, function (opt) {
       return opt.value.indexOf(product.split(" ")[0]) !== -1;
@@ -56,21 +55,6 @@
   }
   function t(key) {
     return window.I18N ? window.I18N.t(key) : key;
-  }
-
-  if (message && (params.get("kg") || params.get("preorder"))) {
-    const lines = [
-      t("contact.prefill.line1"),
-      t("contact.prefill.product") + " " + (product || "-"),
-      t("contact.prefill.pack") + " " + (params.get("pack") === "300" ? t("shop.pack.300") : t("shop.pack.20")),
-      t("contact.prefill.qty") + " " + t("contact.prefill.qtyUnit")
-        .replace("{qty}", params.get("qty") || "-")
-        .replace("{kg}", params.get("kg") || "-")
-    ];
-    if (params.get("color")) {
-      lines.push(t("contact.prefill.color") + " " + params.get("color"));
-    }
-    message.value = lines.join("\n");
   }
 
   form.addEventListener("submit", function (event) {
