@@ -270,14 +270,7 @@
 
       "notices.h1": "공지사항",
       "notices.lede": "대양피엔티㈜의 새로운 소식을 안내합니다.",
-      "notices.item1.date": "2026.08.20",
-      "notices.item1.title": "포천 제2공장 스마트 설비 증설 안내",
-      "notices.item2.date": "2026.05.12",
-      "notices.item2.title": "여름철 근무시간 및 방역 안내",
-      "notices.item3.date": "2026.02.03",
-      "notices.item3.title": "2026년 설 연휴 휴무 안내",
-      "notices.item4.date": "2025.11.18",
-      "notices.item4.title": "DYP 컬러멜 신규 색상 3종 출시",
+      "notices.empty": "등록된 공지사항이 없습니다.",
 
       "partnership.h1": "제휴문의",
       "partnership.lede": "대양피엔티㈜와 함께할 파트너를 찾습니다.",
@@ -609,14 +602,7 @@
 
       "notices.h1": "Notices",
       "notices.lede": "The latest news from DAEYANG P&T.",
-      "notices.item1.date": "2026.08.20",
-      "notices.item1.title": "Smart facility expansion at Pocheon Factory 2",
-      "notices.item2.date": "2026.05.12",
-      "notices.item2.title": "Summer working hours and health notice",
-      "notices.item3.date": "2026.02.03",
-      "notices.item3.title": "2026 Lunar New Year holiday notice",
-      "notices.item4.date": "2025.11.18",
-      "notices.item4.title": "3 new DYP COLORMEL colors released",
+      "notices.empty": "No notices yet.",
 
       "partnership.h1": "Partnership Inquiry",
       "partnership.lede": "Looking for partners to grow with DAEYANG P&T.",
@@ -948,14 +934,7 @@
 
       "notices.h1": "お知らせ",
       "notices.lede": "大陽P&Tの最新情報をお知らせします。",
-      "notices.item1.date": "2026.08.20",
-      "notices.item1.title": "抱川第2工場スマート設備増設のお知らせ",
-      "notices.item2.date": "2026.05.12",
-      "notices.item2.title": "夏季勤務時間および防疫のお知らせ",
-      "notices.item3.date": "2026.02.03",
-      "notices.item3.title": "2026年旧正月連休休業のお知らせ",
-      "notices.item4.date": "2025.11.18",
-      "notices.item4.title": "DYPカラーメル新色3種発売",
+      "notices.empty": "登録されたお知らせはありません。",
 
       "partnership.h1": "提携のお問い合わせ",
       "partnership.lede": "大陽P&Tと共に歩むパートナーを探しています。",
@@ -1287,14 +1266,7 @@
 
       "notices.h1": "公告",
       "notices.lede": "为您带来大洋P&T的最新消息。",
-      "notices.item1.date": "2026.08.20",
-      "notices.item1.title": "抱川第二工厂智能设备扩建公告",
-      "notices.item2.date": "2026.05.12",
-      "notices.item2.title": "夏季工作时间及防疫须知",
-      "notices.item3.date": "2026.02.03",
-      "notices.item3.title": "2026年春节假期休假公告",
-      "notices.item4.date": "2025.11.18",
-      "notices.item4.title": "DYP COLORMEL新色3款上市",
+      "notices.empty": "暂无公告。",
 
       "partnership.h1": "合作咨询",
       "partnership.lede": "大洋P&T正在寻找共同成长的合作伙伴。",

@@ -700,6 +700,12 @@ th {
   flex: 1;
 }
 
+.notice-list li.notice-empty {
+  padding: 1.25rem 0;
+  color: var(--muted);
+  border-bottom: none;
+}
+
 @media (max-width: 560px) {
   .notice-list li {
     flex-direction: column;
