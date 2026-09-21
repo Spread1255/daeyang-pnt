@@ -10,7 +10,8 @@
       "common.colorSearchPlaceholder": "DY#1-BK001, SILVER…",
 
       "nav.home": "홈",
-      "nav.products": "제품",
+      "nav.products": "제품안내",
+      "nav.productsIntro": "제품소개",
       "nav.buy": "구매",
       "nav.colors": "색상표",
       "nav.applications": "적용 분야",
@@ -343,6 +344,7 @@
 
       "nav.home": "Home",
       "nav.products": "Products",
+      "nav.productsIntro": "Product Overview",
       "nav.buy": "Buy",
       "nav.colors": "Colors",
       "nav.applications": "Applications",
@@ -674,7 +676,8 @@
       "common.colorSearchPlaceholder": "DY#1-BK001, SILVER…",
 
       "nav.home": "ホーム",
-      "nav.products": "製品",
+      "nav.products": "製品案内",
+      "nav.productsIntro": "製品紹介",
       "nav.buy": "購入",
       "nav.colors": "カラーチャート",
       "nav.applications": "用途",
@@ -1006,7 +1009,8 @@
       "common.colorSearchPlaceholder": "DY#1-BK001, SILVER…",
 
       "nav.home": "首页",
-      "nav.products": "产品",
+      "nav.products": "产品指南",
+      "nav.productsIntro": "产品介绍",
       "nav.buy": "购买",
       "nav.colors": "色卡",
       "nav.applications": "应用领域",

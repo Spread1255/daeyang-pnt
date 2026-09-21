@@ -2044,7 +2044,8 @@ th {
   }
 
   .nav-mega-col--about a:first-child,
-  .nav-mega-col--support a:first-child {
+  .nav-mega-col--support a:first-child,
+  .nav-mega-col--products a:first-child {
     display: none;
   }
 
