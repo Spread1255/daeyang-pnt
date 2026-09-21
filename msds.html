@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="meta.notices.title">공지사항 | 대양피엔티㈜</title>
+  <title data-i18n="meta.msds.title">MSDS | 대양피엔티㈜</title>
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -31,12 +31,12 @@
         </div>
         <div class="nav-mega-col nav-mega-col--tech">
           <a href="colors.html" data-i18n="nav.colors">색상표</a>
-          <a href="msds.html" data-i18n="nav.msds">MSDS</a>
+          <a href="msds.html" aria-current="page" data-i18n="nav.msds">MSDS</a>
           <a href="colorbook.html" data-i18n="nav.colorbook">컬러북</a>
           <a href="colorlab.html" data-i18n="nav.colorlab">컬러 연구소</a>
         </div>
         <div class="nav-mega-col nav-mega-col--support">
-          <a href="notices.html" aria-current="page" data-i18n="nav.notices">공지사항</a>
+          <a href="notices.html" data-i18n="nav.notices">공지사항</a>
           <a href="partnership.html" data-i18n="nav.partnership">제휴문의</a>
           <a href="careers.html" data-i18n="nav.careers">채용안내</a>
           <a href="resources.html" data-i18n="nav.resources">인증서/확인서</a>
@@ -53,42 +53,38 @@
 
   <main>
     <section class="page-hero">
-      <a class="crumb" href="partnership.html" data-i18n="nav.support">고객센터</a>
-      <p class="eyebrow">Notices</p>
-      <h1 data-i18n="notices.h1">공지사항</h1>
-      <p class="lede" data-i18n="notices.lede">대양피엔티㈜의 새로운 소식을 안내합니다.</p>
+      <a class="crumb" href="colors.html" data-i18n="nav.techData">기술자료</a>
+      <p class="eyebrow">MSDS</p>
+      <h1 data-i18n="msds.h1">MSDS</h1>
     </section>
 
     <section class="section about-nav">
       <div class="about-nav-grid">
-        <a class="about-nav-card" href="notices.html" aria-current="page">
-          <span data-i18n="nav.notices">공지사항</span>
+        <a class="about-nav-card" href="colors.html">
+          <span data-i18n="nav.colors">색상표</span>
         </a>
-        <a class="about-nav-card" href="partnership.html">
-          <span data-i18n="nav.partnership">제휴문의</span>
+        <a class="about-nav-card" href="msds.html" aria-current="page">
+          <span data-i18n="nav.msds">MSDS</span>
         </a>
-        <a class="about-nav-card" href="careers.html">
-          <span data-i18n="nav.careers">채용안내</span>
+        <a class="about-nav-card" href="colorbook.html">
+          <span data-i18n="nav.colorbook">컬러북</span>
         </a>
-        <a class="about-nav-card" href="resources.html">
-          <span data-i18n="nav.resources">인증서/확인서</span>
+        <a class="about-nav-card" href="colorlab.html">
+          <span data-i18n="nav.colorlab">컬러 연구소</span>
         </a>
       </div>
     </section>
 
     <section class="section">
-      <ul class="notice-list" id="notice-list"></ul>
+      <p class="prep-notice" data-i18n="common.techPrepNotice">자료 준비중입니다.</p>
     </section>
   </main>
 
   <footer class="site-footer">
     <p><strong>대양피엔티㈜</strong> · <span data-i18n="footer.tagline">분체도료</span></p>
     <p>경기도 김포시 하성면 애기봉로 774번길 39-17,22 · TEL 031)987-8587 · FAX 031)982-8587</p>
-    <p class="fine" data-i18n="footer.fine">본 사이트는 포트폴리오용 가상 회사 예시입니다.</p>
   </footer>
   <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/notices-data.js"></script>
-  <script src="js/notices.js"></script>
 </body>
 </html>

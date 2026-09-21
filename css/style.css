@@ -736,6 +736,14 @@ th {
   border-bottom: none;
 }
 
+.prep-notice {
+  padding: 3.5rem 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 1.05rem;
+  border-top: 1px solid var(--line);
+}
+
 @media (max-width: 560px) {
   .notice-list li {
     flex-direction: column;
@@ -2045,7 +2053,8 @@ th {
 
   .nav-mega-col--about a:first-child,
   .nav-mega-col--support a:first-child,
-  .nav-mega-col--products a:first-child {
+  .nav-mega-col--products a:first-child,
+  .nav-mega-col--tech a:first-child {
     display: none;
   }
 
