@@ -1364,8 +1364,9 @@ th {
   padding-bottom: 1.25rem;
 }
 
-.product-index {
-  padding-top: 0;
+.section.product-index {
+  padding-top: 1.5rem;
+  background: #fff;
 }
 
 .product-cats {
