@@ -26,7 +26,7 @@ html {
 
 body {
   margin: 0;
-  font-family: "Malgun Gothic", "Segoe UI", sans-serif;
+  font-family: "Pretendard", "Malgun Gothic", "Segoe UI", sans-serif;
   color: var(--ink);
   background-color: var(--bg);
   line-height: 1.6;
@@ -106,6 +106,9 @@ a {
 .nav-trigger {
   padding: 0.5rem 0.95rem;
   border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.98rem;
+  letter-spacing: -0.01em;
   transition: background 0.15s ease;
 }
 
