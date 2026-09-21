@@ -294,7 +294,7 @@
 
       "resources.h1": "자료안내",
       "resources.lede": "대양피엔티㈜의 인증서와 각종 자료를 확인하실 수 있습니다.",
-      "resources.certs.h2": "인증서·수상이력",
+      "resources.certs.h2": "인증서 및 확인서",
       "resources.certs.lede": "대양피엔티㈜가 보유한 인증 현황입니다.",
       "resources.cert.viewFull": "새 창에서 크게 보기",
       "resources.cert1.title": "연구개발전담부서 인정서",
@@ -626,7 +626,7 @@
 
       "resources.h1": "Resources",
       "resources.lede": "Certificates and other materials from DAEYANG P&T.",
-      "resources.certs.h2": "Certificates & Awards",
+      "resources.certs.h2": "Certificates & Confirmations",
       "resources.certs.lede": "Certifications held by DAEYANG P&T.",
       "resources.cert.viewFull": "View full size in a new tab",
       "resources.cert1.title": "R&D Department Certificate",
@@ -958,7 +958,7 @@
 
       "resources.h1": "資料案内",
       "resources.lede": "大陽P&Tの認証書および各種資料をご確認いただけます。",
-      "resources.certs.h2": "認証書・受賞歴",
+      "resources.certs.h2": "認証書及び確認書",
       "resources.certs.lede": "大陽P&Tが保有する認証現況です。",
       "resources.cert.viewFull": "新しいタブで拡大表示",
       "resources.cert1.title": "研究開発専担部署認定書",
@@ -1290,7 +1290,7 @@
 
       "resources.h1": "资料中心",
       "resources.lede": "查看大洋P&T的认证证书及各类资料。",
-      "resources.certs.h2": "认证证书·获奖记录",
+      "resources.certs.h2": "认证证书及确认书",
       "resources.certs.lede": "大洋P&T持有的认证现况。",
       "resources.cert.viewFull": "在新标签页中查看大图",
       "resources.cert1.title": "研发专门部门认定书",
