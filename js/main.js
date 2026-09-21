@@ -20,12 +20,25 @@
     if (window.innerWidth <= 800) {
       return;
     }
+    const margin = 20;
+    const maxRight = window.innerWidth - margin;
     triggers.forEach(function (trigger, i) {
       const col = cols[i];
       if (!col) {
         return;
       }
-      col.style.left = trigger.getBoundingClientRect().left + "px";
+      const center = trigger.getBoundingClientRect().left + trigger.offsetWidth / 2;
+      col.style.left = center + "px";
+      const colRect = col.getBoundingClientRect();
+      let shift = 0;
+      if (colRect.right > maxRight) {
+        shift = colRect.right - maxRight;
+      } else if (colRect.left < margin) {
+        shift = colRect.left - margin;
+      }
+      if (shift) {
+        col.style.left = (center - shift) + "px";
+      }
     });
   }
 
