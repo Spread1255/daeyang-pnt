@@ -23,7 +23,7 @@
       "nav.notices": "공지사항",
       "nav.partnership": "제휴문의",
       "nav.careers": "채용안내",
-      "nav.resources": "자료안내",
+      "nav.resources": "인증서/확인서",
 
       "footer.tagline": "분체도료",
       "footer.fine": "본 사이트는 포트폴리오용 가상 회사 예시입니다.",
@@ -47,7 +47,7 @@
       "meta.notices.title": "공지사항 | 대양피엔티㈜",
       "meta.partnership.title": "제휴문의 | 대양피엔티㈜",
       "meta.careers.title": "채용안내 | 대양피엔티㈜",
-      "meta.resources.title": "자료안내 | 대양피엔티㈜",
+      "meta.resources.title": "인증서/확인서 | 대양피엔티㈜",
 
       "home.hero.title": "금속을 지키는 도막,<br>현장에서 통하는 분체도료",
       "home.hero.lede": "무용제 분체도료로 내식·내후·내화학성을 맞춥니다. 표준 색상부터 라인 맞춤 배합까지 생산합니다.",
@@ -292,7 +292,7 @@
       "careers.field3.p": "거래처 관리와 견적·납기 대응을 담당합니다.",
       "careers.cta": "채용 문의하기",
 
-      "resources.h1": "자료안내",
+      "resources.h1": "인증서/확인서",
       "resources.lede": "대양피엔티㈜의 인증서와 각종 자료를 확인하실 수 있습니다.",
       "resources.certs.h2": "인증서 및 확인서",
       "resources.certs.lede": "대양피엔티㈜가 보유한 인증 현황입니다.",
@@ -355,7 +355,7 @@
       "nav.notices": "Notices",
       "nav.partnership": "Partnership Inquiry",
       "nav.careers": "Careers",
-      "nav.resources": "Resources",
+      "nav.resources": "Certificates/Confirmations",
 
       "footer.tagline": "Powder Coatings",
       "footer.fine": "This site is a fictional company example for portfolio purposes.",
@@ -379,7 +379,7 @@
       "meta.notices.title": "Notices | DAEYANG P&T",
       "meta.partnership.title": "Partnership Inquiry | DAEYANG P&T",
       "meta.careers.title": "Careers | DAEYANG P&T",
-      "meta.resources.title": "Resources | DAEYANG P&T",
+      "meta.resources.title": "Certificates/Confirmations | DAEYANG P&T",
 
       "home.hero.title": "Coatings that protect metal,<br>powder coatings that work on site",
       "home.hero.lede": "Solvent-free powder coatings tailored for corrosion, weather, and chemical resistance. We produce everything from standard colors to line-matched custom formulations.",
@@ -624,7 +624,7 @@
       "careers.field3.p": "Managing accounts and handling quotes and delivery schedules.",
       "careers.cta": "Contact Us About Careers",
 
-      "resources.h1": "Resources",
+      "resources.h1": "Certificates/Confirmations",
       "resources.lede": "Certificates and other materials from DAEYANG P&T.",
       "resources.certs.h2": "Certificates & Confirmations",
       "resources.certs.lede": "Certifications held by DAEYANG P&T.",
@@ -687,7 +687,7 @@
       "nav.notices": "お知らせ",
       "nav.partnership": "提携のお問い合わせ",
       "nav.careers": "採用案内",
-      "nav.resources": "資料案内",
+      "nav.resources": "認証書/確認書",
 
       "footer.tagline": "粉体塗料",
       "footer.fine": "本サイトはポートフォリオ用の架空の会社例です。",
@@ -711,7 +711,7 @@
       "meta.notices.title": "お知らせ | DAEYANG P&T",
       "meta.partnership.title": "提携のお問い合わせ | DAEYANG P&T",
       "meta.careers.title": "採用案内 | DAEYANG P&T",
-      "meta.resources.title": "資料案内 | DAEYANG P&T",
+      "meta.resources.title": "認証書/確認書 | DAEYANG P&T",
 
       "home.hero.title": "金属を守る塗膜、<br>現場で通用する粉体塗料",
       "home.hero.lede": "無溶剤の粉体塗料で耐食性・耐候性・耐薬品性を調整します。標準色からライン仕様の配合まで生産します。",
@@ -956,7 +956,7 @@
       "careers.field3.p": "取引先管理と見積・納期対応を担当します。",
       "careers.cta": "採用について問い合わせる",
 
-      "resources.h1": "資料案内",
+      "resources.h1": "認証書/確認書",
       "resources.lede": "大陽P&Tの認証書および各種資料をご確認いただけます。",
       "resources.certs.h2": "認証書及び確認書",
       "resources.certs.lede": "大陽P&Tが保有する認証現況です。",
@@ -1019,7 +1019,7 @@
       "nav.notices": "公告",
       "nav.partnership": "合作咨询",
       "nav.careers": "招聘信息",
-      "nav.resources": "资料中心",
+      "nav.resources": "认证证书/确认书",
 
       "footer.tagline": "粉末涂料",
       "footer.fine": "本网站为作品集用途的虚构公司示例。",
@@ -1043,7 +1043,7 @@
       "meta.notices.title": "公告 | DAEYANG P&T",
       "meta.partnership.title": "合作咨询 | DAEYANG P&T",
       "meta.careers.title": "招聘信息 | DAEYANG P&T",
-      "meta.resources.title": "资料中心 | DAEYANG P&T",
+      "meta.resources.title": "认证证书/确认书 | DAEYANG P&T",
 
       "home.hero.title": "守护金属的涂层，<br>现场适用的粉末涂料",
       "home.hero.lede": "采用无溶剂粉末涂料，满足耐蚀、耐候、耐化学性需求。从标准色到产线定制配方均可生产。",
@@ -1288,7 +1288,7 @@
       "careers.field3.p": "负责客户管理及报价、交期对应。",
       "careers.cta": "咨询招聘事宜",
 
-      "resources.h1": "资料中心",
+      "resources.h1": "认证证书/确认书",
       "resources.lede": "查看大洋P&T的认证证书及各类资料。",
       "resources.certs.h2": "认证证书及确认书",
       "resources.certs.lede": "大洋P&T持有的认证现况。",
