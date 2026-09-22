@@ -21,24 +21,66 @@
       return;
     }
     const margin = 20;
+    const colGap = 24;
     const maxRight = window.innerWidth - margin;
+
+    const centers = [];
     triggers.forEach(function (trigger, i) {
       const col = cols[i];
       if (!col) {
         return;
       }
-      const center = trigger.getBoundingClientRect().left + trigger.offsetWidth / 2;
-      col.style.left = center + "px";
-      const colRect = col.getBoundingClientRect();
-      let shift = 0;
-      if (colRect.right > maxRight) {
-        shift = colRect.right - maxRight;
-      } else if (colRect.left < margin) {
-        shift = colRect.left - margin;
+      centers[i] = trigger.getBoundingClientRect().left + trigger.offsetWidth / 2;
+      col.style.left = centers[i] + "px";
+    });
+
+    const edges = [];
+    cols.forEach(function (col, i) {
+      if (centers[i] === undefined) {
+        return;
       }
-      if (shift) {
-        col.style.left = (center - shift) + "px";
+      const width = col.offsetWidth;
+      edges[i] = { left: centers[i] - width / 2, right: centers[i] + width / 2, width: width };
+    });
+
+    for (let i = 1; i < edges.length; i++) {
+      if (!edges[i] || !edges[i - 1]) {
+        continue;
       }
+      const minLeft = edges[i - 1].right + colGap;
+      if (edges[i].left < minLeft) {
+        const shift = minLeft - edges[i].left;
+        edges[i].left += shift;
+        edges[i].right += shift;
+      }
+    }
+
+    for (let i = edges.length - 1; i >= 0; i--) {
+      if (!edges[i]) {
+        continue;
+      }
+      if (edges[i].right > maxRight) {
+        const shift = edges[i].right - maxRight;
+        edges[i].left -= shift;
+        edges[i].right -= shift;
+      }
+      if (edges[i].left < margin) {
+        const shift = margin - edges[i].left;
+        edges[i].left += shift;
+        edges[i].right += shift;
+      }
+      if (i > 0 && edges[i - 1] && edges[i - 1].right + colGap > edges[i].left) {
+        const shift = edges[i - 1].right + colGap - edges[i].left;
+        edges[i - 1].left -= shift;
+        edges[i - 1].right -= shift;
+      }
+    }
+
+    cols.forEach(function (col, i) {
+      if (!edges[i]) {
+        return;
+      }
+      col.style.left = (edges[i].left + edges[i].width / 2) + "px";
     });
   }
 
