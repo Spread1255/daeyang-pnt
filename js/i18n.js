@@ -292,7 +292,7 @@
       "careers.field2.p": "신규 색상·수지 배합과 물성 테스트를 담당합니다.",
       "careers.field3.h3": "영업·고객지원",
       "careers.field3.p": "거래처 관리와 견적·납기 대응을 담당합니다.",
-      "careers.cta": "채용 문의하기",
+      "careers.cta": "채용 사이트 바로가기",
 
       "resources.h1": "인증서/확인서",
       "resources.lede": "대양피엔티㈜의 인증서와 각종 자료를 확인하실 수 있습니다.",
@@ -626,7 +626,7 @@
       "careers.field2.p": "Developing new colors/resin formulations and physical property testing.",
       "careers.field3.h3": "Sales & Customer Support",
       "careers.field3.p": "Managing accounts and handling quotes and delivery schedules.",
-      "careers.cta": "Contact Us About Careers",
+      "careers.cta": "Go to Careers Site",
 
       "resources.h1": "Certificates/Confirmations",
       "resources.lede": "Certificates and other materials from DAEYANG P&T.",
@@ -960,7 +960,7 @@
       "careers.field2.p": "新色・樹脂配合の開発と物性テストを担当します。",
       "careers.field3.h3": "営業・顧客サポート",
       "careers.field3.p": "取引先管理と見積・納期対応を担当します。",
-      "careers.cta": "採用について問い合わせる",
+      "careers.cta": "採用サイトへ",
 
       "resources.h1": "認証書/確認書",
       "resources.lede": "大陽P&Tの認証書および各種資料をご確認いただけます。",
@@ -1294,7 +1294,7 @@
       "careers.field2.p": "负责新色号/树脂配方开发及物性测试。",
       "careers.field3.h3": "销售/客户支持",
       "careers.field3.p": "负责客户管理及报价、交期对应。",
-      "careers.cta": "咨询招聘事宜",
+      "careers.cta": "前往招聘网站",
 
       "resources.h1": "认证证书/确认书",
       "resources.lede": "查看大洋P&T的认证证书及各类资料。",
