@@ -94,11 +94,13 @@
       </div>
       <!-- Set data-open="true" once a listing for 주식회사 대양피앤티 at 경기도 포천시 일동면 화동로 1544-6 is live on work24, then js/careers.js enables the button and removes the closed badge/note. -->
       <div class="hero-actions careers-cta" data-careers-widget data-open="false">
-        <span class="status-pill status-pill--closed" data-careers-badge>
-          <span class="status-pill-dot" aria-hidden="true"></span>
-          <span data-i18n="careers.status.closed">현재 채용 마감</span>
-        </span>
-        <a class="btn is-disabled" href="https://www.work24.go.kr/cm/f/c/0100/selectUnifySearch.do?topQuerySearchArea=all&amp;topQueryData=%25EB%258C%2580%25EC%2596%2591%25ED%2594%25BC%25EC%2595%25A4%25ED%258B%25B0&amp;sortField=rank&amp;startCount=1&amp;listCount=5" target="_blank" rel="noopener noreferrer" data-i18n="careers.cta" data-careers-link aria-disabled="true" tabindex="-1">채용 사이트 바로가기</a>
+        <div class="careers-cta-row">
+          <a class="btn is-disabled" href="https://www.work24.go.kr/cm/f/c/0100/selectUnifySearch.do?topQuerySearchArea=all&amp;topQueryData=%25EB%258C%2580%25EC%2596%2591%25ED%2594%25BC%25EC%2595%25A4%25ED%258B%25B0&amp;sortField=rank&amp;startCount=1&amp;listCount=5" target="_blank" rel="noopener noreferrer" data-i18n="careers.cta" data-careers-link aria-disabled="true" tabindex="-1">채용 사이트 바로가기</a>
+          <span class="status-pill status-pill--closed" data-careers-badge>
+            <span class="status-pill-dot" aria-hidden="true"></span>
+            <span data-i18n="careers.status.closed">현재 채용 마감</span>
+          </span>
+        </div>
         <p class="careers-cta-note" data-careers-note data-i18n="careers.status.closedNote">신규 채용 공고 등록 시 버튼이 자동으로 활성화됩니다.</p>
       </div>
     </section>
