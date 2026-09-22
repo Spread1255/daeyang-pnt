@@ -713,7 +713,7 @@ th {
   grid-template-columns: 2rem 1fr;
   gap: 0.65rem;
   align-items: baseline;
-  color: var(--muted);
+  color: var(--ink);
 }
 
 .history ul li + li {
