@@ -17,7 +17,7 @@
       name: row[2],
       series: match ? match[1] : "",
       color: match ? match[2] : "",
-      img: "images/chips/" + String(row[0]).padStart(3, "0") + ".jpg"
+      hex: row[3] || "#ffffff"
     };
   });
 
@@ -72,7 +72,7 @@
       const article = document.createElement("article");
       article.className = "swatch";
       article.innerHTML =
-        '<img src="' + item.img + '" alt="' + item.code + '">' +
+        '<span class="swatch-color" style="background-color:' + item.hex + '" role="img" aria-label="' + item.code + '"></span>' +
         '<p class="swatch-code">' + item.code + "</p>" +
         '<p class="swatch-meta">' +
         seriesName(item.series) +

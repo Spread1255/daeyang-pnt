@@ -1109,12 +1109,10 @@ th {
   padding: 0.5rem 0.6rem 0.75rem;
 }
 
-.swatch img {
+.swatch-color {
   display: block;
   width: 100%;
   height: 4.5rem;
-  object-fit: cover;
-  object-position: center 35%;
   border-radius: 0.45rem;
 }
 
