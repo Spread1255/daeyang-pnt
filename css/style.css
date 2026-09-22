@@ -722,7 +722,7 @@ th {
 
 .history ul span:first-child {
   font-weight: 700;
-  color: var(--accent-dark);
+  color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
 
