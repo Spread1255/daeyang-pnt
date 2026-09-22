@@ -10,85 +10,115 @@
   }
 
   const header = document.querySelector(".site-header");
+  const navLinks = document.querySelector(".nav-links");
+  const logo = document.querySelector(".logo");
+  const langSwitch = document.querySelector(".lang-switch");
   const triggers = document.querySelectorAll(".nav-trigger");
   const cols = document.querySelectorAll(".nav-mega-col");
 
-  function layoutNavMega() {
+  function layoutNavLinks() {
+    if (!header || !navLinks) {
+      return;
+    }
+    if (window.innerWidth <= 800) {
+      navLinks.style.left = "";
+      return;
+    }
+    const margin = 24;
+    const headerRect = header.getBoundingClientRect();
+    let minLeft = margin;
+    let maxRight = headerRect.width - margin;
+    if (logo) {
+      minLeft = Math.max(minLeft, logo.getBoundingClientRect().right - headerRect.left + margin);
+    }
+    if (langSwitch) {
+      maxRight = Math.min(maxRight, langSwitch.getBoundingClientRect().left - headerRect.left - margin);
+    }
+    const width = navLinks.offsetWidth;
+    const center = headerRect.width / 2;
+    let left = center - width / 2;
+    let right = center + width / 2;
+    if (right > maxRight) {
+      const shift = right - maxRight;
+      left -= shift;
+      right -= shift;
+    }
+    if (left < minLeft) {
+      const shift = minLeft - left;
+      left += shift;
+      right += shift;
+    }
+    navLinks.style.left = (left + width / 2) + "px";
+  }
+
+  function layoutNav() {
     if (header) {
       document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
     }
+
+    triggers.forEach(function (trigger) {
+      trigger.style.marginLeft = "";
+    });
+    if (navLinks) {
+      navLinks.style.left = "";
+    }
+
     if (window.innerWidth <= 800) {
       return;
     }
-    const margin = 20;
-    const colGap = 24;
-    const maxRight = window.innerWidth - margin;
 
-    const centers = [];
+    const colGap = 24;
+
+    const naturalCenters = [];
+    triggers.forEach(function (trigger, i) {
+      naturalCenters[i] = trigger.getBoundingClientRect().left + trigger.offsetWidth / 2;
+    });
+
+    const colWidths = [];
+    cols.forEach(function (col, i) {
+      colWidths[i] = col.offsetWidth;
+    });
+
+    let cumulative = 0;
+    for (let i = 1; i < triggers.length; i++) {
+      if (colWidths[i] === undefined || colWidths[i - 1] === undefined) {
+        continue;
+      }
+      const naturalGap = naturalCenters[i] - naturalCenters[i - 1];
+      const required = (colWidths[i - 1] + colWidths[i]) / 2 + colGap;
+      const extra = Math.max(0, required - naturalGap);
+      cumulative += extra;
+      if (cumulative) {
+        triggers[i].style.marginLeft = cumulative + "px";
+      }
+    }
+
+    layoutNavLinks();
+
+    const margin = 20;
+    const maxRight = window.innerWidth - margin;
     triggers.forEach(function (trigger, i) {
       const col = cols[i];
       if (!col) {
         return;
       }
-      centers[i] = trigger.getBoundingClientRect().left + trigger.offsetWidth / 2;
-      col.style.left = centers[i] + "px";
-    });
-
-    const edges = [];
-    cols.forEach(function (col, i) {
-      if (centers[i] === undefined) {
-        return;
+      const center = trigger.getBoundingClientRect().left + trigger.offsetWidth / 2;
+      const width = colWidths[i] !== undefined ? colWidths[i] : col.offsetWidth;
+      let colLeft = center;
+      if (center + width / 2 > maxRight) {
+        colLeft = center - (center + width / 2 - maxRight);
+      } else if (center - width / 2 < margin) {
+        colLeft = center + (margin - (center - width / 2));
       }
-      const width = col.offsetWidth;
-      edges[i] = { left: centers[i] - width / 2, right: centers[i] + width / 2, width: width };
-    });
-
-    for (let i = 1; i < edges.length; i++) {
-      if (!edges[i] || !edges[i - 1]) {
-        continue;
-      }
-      const minLeft = edges[i - 1].right + colGap;
-      if (edges[i].left < minLeft) {
-        const shift = minLeft - edges[i].left;
-        edges[i].left += shift;
-        edges[i].right += shift;
-      }
-    }
-
-    for (let i = edges.length - 1; i >= 0; i--) {
-      if (!edges[i]) {
-        continue;
-      }
-      if (edges[i].right > maxRight) {
-        const shift = edges[i].right - maxRight;
-        edges[i].left -= shift;
-        edges[i].right -= shift;
-      }
-      if (edges[i].left < margin) {
-        const shift = margin - edges[i].left;
-        edges[i].left += shift;
-        edges[i].right += shift;
-      }
-      if (i > 0 && edges[i - 1] && edges[i - 1].right + colGap > edges[i].left) {
-        const shift = edges[i - 1].right + colGap - edges[i].left;
-        edges[i - 1].left -= shift;
-        edges[i - 1].right -= shift;
-      }
-    }
-
-    cols.forEach(function (col, i) {
-      if (!edges[i]) {
-        return;
-      }
-      col.style.left = (edges[i].left + edges[i].width / 2) + "px";
+      col.style.left = colLeft + "px";
     });
   }
 
   if (header && triggers.length && cols.length) {
-    layoutNavMega();
-    window.addEventListener("resize", layoutNavMega);
-    window.addEventListener("load", layoutNavMega);
-    window.addEventListener("i18n:change", layoutNavMega);
+    layoutNav();
+    window.addEventListener("resize", layoutNav);
+    window.addEventListener("load", layoutNav);
+    window.addEventListener("i18n:change", layoutNav);
   }
 
   const form = document.getElementById("inquiry-form");
