@@ -720,7 +720,7 @@ th {
   margin-top: 0.35rem;
 }
 
-.history ul span {
+.history ul span:first-child {
   font-weight: 700;
   color: var(--accent-dark);
   font-variant-numeric: tabular-nums;
