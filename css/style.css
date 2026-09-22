@@ -324,6 +324,50 @@ h3 {
   background: var(--navy-alt);
 }
 
+.btn.is-disabled {
+  background: var(--panel);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.careers-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.status-pill--closed {
+  background: rgb(0 0 0 / 0.05);
+  color: var(--muted);
+  border: 1px solid var(--line);
+}
+
+.status-pill-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.careers-cta-note {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
 .snap-track {
   position: relative;
   background: var(--navy-alt);
