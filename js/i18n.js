@@ -1406,10 +1406,10 @@
   };
 
   var COLOR_NAME = {
-    ko: { WH: "화이트", IV: "아이보리", BE: "베이지", GY: "그레이", BR: "브라운", GN: "그린", BL: "블루", PK: "핑크", YL: "옐로우", OR: "오렌지", RD: "레드", SI: "실버", BK: "블랙", GD: "코퍼" },
-    en: { WH: "White", IV: "Ivory", BE: "Beige", GY: "Gray", BR: "Brown", GN: "Green", BL: "Blue", PK: "Pink", YL: "Yellow", OR: "Orange", RD: "Red", SI: "Silver", BK: "Black", GD: "Copper" },
-    ja: { WH: "ホワイト", IV: "アイボリー", BE: "ベージュ", GY: "グレー", BR: "ブラウン", GN: "グリーン", BL: "ブルー", PK: "ピンク", YL: "イエロー", OR: "オレンジ", RD: "レッド", SI: "シルバー", BK: "ブラック", GD: "カッパー" },
-    zh: { WH: "白色", IV: "象牙白", BE: "米色", GY: "灰色", BR: "棕色", GN: "绿色", BL: "蓝色", PK: "粉色", YL: "黄色", OR: "橙色", RD: "红色", SI: "银色", BK: "黑色", GD: "铜色" }
+    ko: { WH: "화이트", IV: "아이보리", BE: "베이지", GY: "그레이", BR: "브라운", GN: "그린", BL: "블루", PK: "핑크", YL: "옐로우", OR: "오렌지", RD: "레드", SI: "실버", BK: "블랙", GD: "코퍼", CL: "클리어" },
+    en: { WH: "White", IV: "Ivory", BE: "Beige", GY: "Gray", BR: "Brown", GN: "Green", BL: "Blue", PK: "Pink", YL: "Yellow", OR: "Orange", RD: "Red", SI: "Silver", BK: "Black", GD: "Copper", CL: "Clear" },
+    ja: { WH: "ホワイト", IV: "アイボリー", BE: "ベージュ", GY: "グレー", BR: "ブラウン", GN: "グリーン", BL: "ブルー", PK: "ピンク", YL: "イエロー", OR: "オレンジ", RD: "レッド", SI: "シルバー", BK: "ブラック", GD: "カッパー", CL: "クリア" },
+    zh: { WH: "白色", IV: "象牙白", BE: "米色", GY: "灰色", BR: "棕色", GN: "绿色", BL: "蓝色", PK: "粉色", YL: "黄色", OR: "橙色", RD: "红色", SI: "银色", BK: "黑色", GD: "铜色", CL: "透明" }
   };
 
   var USE_BY_ID = { 1: "indoor", 2: "outdoor", 3: "both", 4: "both", 5: "both", 6: "both" };
