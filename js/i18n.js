@@ -31,6 +31,9 @@
       "nav.resources": "인증서/확인서",
 
       "footer.tagline": "분체도료",
+      "footer.hq": "본사",
+      "footer.factory1": "제1공장",
+      "footer.factory2": "제2공장",
       "footer.fine": "본 사이트는 포트폴리오용 가상 회사 예시입니다.",
       "footer.fineContact": "본 사이트는 포트폴리오용 가상 회사 예시입니다. 문의는 이 브라우저에만 저장됩니다.",
 
@@ -367,6 +370,9 @@
       "nav.resources": "Certificates/Confirmations",
 
       "footer.tagline": "Powder Coatings",
+      "footer.hq": "Head Office",
+      "footer.factory1": "Plant 1",
+      "footer.factory2": "Plant 2",
       "footer.fine": "This site is a fictional company example for portfolio purposes.",
       "footer.fineContact": "This site is a fictional company example for portfolio purposes. Inquiries are stored only in this browser.",
 
@@ -703,6 +709,9 @@
       "nav.resources": "認証書/確認書",
 
       "footer.tagline": "粉体塗料",
+      "footer.hq": "本社",
+      "footer.factory1": "第1工場",
+      "footer.factory2": "第2工場",
       "footer.fine": "本サイトはポートフォリオ用の架空の会社例です。",
       "footer.fineContact": "本サイトはポートフォリオ用の架空の会社例です。お問い合わせはこのブラウザにのみ保存されます。",
 
@@ -1039,6 +1048,9 @@
       "nav.resources": "认证证书/确认书",
 
       "footer.tagline": "粉末涂料",
+      "footer.hq": "总部",
+      "footer.factory1": "第一工厂",
+      "footer.factory2": "第二工厂",
       "footer.fine": "本网站为作品集用途的虚构公司示例。",
       "footer.fineContact": "本网站为作品集用途的虚构公司示例。咨询内容仅保存在此浏览器中。",
 

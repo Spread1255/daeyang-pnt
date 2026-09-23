@@ -1097,6 +1097,11 @@ th {
   font-size: 0.9rem;
 }
 
+.site-footer .footer-label {
+  font-weight: 700;
+  margin-right: 0.35em;
+}
+
 .legend {
   background: var(--panel);
   border: 1px solid var(--line);
