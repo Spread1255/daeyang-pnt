@@ -34,8 +34,6 @@
       "footer.hq": "본사",
       "footer.factory1": "제1공장",
       "footer.factory2": "제2공장",
-      "footer.fine": "본 사이트는 포트폴리오용 가상 회사 예시입니다.",
-      "footer.fineContact": "본 사이트는 포트폴리오용 가상 회사 예시입니다. 문의는 이 브라우저에만 저장됩니다.",
 
       "meta.home.title": "대양피엔티㈜ | 분체도료 전문",
       "meta.home.desc": "건축, 가전, 자동차 부품용 분체도료. 에폭시, 폴리에스터, 하이브리드 및 맞춤 색상.",
@@ -373,8 +371,6 @@
       "footer.hq": "Head Office",
       "footer.factory1": "Plant 1",
       "footer.factory2": "Plant 2",
-      "footer.fine": "This site is a fictional company example for portfolio purposes.",
-      "footer.fineContact": "This site is a fictional company example for portfolio purposes. Inquiries are stored only in this browser.",
 
       "meta.home.title": "DAEYANG P&T | Powder Coating Specialist",
       "meta.home.desc": "Powder coatings for construction, appliances, and automotive parts. Epoxy, polyester, hybrid, and custom colors.",
@@ -712,8 +708,6 @@
       "footer.hq": "本社",
       "footer.factory1": "第1工場",
       "footer.factory2": "第2工場",
-      "footer.fine": "本サイトはポートフォリオ用の架空の会社例です。",
-      "footer.fineContact": "本サイトはポートフォリオ用の架空の会社例です。お問い合わせはこのブラウザにのみ保存されます。",
 
       "meta.home.title": "DAEYANG P&T | 粉体塗料専門",
       "meta.home.desc": "建築、家電、自動車部品向け粉体塗料。エポキシ、ポリエステル、ハイブリッド、カスタムカラー対応。",
@@ -1051,8 +1045,6 @@
       "footer.hq": "总部",
       "footer.factory1": "第一工厂",
       "footer.factory2": "第二工厂",
-      "footer.fine": "本网站为作品集用途的虚构公司示例。",
-      "footer.fineContact": "本网站为作品集用途的虚构公司示例。咨询内容仅保存在此浏览器中。",
 
       "meta.home.title": "DAEYANG P&T | 粉末涂料专业制造",
       "meta.home.desc": "适用于建筑、家电、汽车零部件的粉末涂料。提供环氧、聚酯、混合型及定制色。",
