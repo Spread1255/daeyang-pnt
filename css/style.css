@@ -1191,6 +1191,423 @@ th {
   color: var(--accent-dark);
 }
 
+/* 보기 전환 */
+.view-toggle {
+  display: inline-flex;
+  margin: 0 0 0.2rem auto;
+  padding: 0.2rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--field);
+}
+
+.view-toggle button {
+  border: 0;
+  background: transparent;
+  padding: 0.4rem 0.95rem;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.view-toggle button[aria-pressed="true"] {
+  background: var(--ink);
+  color: #fff;
+}
+
+.swatch-grid[hidden],
+.cbook[hidden] {
+  display: none;
+}
+
+/* 컬러북 */
+.cbook {
+  margin: 0.5rem 0 1.5rem;
+}
+
+.cbook-stage {
+  padding: 1.5rem 0 0.5rem;
+  outline: none;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.cbook-stage:focus-visible .cbook-book {
+  outline: 2px solid var(--accent);
+  outline-offset: 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.cbook-book {
+  position: relative;
+  width: min(100%, 60rem);
+  aspect-ratio: 3 / 2;
+  margin: 0 auto;
+  perspective: 2600px;
+  transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.cbook-book.is-closed-front {
+  transform: translateX(-25%);
+}
+
+.cbook-book.is-closed-back {
+  transform: translateX(25%);
+}
+
+.cbook-leaf {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+  cursor: pointer;
+}
+
+.cbook-leaf.is-flipped {
+  transform: rotateY(-180deg);
+}
+
+.cbook-book.no-anim,
+.cbook-book.no-anim .cbook-leaf {
+  transition: none;
+}
+
+.cbook-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  container-type: inline-size;
+  background: #fbfaf6;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.cbook-face--front {
+  border-radius: 0 0.6rem 0.6rem 0;
+}
+
+.cbook-face--back {
+  transform: rotateY(180deg);
+  border-radius: 0.6rem 0 0 0.6rem;
+}
+
+/* 그림자는 맨 아래 장과 넘어가는 장에만 (겹치면 진해짐) */
+.cbook-leaf:last-child .cbook-face--front,
+.cbook-leaf:first-child .cbook-face--back,
+.cbook-leaf.is-turning .cbook-face {
+  box-shadow: 0 14px 30px -12px rgb(0 0 0 / 0.35);
+}
+
+/* 제본선 쪽 그림자 */
+.cbook-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+
+.cbook-face--front::after {
+  background: linear-gradient(to right, rgb(0 0 0 / 0.16), rgb(0 0 0 / 0) 9%);
+}
+
+.cbook-face--back::after {
+  background: linear-gradient(to left, rgb(0 0 0 / 0.16), rgb(0 0 0 / 0) 9%);
+}
+
+/* 넘어가는 중인 장에 드리우는 음영 */
+.cbook-leaf.is-turning .cbook-face::after {
+  animation: cbook-shade 0.8s ease;
+}
+
+@keyframes cbook-shade {
+  50% {
+    background: linear-gradient(to right, rgb(0 0 0 / 0.28), rgb(0 0 0 / 0.08));
+  }
+}
+
+.cbook-page {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 6.5cqw 7cqw 5cqw;
+}
+
+.cbook-page-head {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 2cqw;
+  margin-bottom: 4cqw;
+  border-bottom: 1px solid var(--line);
+  font-size: clamp(0.55rem, 2.2cqw, 0.72rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+.cbook-chips {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 3.5cqw 5cqw;
+}
+
+.cbook-chip {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  margin: 0;
+}
+
+.cbook-chip-color {
+  flex: 1;
+  min-height: 0;
+  border-radius: 0.3rem;
+  background-size: cover;
+  background-position: center;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08), 0 1px 3px rgb(0 0 0 / 0.15);
+}
+
+.cbook-chip figcaption {
+  display: grid;
+  padding-top: 1.2cqw;
+  line-height: 1.25;
+}
+
+.cbook-chip strong {
+  font-size: clamp(0.62rem, 2.9cqw, 0.85rem);
+  letter-spacing: -0.02em;
+}
+
+.cbook-chip figcaption span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: clamp(0.56rem, 2.5cqw, 0.75rem);
+  color: var(--accent-dark);
+}
+
+.cbook-page-foot {
+  margin-top: 3cqw;
+  text-align: right;
+  font-size: clamp(0.55rem, 2.3cqw, 0.75rem);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.cbook-page--left .cbook-page-foot {
+  text-align: left;
+}
+
+.cbook-text {
+  font-size: clamp(0.7rem, 3cqw, 0.95rem);
+  color: var(--ink);
+}
+
+.cbook-text h3 {
+  margin: 2cqw 0 3cqw;
+  font-size: clamp(1rem, 5.5cqw, 1.6rem);
+  letter-spacing: -0.02em;
+}
+
+.cbook-text h4 {
+  margin: 6cqw 0 2cqw;
+  font-size: clamp(0.72rem, 3cqw, 0.95rem);
+  color: var(--accent-dark);
+}
+
+.cbook-text p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.cbook-text--center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.cbook-series {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cbook-series li {
+  display: grid;
+  grid-template-columns: 4.2em 1fr auto;
+  gap: 0.5em;
+  padding: 1.6cqw 0;
+  border-bottom: 1px dashed var(--line);
+}
+
+.cbook-series em {
+  font-style: normal;
+  color: var(--muted);
+}
+
+/* 표지 */
+.cbook-cover {
+  justify-content: space-between;
+  padding: 9cqw 9cqw 8cqw;
+  background:
+    radial-gradient(120% 80% at 100% 0%, rgb(224 122 40 / 0.28), transparent 60%),
+    var(--night);
+  color: #f4efe6;
+}
+
+.cbook-cover-logo {
+  width: 16cqw;
+  height: auto;
+}
+
+.cbook-cover-title p {
+  margin: 0;
+  font-size: 15cqw;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.cbook-cover-title span {
+  display: inline-block;
+  margin-top: 3cqw;
+  padding-top: 2.5cqw;
+  border-top: 3px solid var(--accent);
+  font-size: clamp(0.7rem, 3.4cqw, 1rem);
+  font-weight: 600;
+}
+
+.cbook-cover-stripe {
+  display: flex;
+  height: 7cqw;
+  border-radius: 0.3rem;
+  overflow: hidden;
+}
+
+.cbook-cover-stripe span {
+  flex: 1;
+}
+
+.cbook-cover-foot {
+  margin: 0;
+  font-size: clamp(0.55rem, 2.4cqw, 0.75rem);
+  letter-spacing: 0.16em;
+  color: rgb(244 239 230 / 0.7);
+}
+
+.cbook-cover--back {
+  justify-content: center;
+  align-items: center;
+  gap: 6cqw;
+  text-align: center;
+}
+
+.cbook-back-info {
+  display: grid;
+  gap: 1.5cqw;
+  font-size: clamp(0.6rem, 2.6cqw, 0.85rem);
+  color: rgb(244 239 230 / 0.75);
+}
+
+.cbook-back-info strong {
+  font-size: clamp(0.9rem, 4.5cqw, 1.3rem);
+  color: #f4efe6;
+}
+
+.cbook-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+.cbook-btn {
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.cbook-btn:hover:not(:disabled) {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.cbook-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.cbook-indicator {
+  min-width: 4.5rem;
+  text-align: center;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.cbook-hint {
+  margin: 0.6rem 0 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+@media (max-width: 700px) {
+  .view-toggle {
+    margin-left: 0;
+  }
+
+  .cbook-book {
+    width: min(100%, 26rem);
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border-radius: 0.6rem;
+  }
+
+  .cbook-leaf {
+    left: 0;
+    width: 100%;
+  }
+
+  .cbook-face--front {
+    border-radius: 0.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cbook-book,
+  .cbook-leaf {
+    transition: none;
+  }
+
+  .cbook-leaf.is-turning .cbook-face::after {
+    animation: none;
+  }
+}
+
 .has-color-finder {
   padding-right: 0;
 }

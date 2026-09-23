@@ -66,6 +66,9 @@
       }
       return true;
     });
+    if (window.ColorBook) {
+      window.ColorBook.render(filtered, series || color || q ? [series, color, q].join("|") : "");
+    }
     countEl.textContent = t("colors.count").replace("{n}", filtered.length);
     grid.replaceChildren();
     filtered.forEach(function (item) {

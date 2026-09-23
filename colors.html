@@ -96,7 +96,12 @@
           <input id="filter-search" type="search" data-i18n-placeholder="common.colorSearchPlaceholder" placeholder="DY#1-BK001, SILVER…">
         </label>
         <p id="color-count" class="count"></p>
+        <div class="view-toggle" role="group" data-i18n-aria-label="colors.view.label" aria-label="보기 방식">
+          <button type="button" data-view="book" aria-pressed="true" data-i18n="colors.view.book">컬러북 보기</button>
+          <button type="button" data-view="grid" aria-pressed="false" data-i18n="colors.view.grid">목록 보기</button>
+        </div>
       </div>
+      <div id="color-book" class="cbook"></div>
       <div id="color-grid" class="swatch-grid"></div>
       <p class="note" data-i18n="colors.note">본 색상표는 실제 공급 도료와 작업 공정에 따라 색차가 있을 수 있습니다. 원본: 대양피앤티 제품코드 1~5.</p>
     </section>
@@ -110,6 +115,7 @@
   <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
   <script src="js/colors.js"></script>
+  <script src="js/color-book.js"></script>
   <script src="js/color-page.js"></script>
 </body>
 </html>
