@@ -30,7 +30,6 @@
       "nav.careers": "채용안내",
       "nav.resources": "인증서/확인서",
 
-      "footer.tagline": "분체도료",
       "footer.hq": "본사",
       "footer.factory1": "제1공장",
       "footer.factory2": "제2공장",
@@ -378,7 +377,6 @@
       "nav.careers": "Careers",
       "nav.resources": "Certificates/Confirmations",
 
-      "footer.tagline": "Powder Coatings",
       "footer.hq": "Head Office",
       "footer.factory1": "Plant 1",
       "footer.factory2": "Plant 2",
@@ -726,7 +724,6 @@
       "nav.careers": "採用案内",
       "nav.resources": "認証書/確認書",
 
-      "footer.tagline": "粉体塗料",
       "footer.hq": "本社",
       "footer.factory1": "第1工場",
       "footer.factory2": "第2工場",
@@ -1074,7 +1071,6 @@
       "nav.careers": "招聘信息",
       "nav.resources": "认证证书/确认书",
 
-      "footer.tagline": "粉末涂料",
       "footer.hq": "总部",
       "footer.factory1": "第一工厂",
       "footer.factory2": "第二工厂",
