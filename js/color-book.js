@@ -76,31 +76,10 @@
     return '<header class="cbook-page-head"><span>DAEYANG P&amp;T</span><span>COLOR BOOK</span></header>';
   }
 
-  function coverStripe() {
-    const seen = {};
-    const picks = [];
-    items.forEach(function (item) {
-      if (!seen[item.color] && picks.length < 12) {
-        seen[item.color] = true;
-        picks.push(item);
-      }
-    });
-    return picks.map(function (item) {
-      return '<span style="background-color:' + item.hex + '"></span>';
-    }).join("");
-  }
-
   function pageHTML(page, side) {
     switch (page.type) {
       case "cover":
-        return (
-          '<div class="cbook-page cbook-cover">' +
-          '<img class="cbook-cover-logo" src="images/logo-dyp.png" alt="">' +
-          '<div class="cbook-cover-title"><p>COLOR<br>BOOK</p><span>' + esc(t("colors.book.subtitle")) + "</span></div>" +
-          '<div class="cbook-cover-stripe">' + coverStripe() + "</div>" +
-          '<p class="cbook-cover-foot">DAEYANG P&amp;T · ' + items.length + " COLORS</p>" +
-          "</div>"
-        );
+        return '<div class="cbook-page cbook-blank"></div>';
       case "intro": {
         const counts = {};
         items.forEach(function (item) {
@@ -144,14 +123,7 @@
           '<div class="cbook-text cbook-text--center"><h3>' + esc(t("colors.book.noteTitle")) + "</h3><p>" + esc(t("colors.note")) + "</p></div></div>"
         );
       case "back":
-        return (
-          '<div class="cbook-page cbook-cover cbook-cover--back">' +
-          '<img class="cbook-cover-logo" src="images/logo-dyp.png" alt="">' +
-          '<div class="cbook-back-info"><strong>대양피엔티㈜</strong>' +
-          "<span>경기도 김포시 하성면 애기봉로 774번길 39-17,22</span>" +
-          "<span>TEL 031)987-8587 · FAX 031)982-8587</span></div>" +
-          "</div>"
-        );
+        return '<div class="cbook-page cbook-blank"></div>';
       default:
         return '<div class="cbook-page cbook-page--' + side + '"></div>';
     }

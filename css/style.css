@@ -1481,73 +1481,9 @@ th {
   color: var(--muted);
 }
 
-/* 표지 */
-.cbook-cover {
-  justify-content: space-between;
-  padding: 9cqw 9cqw 8cqw;
-  background:
-    radial-gradient(120% 80% at 100% 0%, rgb(224 122 40 / 0.28), transparent 60%),
-    var(--night);
-  color: #f4efe6;
-}
-
-.cbook-cover-logo {
-  width: 16cqw;
-  height: auto;
-}
-
-.cbook-cover-title p {
-  margin: 0;
-  font-size: 15cqw;
-  font-weight: 800;
-  line-height: 0.95;
-  letter-spacing: -0.03em;
-}
-
-.cbook-cover-title span {
-  display: inline-block;
-  margin-top: 3cqw;
-  padding-top: 2.5cqw;
-  border-top: 3px solid var(--accent);
-  font-size: clamp(0.7rem, 3.4cqw, 1rem);
-  font-weight: 600;
-}
-
-.cbook-cover-stripe {
-  display: flex;
-  height: 7cqw;
-  border-radius: 0.3rem;
-  overflow: hidden;
-}
-
-.cbook-cover-stripe span {
-  flex: 1;
-}
-
-.cbook-cover-foot {
-  margin: 0;
-  font-size: clamp(0.55rem, 2.4cqw, 0.75rem);
-  letter-spacing: 0.16em;
-  color: rgb(244 239 230 / 0.7);
-}
-
-.cbook-cover--back {
-  justify-content: center;
-  align-items: center;
-  gap: 6cqw;
-  text-align: center;
-}
-
-.cbook-back-info {
-  display: grid;
-  gap: 1.5cqw;
-  font-size: clamp(0.6rem, 2.6cqw, 0.85rem);
-  color: rgb(244 239 230 / 0.75);
-}
-
-.cbook-back-info strong {
-  font-size: clamp(0.9rem, 4.5cqw, 1.3rem);
-  color: #f4efe6;
+/* 표지 (PDF 원본처럼 백지) */
+.cbook-blank {
+  background: #fbfaf6;
 }
 
 .cbook-controls {
