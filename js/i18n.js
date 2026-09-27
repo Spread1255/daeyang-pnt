@@ -229,6 +229,7 @@
       "colors.book.hint": "마우스 휠을 굴리거나 페이지를 클릭해서 한 장씩 넘겨보세요.",
       "colors.book.prev": "이전 장",
       "colors.book.next": "다음 장",
+      "colors.book.disclaimer": "※ 본 색상은 웹 컬러로, 모니터에 따라 실제 도료 색과 다르게 보일 수 있습니다. 반드시 실제 칼라북으로 재확인하시기 바랍니다.",
 
       "applications.h1": "적용 분야",
       "applications.card1.h3": "건축 자재",
@@ -576,6 +577,7 @@
       "colors.book.hint": "Scroll the mouse wheel or click a page to turn it.",
       "colors.book.prev": "Previous page",
       "colors.book.next": "Next page",
+      "colors.book.disclaimer": "※ These are web colors and may look different from the actual coating depending on your monitor. Please double-check against the physical color book.",
 
       "applications.h1": "Applications",
       "applications.card1.h3": "Building Materials",
@@ -917,6 +919,7 @@
       "colors.book.hint": "マウスホイールを回すかページをクリックしてめくってください。",
       "colors.book.prev": "前のページ",
       "colors.book.next": "次のページ",
+      "colors.book.disclaimer": "※ 本カラーはウェブカラーのため、モニターにより実際の塗料色と異なって見える場合があります。必ず実物のカラーブックでご確認ください。",
 
       "applications.h1": "用途",
       "applications.card1.h3": "建築資材",
@@ -1258,6 +1261,7 @@
       "colors.book.hint": "滚动鼠标滚轮或点击页面即可逐页翻阅。",
       "colors.book.prev": "上一页",
       "colors.book.next": "下一页",
+      "colors.book.disclaimer": "※ 本色彩为网页色彩，可能因显示器不同而与实际涂料颜色有差异，请务必以实物色卡册为准。",
 
       "applications.h1": "应用领域",
       "applications.card1.h3": "建筑材料",

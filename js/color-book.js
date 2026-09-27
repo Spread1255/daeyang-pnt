@@ -20,8 +20,13 @@
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   root.innerHTML =
+    '<p class="cbook-disclaimer" data-i18n="colors.book.disclaimer">※ 본 색상은 웹 컬러로, 모니터에 따라 실제 도료 색과 다르게 보일 수 있습니다. 반드시 실제 칼라북으로 재확인하시기 바랍니다.</p>' +
     '<div class="cbook-stage" tabindex="0">' +
-    '<div class="cbook-book"></div>' +
+    '<div class="cbook-book">' +
+    '<div class="cbook-leaves"></div>' +
+    '<div class="cbook-spine cbook-spine--front"></div>' +
+    '<div class="cbook-spine cbook-spine--back"></div>' +
+    "</div>" +
     "</div>" +
     '<div class="cbook-controls">' +
     '<button type="button" class="cbook-btn" data-dir="-1" data-i18n-aria-label="colors.book.prev" aria-label="이전 장">&#8249;</button>' +
@@ -36,6 +41,7 @@
 
   const stage = root.querySelector(".cbook-stage");
   const book = root.querySelector(".cbook-book");
+  const leavesRoot = root.querySelector(".cbook-leaves");
   const indicator = root.querySelector(".cbook-indicator");
   const prevBtn = root.querySelector('[data-dir="-1"]');
   const nextBtn = root.querySelector('[data-dir="1"]');
@@ -65,7 +71,7 @@
       }
     }
     book.classList.add("no-anim");
-    book.innerHTML = pairs.map(function (pair) {
+    leavesRoot.innerHTML = pairs.map(function (pair) {
       return (
         '<div class="cbook-leaf">' +
         '<div class="cbook-face cbook-face--front">' + pageHTML(pair[0]) + "</div>" +
@@ -73,7 +79,7 @@
         "</div>"
       );
     }).join("");
-    leaves = Array.prototype.slice.call(book.children);
+    leaves = Array.prototype.slice.call(leavesRoot.children);
     max = isSingle ? leaves.length - 1 : leaves.length;
     current = Math.max(0, Math.min(max, target));
     update();

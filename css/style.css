@@ -1280,6 +1280,45 @@ th {
   transform: translateX(25%);
 }
 
+.cbook-leaves {
+  position: absolute;
+  inset: 0;
+}
+
+/* 표지가 닫혀 있을 때 책등처럼 보이도록 제본선에 비스듬한 두께를 준다 */
+.cbook-spine {
+  position: absolute;
+  top: 1.5%;
+  bottom: 1.5%;
+  width: 1.15rem;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  box-shadow: 0 10px 20px -6px rgb(0 0 0 / 0.35);
+}
+
+.cbook-spine--front {
+  left: calc(50% - 1.1rem);
+  background: linear-gradient(to right, rgb(0 0 0 / 0.04), rgb(0 0 0 / 0.4) 65%, rgb(0 0 0 / 0.12));
+  border-radius: 0.2rem 0 0 0.2rem;
+  transform: perspective(900px) rotateY(38deg);
+  transform-origin: right center;
+}
+
+.cbook-spine--back {
+  left: 50%;
+  background: linear-gradient(to left, rgb(0 0 0 / 0.04), rgb(0 0 0 / 0.4) 65%, rgb(0 0 0 / 0.12));
+  border-radius: 0 0.2rem 0.2rem 0;
+  transform: perspective(900px) rotateY(-38deg);
+  transform-origin: left center;
+}
+
+.cbook-book.is-closed-front .cbook-spine--front,
+.cbook-book.is-closed-back .cbook-spine--back {
+  opacity: 1;
+}
+
 .cbook-leaf {
   position: absolute;
   top: 0;
@@ -1412,6 +1451,14 @@ th {
   text-align: center;
   font-size: 0.85rem;
   color: var(--muted);
+}
+
+.cbook-disclaimer {
+  margin: 0 0 0.5rem;
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-dark);
 }
 
 @media (max-width: 700px) {
