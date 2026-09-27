@@ -5,7 +5,16 @@
     return;
   }
 
-  const PER_PAGE = 8;
+  const PAGE_COUNT = 12;
+  const PAGES = [];
+  for (let i = 1; i <= PAGE_COUNT; i++) {
+    const n = ("0" + i).slice(-2);
+    PAGES.push({
+      src: "images/colorbook/page-" + n + ".jpg",
+      alt: i === 1 ? "대양피엔티 디지털 컬러북 표지" : i === PAGE_COUNT ? "대양피엔티 디지털 컬러북 뒤표지" : "대양피엔티 디지털 컬러북 " + i + "페이지"
+    });
+  }
+
   const FLIP_MS = 800;
   const single = window.matchMedia("(max-width: 700px)");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -31,123 +40,36 @@
   const prevBtn = root.querySelector('[data-dir="-1"]');
   const nextBtn = root.querySelector('[data-dir="1"]');
 
-  let items = [];
-  let filterKey = "";
   let leaves = [];
   let current = 0;
   let max = 0;
   let isSingle = single.matches;
 
-  function t(key) {
-    return window.I18N ? window.I18N.t(key) : key;
-  }
-
-  function seriesName(id) {
-    return window.I18N ? window.I18N.seriesName(id) : (window.SERIES_NAMES[id] || "");
-  }
-
-  function esc(s) {
-    return String(s).replace(/[&<>"]/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
-    });
-  }
-
-  function pad3(n) {
-    return ("00" + n).slice(-3);
-  }
-
-  function makePages() {
-    const pages = [{ type: "cover" }, { type: "intro" }];
-    if (!items.length) {
-      pages.push({ type: "empty" });
+  function pageHTML(page) {
+    if (!page) {
+      return '<div class="cbook-page"></div>';
     }
-    for (let i = 0; i < items.length; i += PER_PAGE) {
-      pages.push({ type: "chips", items: items.slice(i, i + PER_PAGE), num: i / PER_PAGE + 1 });
-    }
-    pages.push({ type: "note" });
-    if (!isSingle && pages.length % 2 === 0) {
-      pages.push({ type: "blank" });
-    }
-    pages.push({ type: "back" });
-    return pages;
-  }
-
-  function head() {
-    return '<header class="cbook-page-head"><span>DAEYANG P&amp;T</span><span>COLOR BOOK</span></header>';
-  }
-
-  function pageHTML(page, side) {
-    switch (page.type) {
-      case "cover":
-        return '<div class="cbook-page cbook-blank"></div>';
-      case "intro": {
-        const counts = {};
-        items.forEach(function (item) {
-          counts[item.series] = (counts[item.series] || 0) + 1;
-        });
-        const rows = Object.keys(counts).sort().map(function (s) {
-          return "<li><strong>DY#" + s + "</strong><span>" + esc(seriesName(s)) + "</span><em>" + esc(t("colors.count").replace("{n}", counts[s])) + "</em></li>";
-        }).join("");
-        return (
-          '<div class="cbook-page cbook-page--' + side + '">' + head() +
-          '<div class="cbook-text">' +
-          "<h3>" + esc(t("colors.book.introTitle")) + "</h3>" +
-          "<p>" + esc(t("colors.book.introBody")) + "</p>" +
-          "<h4>" + esc(t("colors.book.series")) + "</h4>" +
-          '<ul class="cbook-series">' + rows + "</ul>" +
-          "</div></div>"
-        );
-      }
-      case "chips":
-        return (
-          '<div class="cbook-page cbook-page--' + side + '">' + head() +
-          '<div class="cbook-chips">' +
-          page.items.map(function (item) {
-            return (
-              '<figure class="cbook-chip">' +
-              '<span class="cbook-chip-color" role="img" aria-label="' + esc(item.code) + '" style="background-color:' + item.hex +
-              ";background-image:url(images/chips/" + pad3(item.no) + '.jpg)"></span>' +
-              "<figcaption><strong>" + esc(item.code) + "</strong><span>" + esc(item.name) + "</span></figcaption>" +
-              "</figure>"
-            );
-          }).join("") +
-          "</div>" +
-          '<footer class="cbook-page-foot">' + page.num + "</footer>" +
-          "</div>"
-        );
-      case "empty":
-        return '<div class="cbook-page cbook-page--' + side + '">' + head() + '<div class="cbook-text cbook-text--center"><p>' + esc(t("colors.empty")) + "</p></div></div>";
-      case "note":
-        return (
-          '<div class="cbook-page cbook-page--' + side + '">' + head() +
-          '<div class="cbook-text cbook-text--center"><h3>' + esc(t("colors.book.noteTitle")) + "</h3><p>" + esc(t("colors.note")) + "</p></div></div>"
-        );
-      case "back":
-        return '<div class="cbook-page cbook-blank"></div>';
-      default:
-        return '<div class="cbook-page cbook-page--' + side + '"></div>';
-    }
+    return '<div class="cbook-page"><img src="' + page.src + '" alt="' + page.alt + '" loading="lazy"></div>';
   }
 
   function build(target) {
     isSingle = single.matches;
-    const pages = makePages();
     const pairs = [];
     if (isSingle) {
-      pages.forEach(function (p) {
-        pairs.push([p, { type: "blank" }]);
+      PAGES.forEach(function (p) {
+        pairs.push([p, null]);
       });
     } else {
-      for (let i = 0; i < pages.length; i += 2) {
-        pairs.push([pages[i], pages[i + 1]]);
+      for (let i = 0; i < PAGES.length; i += 2) {
+        pairs.push([PAGES[i], PAGES[i + 1]]);
       }
     }
     book.classList.add("no-anim");
     book.innerHTML = pairs.map(function (pair) {
       return (
         '<div class="cbook-leaf">' +
-        '<div class="cbook-face cbook-face--front">' + pageHTML(pair[0], "right") + "</div>" +
-        '<div class="cbook-face cbook-face--back">' + pageHTML(pair[1], "left") + "</div>" +
+        '<div class="cbook-face cbook-face--front">' + pageHTML(pair[0]) + "</div>" +
+        '<div class="cbook-face cbook-face--back">' + pageHTML(pair[1]) + "</div>" +
         "</div>"
       );
     }).join("");
@@ -299,15 +221,9 @@
   } catch (err) {}
   setView(savedView);
 
+  build(0);
+
   window.ColorBook = {
-    render: function (nextItems, nextKey) {
-      items = nextItems;
-      let target = current;
-      if (nextKey !== filterKey) {
-        target = nextKey ? (isSingle ? 2 : 1) : 0;
-        filterKey = nextKey;
-      }
-      build(target);
-    }
+    render: function () {}
   };
 })();

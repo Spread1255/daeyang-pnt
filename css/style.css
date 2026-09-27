@@ -1265,8 +1265,8 @@ th {
 
 .cbook-book {
   position: relative;
-  width: min(100%, 60rem);
-  aspect-ratio: 3 / 2;
+  width: min(100%, 56rem);
+  aspect-ratio: 1190 / 842;
   margin: 0 auto;
   perspective: 2600px;
   transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -1358,132 +1358,13 @@ th {
 .cbook-page {
   position: absolute;
   inset: 0;
-  display: flex;
-  flex-direction: column;
-  padding: 6.5cqw 7cqw 5cqw;
 }
 
-.cbook-page-head {
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 2cqw;
-  margin-bottom: 4cqw;
-  border-bottom: 1px solid var(--line);
-  font-size: clamp(0.55rem, 2.2cqw, 0.72rem);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  color: var(--muted);
-}
-
-.cbook-chips {
-  flex: 1;
-  min-height: 0;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(4, 1fr);
-  gap: 3.5cqw 5cqw;
-}
-
-.cbook-chip {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  margin: 0;
-}
-
-.cbook-chip-color {
-  flex: 1;
-  min-height: 0;
-  border-radius: 0.3rem;
-  background-size: cover;
-  background-position: center;
-  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08), 0 1px 3px rgb(0 0 0 / 0.15);
-}
-
-.cbook-chip figcaption {
-  display: grid;
-  padding-top: 1.2cqw;
-  line-height: 1.25;
-}
-
-.cbook-chip strong {
-  font-size: clamp(0.62rem, 2.9cqw, 0.85rem);
-  letter-spacing: -0.02em;
-}
-
-.cbook-chip figcaption span {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  font-size: clamp(0.56rem, 2.5cqw, 0.75rem);
-  color: var(--accent-dark);
-}
-
-.cbook-page-foot {
-  margin-top: 3cqw;
-  text-align: right;
-  font-size: clamp(0.55rem, 2.3cqw, 0.75rem);
-  font-weight: 600;
-  color: var(--muted);
-}
-
-.cbook-page--left .cbook-page-foot {
-  text-align: left;
-}
-
-.cbook-text {
-  font-size: clamp(0.7rem, 3cqw, 0.95rem);
-  color: var(--ink);
-}
-
-.cbook-text h3 {
-  margin: 2cqw 0 3cqw;
-  font-size: clamp(1rem, 5.5cqw, 1.6rem);
-  letter-spacing: -0.02em;
-}
-
-.cbook-text h4 {
-  margin: 6cqw 0 2cqw;
-  font-size: clamp(0.72rem, 3cqw, 0.95rem);
-  color: var(--accent-dark);
-}
-
-.cbook-text p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.7;
-}
-
-.cbook-text--center {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-}
-
-.cbook-series {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.cbook-series li {
-  display: grid;
-  grid-template-columns: 4.2em 1fr auto;
-  gap: 0.5em;
-  padding: 1.6cqw 0;
-  border-bottom: 1px dashed var(--line);
-}
-
-.cbook-series em {
-  font-style: normal;
-  color: var(--muted);
-}
-
-/* 표지 (PDF 원본처럼 백지) */
-.cbook-blank {
-  background: #fbfaf6;
+.cbook-page img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .cbook-controls {
@@ -1540,7 +1421,7 @@ th {
 
   .cbook-book {
     width: min(100%, 26rem);
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 595 / 842;
     overflow: hidden;
     border-radius: 0.6rem;
   }
