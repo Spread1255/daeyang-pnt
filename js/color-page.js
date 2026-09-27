@@ -17,7 +17,8 @@
       name: row[2],
       series: match ? match[1] : "",
       color: match ? match[2] : "",
-      hex: row[3] || "#ffffff"
+      hex: row[3] || "#ffffff",
+      swatch: "images/swatches/" + code.replace("#", "") + ".jpg"
     };
   });
 
@@ -75,7 +76,7 @@
       const article = document.createElement("article");
       article.className = "swatch";
       article.innerHTML =
-        '<span class="swatch-color" style="background-color:' + item.hex + '" role="img" aria-label="' + item.code + '"></span>' +
+        '<img class="swatch-color" src="' + item.swatch + '" alt="" loading="lazy" style="background-color:' + item.hex + '">' +
         '<p class="swatch-code">' + item.code + "</p>" +
         '<p class="swatch-meta">' +
         seriesName(item.series) +

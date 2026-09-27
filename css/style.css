@@ -1192,6 +1192,7 @@ th {
   width: 100%;
   height: 4.5rem;
   border-radius: 0.45rem;
+  object-fit: cover;
 }
 
 .swatch-code {
