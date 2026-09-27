@@ -1,6 +1,5 @@
 (function () {
   const root = document.getElementById("color-book");
-  const grid = document.getElementById("color-grid");
   if (!root) {
     return;
   }
@@ -197,39 +196,5 @@
     build(single.matches ? pageIndex : Math.round(pageIndex / 2));
   });
 
-  // 보기 전환 (컬러북 / 목록)
-  const toggle = document.querySelector(".view-toggle");
-  function setView(view) {
-    root.hidden = view !== "book";
-    if (grid) {
-      grid.hidden = view === "book";
-    }
-    if (toggle) {
-      toggle.querySelectorAll("button").forEach(function (btn) {
-        btn.setAttribute("aria-pressed", String(btn.dataset.view === view));
-      });
-    }
-    try {
-      localStorage.setItem("dyp.colorsView", view);
-    } catch (err) {}
-  }
-  if (toggle) {
-    toggle.addEventListener("click", function (e) {
-      const btn = e.target.closest("button[data-view]");
-      if (btn) {
-        setView(btn.dataset.view);
-      }
-    });
-  }
-  let savedView = "book";
-  try {
-    savedView = localStorage.getItem("dyp.colorsView") || "book";
-  } catch (err) {}
-  setView(savedView);
-
   build(0);
-
-  window.ColorBook = {
-    render: function () {}
-  };
 })();

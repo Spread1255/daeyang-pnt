@@ -1214,35 +1214,7 @@ th {
   color: var(--accent-dark);
 }
 
-/* 보기 전환 */
-.view-toggle {
-  display: inline-flex;
-  margin: 0 0 0.2rem auto;
-  padding: 0.2rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--field);
-}
-
-.view-toggle button {
-  border: 0;
-  background: transparent;
-  padding: 0.4rem 0.95rem;
-  border-radius: 999px;
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--muted);
-  cursor: pointer;
-}
-
-.view-toggle button[aria-pressed="true"] {
-  background: var(--ink);
-  color: #fff;
-}
-
-.swatch-grid[hidden],
-.cbook[hidden] {
+.swatch-grid[hidden] {
   display: none;
 }
 
@@ -1463,10 +1435,6 @@ th {
 }
 
 @media (max-width: 700px) {
-  .view-toggle {
-    margin-left: 0;
-  }
-
   .cbook-book {
     width: min(100%, 26rem);
     aspect-ratio: 595 / 842;
