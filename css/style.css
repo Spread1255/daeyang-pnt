@@ -2417,8 +2417,14 @@ th {
     left: 0;
     right: 0;
     flex-direction: column;
+    flex-wrap: nowrap;
     align-items: stretch;
-    padding: 1rem 1.5rem 1.25rem;
+    gap: 0;
+    max-height: calc(100vh - var(--header-h));
+    max-height: calc(100dvh - var(--header-h));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.25rem 1.25rem 1.25rem;
     background: var(--night);
     color: #f4efe6;
     border-bottom: 1px solid rgb(244 232 214 / 0.28);
@@ -2428,39 +2434,55 @@ th {
     display: flex;
   }
 
-  .nav-links {
-    position: static;
-    top: auto;
-    left: auto;
-    transform: none;
-    flex-direction: column;
-    align-items: stretch;
+  /* 모바일: 상단 메뉴 바로 아래에 해당 하위 메뉴가 오도록 순서를 섞는다 */
+  .nav-links,
+  .nav-mega {
+    display: contents;
+    visibility: visible;
   }
 
-  .nav-mega {
-    position: static;
-    display: flex;
-    flex-direction: column;
-    transform: none;
-    margin-top: 0.2rem;
-    margin-left: 0.75rem;
-    padding: 0.2rem 0;
-    background: transparent;
-    opacity: 1;
-    visibility: visible;
-    gap: 0.2rem;
+  .nav-trigger {
+    padding: 0.85rem 0 0.35rem;
+    border-top: 1px solid rgb(244 232 214 / 0.12);
+    border-radius: 0;
+    text-align: left;
+    font-size: 1rem;
   }
+
+  .nav-trigger:first-child {
+    border-top: none;
+  }
+
+  .nav-trigger:hover,
+  .nav-trigger:focus-visible,
+  .nav-trigger[aria-current="page"] {
+    background: transparent;
+    color: var(--accent);
+  }
+
+  .nav-links .nav-trigger:nth-child(1) { order: 1; }
+  .nav-mega-col--about { order: 2; }
+  .nav-links .nav-trigger:nth-child(2) { order: 3; }
+  .nav-mega-col--products { order: 4; }
+  .nav-links .nav-trigger:nth-child(3) { order: 5; }
+  .nav-mega-col--tech { order: 6; }
+  .nav-links .nav-trigger:nth-child(4) { order: 7; }
+  .nav-mega-col--support { order: 8; }
 
   .nav-mega-col {
     position: static;
     top: auto;
     transform: none;
     align-items: stretch;
+    gap: 0;
+    padding: 0 0 0.6rem 0.75rem;
   }
 
   .nav-mega-col a {
     padding: 0.35rem 0;
     font-size: 0.92rem;
+    text-align: left;
+    white-space: normal;
     color: rgb(244 232 214 / 0.75);
   }
 
@@ -2475,15 +2497,17 @@ th {
     display: none;
   }
 
-  .lang-switch {
-    margin-left: 0;
-    margin-top: 0.25rem;
+  .header-login {
+    order: 9;
+    align-self: flex-start;
+    margin: 0.75rem 0 0;
+    padding: 0.45rem 0.9rem;
   }
 
-  .header-login {
-    align-self: flex-start;
-    margin: 0.5rem 0 0;
-    padding: 0.45rem 0.9rem;
+  .lang-switch {
+    order: 10;
+    margin-left: 0;
+    margin-top: 0.6rem;
   }
 
   .cards,
