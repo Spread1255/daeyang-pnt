@@ -180,8 +180,8 @@ window.COLOR_CHART = [
   [179, "DY#3-GY025", "S/T N 4.0 반광", "#51575e"],
   [180, "DY#3-GY008", "S/T 408K GRAY 반광", "#40464c"],
   [181, "DY#3-BK008", "S/T BK 024 반광", "#2a2e31"],
-  [182, "DY#3-BK001", "S/T BLACK 반광", "#090a0c"],
-  [183, "DY#3-BK011", "S/T 072 BLACK 반광", "#1f2020"]
+  [182, "DY#3-BK011", "S/T 072 BLACK 반광", "#1f2020"],
+  [183, "DY#3-BK001", "S/T BLACK 반광", "#090a0c"]
 ];
 
 window.COLOR_NAMES = {
