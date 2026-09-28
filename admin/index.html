@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>관리자 | 대양피엔티㈜</title>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="panel-header">
+    <a class="panel-brand" href="index.html"><img src="../images/logo-dyp.png" alt="">관리자</a>
+    <div class="panel-user">
+      <span class="panel-email" id="panel-email"></span>
+      <a class="a-btn a-btn--ghost a-btn--sm" href="../index.html" target="_blank" rel="noopener">홈페이지 보기</a>
+      <button class="a-btn a-btn--ghost a-btn--sm" type="button" id="logout">로그아웃</button>
+    </div>
+  </header>
+  <nav class="panel-tabs" aria-label="관리 메뉴">
+    <a href="#notices" data-tab="notices">공지사항</a>
+    <a href="#inquiries" data-tab="inquiries">제휴문의 <span class="tab-badge" id="new-count" hidden></span></a>
+    <a href="#careers" data-tab="careers">채용</a>
+    <a href="#resources" data-tab="resources">자료실</a>
+  </nav>
+  <main class="panel-main" id="panel-main" aria-live="polite">
+    <p class="a-empty">불러오는 중...</p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.min.js"></script>
+  <script src="../js/sb.js"></script>
+  <script src="admin.js"></script>
+  <script src="panel.js"></script>
+</body>
+</html>

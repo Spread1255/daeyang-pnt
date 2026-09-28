@@ -4,14 +4,21 @@
     return;
   }
 
-  const notices = window.NOTICES || [];
+  // 관리자 페이지에서 등록한 공지(Supabase) + notices-data.js의 기존 공지
+  let dbNotices = [];
+  const fileNotices = window.NOTICES || [];
 
   function t(key) {
     return window.I18N ? window.I18N.t(key) : key;
   }
 
+  function formatDate(iso) {
+    return String(iso || "").replace(/-/g, ".");
+  }
+
   function render() {
     list.replaceChildren();
+    const notices = dbNotices.concat(fileNotices);
 
     if (!notices.length) {
       const empty = document.createElement("li");
@@ -27,12 +34,44 @@
       time.textContent = item.date;
       const span = document.createElement("span");
       span.textContent = item.title;
-      li.appendChild(time);
-      li.appendChild(span);
+
+      if (item.body) {
+        li.className = "notice-has-body";
+        const details = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.appendChild(time);
+        summary.appendChild(span);
+        const body = document.createElement("div");
+        body.className = "notice-body";
+        body.textContent = item.body;
+        details.appendChild(summary);
+        details.appendChild(body);
+        li.appendChild(details);
+      } else {
+        li.appendChild(time);
+        li.appendChild(span);
+      }
       list.appendChild(li);
     });
   }
 
   render();
   window.addEventListener("i18n:change", render);
+
+  if (window.DY_SB) {
+    window.DY_SB
+      .from("notices")
+      .select("title, body, notice_date")
+      .order("notice_date", { ascending: false })
+      .order("id", { ascending: false })
+      .then(function (res) {
+        if (res.error || !res.data) {
+          return;
+        }
+        dbNotices = res.data.map(function (row) {
+          return { date: formatDate(row.notice_date), title: row.title, body: row.body };
+        });
+        render();
+      });
+  }
 })();

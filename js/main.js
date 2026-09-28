@@ -170,13 +170,35 @@
     return window.I18N ? window.I18N.t(key) : key;
   }
 
-  form.addEventListener("submit", function (event) {
+  form.addEventListener("submit", async function (event) {
     event.preventDefault();
+    const button = form.querySelector('[type="submit"]');
     const data = Object.fromEntries(new FormData(form).entries());
-    const saved = JSON.parse(localStorage.getItem("daeyang.pnt.inquiries") || "[]");
-    saved.push({ ...data, at: new Date().toISOString() });
-    localStorage.setItem("daeyang.pnt.inquiries", JSON.stringify(saved));
-    form.reset();
-    status.textContent = t("contact.status.submitted");
+    data.lang = document.documentElement.lang;
+
+    status.textContent = t("contact.status.sending");
+    if (button) {
+      button.disabled = true;
+    }
+    try {
+      if (!window.DY_SB) {
+        throw new Error("supabase unavailable");
+      }
+      const res = await window.DY_SB.from("inquiries").insert({
+        data: data,
+        page: window.location.pathname.split("/").pop() || "index.html"
+      });
+      if (res.error) {
+        throw res.error;
+      }
+      form.reset();
+      status.textContent = t("contact.status.submitted");
+    } catch (err) {
+      status.textContent = t("contact.status.error");
+    } finally {
+      if (button) {
+        button.disabled = false;
+      }
+    }
   });
 })();

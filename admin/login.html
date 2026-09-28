@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>관리자 로그인 | 대양피엔티㈜</title>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="login-page">
+  <main class="login-card">
+    <div class="login-brand">
+      <img src="../images/logo-dyp.png" alt="">
+      <div>
+        <strong>대양피엔티 관리자</strong>
+        <span>홈페이지 관리 페이지</span>
+      </div>
+    </div>
+    <form id="login-form" novalidate>
+      <label class="a-field">이메일
+        <input name="email" type="email" required autocomplete="username">
+      </label>
+      <label class="a-field">비밀번호
+        <input name="password" type="password" required autocomplete="current-password">
+      </label>
+      <button class="a-btn" type="submit">로그인</button>
+      <p class="a-msg" id="login-msg" role="status"></p>
+    </form>
+    <a class="login-back" href="../index.html">← 홈페이지로 돌아가기</a>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.min.js"></script>
+  <script src="../js/sb.js"></script>
+  <script src="admin.js"></script>
+  <script>
+    (function () {
+      var form = document.getElementById("login-form");
+      var msg = document.getElementById("login-msg");
+      var sb = window.DY_SB;
+
+      function show(text, isError) {
+        msg.textContent = text;
+        msg.className = "a-msg" + (isError ? " is-error" : "");
+      }
+
+      if (!sb) {
+        show("서버에 연결할 수 없습니다. 인터넷 연결을 확인해 주세요.", true);
+        return;
+      }
+
+      if (new URLSearchParams(location.search).get("reason") === "not-admin") {
+        show("관리자 권한이 없는 계정입니다.", true);
+      }
+
+      // 이미 로그인된 관리자라면 바로 관리 화면으로
+      window.DY_ADMIN.checkAdmin().then(function (ok) {
+        if (ok) {
+          location.replace("index.html");
+        }
+      });
+
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        var email = form.email.value.trim();
+        var password = form.password.value;
+        if (!email || !password) {
+          show("이메일과 비밀번호를 입력해 주세요.", true);
+          return;
+        }
+        var button = form.querySelector("button");
+        button.disabled = true;
+        show("로그인 중...");
+        var res = await sb.auth.signInWithPassword({ email: email, password: password });
+        if (res.error) {
+          button.disabled = false;
+          show("이메일 또는 비밀번호가 올바르지 않습니다.", true);
+          return;
+        }
+        var ok = await window.DY_ADMIN.checkAdmin();
+        if (!ok) {
+          await sb.auth.signOut();
+          button.disabled = false;
+          show("관리자 권한이 없는 계정입니다.", true);
+          return;
+        }
+        location.replace("index.html");
+      });
+    })();
+  </script>
+</body>
+</html>

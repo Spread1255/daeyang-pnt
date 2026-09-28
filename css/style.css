@@ -803,6 +803,79 @@ th {
   flex: 1;
 }
 
+.notice-list li.notice-has-body {
+  display: block;
+  padding: 0;
+}
+
+.notice-list details summary {
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+  padding: 1.1rem 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.notice-list details summary::-webkit-details-marker {
+  display: none;
+}
+
+.notice-list details summary:hover span {
+  color: var(--accent-dark);
+}
+
+.notice-body {
+  padding: 0 0 1.25rem 7.25rem;
+  color: var(--muted);
+  white-space: pre-line;
+}
+
+@media (max-width: 560px) {
+  .notice-list details summary {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .notice-body {
+    padding-left: 0;
+  }
+}
+
+.file-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.file-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.file-list-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.file-list-text span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.btn.btn-sm {
+  flex: 0 0 auto;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.85rem;
+}
+
 .notice-list li.notice-empty {
   padding: 1.25rem 0;
   color: var(--muted);
