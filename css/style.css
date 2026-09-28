@@ -1238,7 +1238,7 @@ th {
 
 .cbook-book {
   position: relative;
-  width: min(100%, 56rem);
+  width: min(100%, 66rem);
   aspect-ratio: 1190 / 842;
   margin: 0 auto;
   perspective: 2600px;
@@ -1436,7 +1436,7 @@ th {
 
 @media (max-width: 700px) {
   .cbook-book {
-    width: min(100%, 26rem);
+    width: min(100%, 30rem);
     aspect-ratio: 595 / 842;
     overflow: hidden;
     border-radius: 0.6rem;
