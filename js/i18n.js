@@ -273,8 +273,6 @@
       "about.history.2015": "분체페인트 생산제조시설 증설 (분산기/분쇄기/혼합기)",
       "about.history.2019": "대양피엔티 포천 제 2공장 (대지3000평, 건물400평, 창고630평)",
       "about.history.2020": "분체페인트 생산시설 증설 & 포천 제 2공장으로 생산시설 전면이동 (생산량 증가확충)",
-      "about.history.2023": "연 매출 69억원 달성",
-      "about.history.2024": "연 매출 72억원 달성",
       "about.history.2026": "대양피엔티 포천 제 2공장 3000평 (스마트 시설 확충 및 건물 증축)",
 
       "contact.h1": "견적 문의",
@@ -618,8 +616,6 @@
       "about.history.2015": "Expanded powder coating production facilities (disperser / grinder / mixer)",
       "about.history.2019": "Opened DAEYANG P&T Pocheon Factory 2 (site 3,000 pyeong, building 400 pyeong, warehouse 630 pyeong)",
       "about.history.2020": "Expanded powder coating production facilities & fully relocated production to Pocheon Factory 2 (increased production capacity)",
-      "about.history.2023": "Achieved annual revenue of KRW 6.9 billion",
-      "about.history.2024": "Achieved annual revenue of KRW 7.2 billion",
       "about.history.2026": "DAEYANG P&T Pocheon Factory 2 expanded to 3,000 pyeong (smart facility upgrade and building expansion)",
 
       "contact.h1": "Request a Quote",
@@ -963,8 +959,6 @@
       "about.history.2015": "粉体塗料生産製造設備増設(分散機・粉砕機・混合機)",
       "about.history.2019": "大陽P&T抱川第2工場(敷地3,000坪、建物400坪、倉庫630坪)",
       "about.history.2020": "粉体塗料生産設備増設及び抱川第2工場へ生産設備を全面移転(生産量増強)",
-      "about.history.2023": "年間売上69億ウォン達成",
-      "about.history.2024": "年間売上72億ウォン達成",
       "about.history.2026": "大陽P&T抱川第2工場3,000坪(スマート設備拡充及び増築)",
 
       "contact.h1": "見積依頼",
@@ -1308,8 +1302,6 @@
       "about.history.2015": "增设粉末涂料生产设施(分散机/粉碎机/混合机)",
       "about.history.2019": "大洋P&T抱川第二工厂(占地3,000坪，建筑400坪，仓库630坪)",
       "about.history.2020": "增设粉末涂料生产设施，并将生产全面迁至抱川第二工厂(扩大产能)",
-      "about.history.2023": "实现年销售额69亿韩元",
-      "about.history.2024": "实现年销售额72亿韩元",
       "about.history.2026": "大洋P&T抱川第二工厂3,000坪(智能设施扩充及厂房增建)",
 
       "contact.h1": "报价咨询",
