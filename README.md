@@ -11,11 +11,11 @@
 - `applications.html` 적용 분야
 - `about.html` 회사소개 (소개·기업이념·비전)
 - `partnership.html` 제휴문의
-- `admin/` 관리자 페이지 (로그인 필요)
+- `manager/` 관리자 페이지 (로그인 필요)
 
 ## 관리자 페이지
 
-`admin/login.html`에서 로그인하면 `admin/index.html`에서 다음을 관리합니다.
+`manager/login.html`에서 로그인하면 `manager/index.html`에서 다음을 관리합니다.
 
 - 공지사항 작성·수정·삭제 → `notices.html`에 표시
 - 제휴문의 확인·처리 상태·메모 (제휴문의 폼 제출 내용)
