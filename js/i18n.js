@@ -117,9 +117,7 @@
       "home.story.values.img2Alt": "글로벌 비즈니스 이미지",
       "home.story.values.img3Alt": "연구 개발 이미지",
       "home.story.vision.h2": "사업비전",
-      "home.story.vision.p1": "분체도료는 100% 고형분의 환경친화적 도료로서 VOC 배출 규제에 따른 휘발성 액상 도료의 대체품으로 매년 사용량이 증가하는 매력적인 도료 산업 시장이다.",
-      "home.story.vision.p2": "분체도료 소비의 증가에 따라 발생되는 폐분체도료의 양도 증가하고 있으며, 이를 재활용하여 활용할 수 있는 여러 방법이 연구되고 있다.",
-      "home.story.vision.p3": "자사는 분체도료 제조의 기술력을 확보하였으며, 이를 바탕으로 기존 분체도료 시장에서 우월한 가격 경쟁력을 확보하여 소비자와 생산자 간의 신뢰를 바탕으로 상호 이익 실현에 중심이 되어 국내 분체도료 시장의 벤치마킹 선두 모델로 성장할 것이다.",
+      "home.story.vision.p1": "분체도료는 100% 고형분의 환경친화적 도료로서 VOC 배출 규제에 따른 휘발성 액상 도료의 대체품으로 매년 사용량이 증가하는 매력적인 도료 산업 시장이다. 자사는 분체도료 제조의 기술력을 확보하였으며, 이를 바탕으로 기존 분체도료 시장에서 우월한 가격 경쟁력을 확보하여 소비자와 생산자 간의 신뢰를 바탕으로 상호 이익 실현에 중심이 되어 국내 분체도료 시장의 벤치마킹 선두 모델로 성장할 것이다.",
       "home.story.vision.imgAlt": "분체도료 산업 전경",
 
       "products.h1": "제품",
@@ -460,9 +458,7 @@
       "home.story.values.img2Alt": "Global business",
       "home.story.values.img3Alt": "Research and development",
       "home.story.vision.h2": "Business Vision",
-      "home.story.vision.p1": "Powder coating is a 100% solid, eco-friendly coating that serves as a replacement for volatile liquid coatings under VOC emission regulations, making it an attractive coatings market with usage increasing every year.",
-      "home.story.vision.p2": "As powder coating consumption grows, the amount of waste powder coating generated is also increasing, and various methods for recycling and reusing it are being researched.",
-      "home.story.vision.p3": "We have secured the technological capability to manufacture powder coatings, and based on this, we will establish superior price competitiveness in the existing powder coating market, becoming central to mutual profit realization built on trust between consumers and producers, and grow into the leading benchmark model of the domestic powder coating market.",
+      "home.story.vision.p1": "Powder coating is a 100% solid, eco-friendly coating that serves as a replacement for volatile liquid coatings under VOC emission regulations, making it an attractive coatings market with usage increasing every year. We have secured the technological capability to manufacture powder coatings, and based on this, we will establish superior price competitiveness in the existing powder coating market, becoming central to mutual profit realization built on trust between consumers and producers, and grow into the leading benchmark model of the domestic powder coating market.",
       "home.story.vision.imgAlt": "Powder coating industry overview",
 
       "products.h1": "Products",
@@ -803,9 +799,7 @@
       "home.story.values.img2Alt": "グローバルビジネス",
       "home.story.values.img3Alt": "研究開発",
       "home.story.vision.h2": "事業ビジョン",
-      "home.story.vision.p1": "粉体塗料は固形分100%の環境に優しい塗料であり、VOC排出規制に伴う揮発性液体塗料の代替品として、毎年使用量が増加している魅力的な塗料産業市場である。",
-      "home.story.vision.p2": "粉体塗料消費の増加に伴い発生する廃粉体塗料の量も増加しており、これをリサイクルして活用できる様々な方法が研究されている。",
-      "home.story.vision.p3": "当社は粉体塗料製造の技術力を確保しており、これを基に既存の粉体塗料市場で優れた価格競争力を確保し、消費者と生産者間の信頼を基盤に相互利益実現の中心となり、国内粉体塗料市場のベンチマーク先頭モデルへと成長していく。",
+      "home.story.vision.p1": "粉体塗料は固形分100%の環境に優しい塗料であり、VOC排出規制に伴う揮発性液体塗料の代替品として、毎年使用量が増加している魅力的な塗料産業市場である。当社は粉体塗料製造の技術力を確保しており、これを基に既存の粉体塗料市場で優れた価格競争力を確保し、消費者と生産者間の信頼を基盤に相互利益実現の中心となり、国内粉体塗料市場のベンチマーク先頭モデルへと成長していく。",
       "home.story.vision.imgAlt": "粉体塗料産業の展望",
 
       "products.h1": "製品",
@@ -1146,9 +1140,7 @@
       "home.story.values.img2Alt": "全球业务",
       "home.story.values.img3Alt": "研发",
       "home.story.vision.h2": "事业愿景",
-      "home.story.vision.p1": "粉末涂料是固含量100%的环保涂料，作为VOC排放法规下挥发性液体涂料的替代品，使用量逐年增长，是极具吸引力的涂料产业市场。",
-      "home.story.vision.p2": "随着粉末涂料消费量的增加，产生的废弃粉末涂料也在增多，目前正在研究多种回收再利用的方法。",
-      "home.story.vision.p3": "本公司已确保粉末涂料制造的技术实力，并以此为基础，在现有粉末涂料市场中确立优越的价格竞争力，以消费者与生产者之间的信任为基础，成为实现互利共赢的核心力量，成长为国内粉末涂料市场的标杆领先企业。",
+      "home.story.vision.p1": "粉末涂料是固含量100%的环保涂料，作为VOC排放法规下挥发性液体涂料的替代品，使用量逐年增长，是极具吸引力的涂料产业市场。本公司已确保粉末涂料制造的技术实力，并以此为基础，在现有粉末涂料市场中确立优越的价格竞争力，以消费者与生产者之间的信任为基础，成为实现互利共赢的核心力量，成长为国内粉末涂料市场的标杆领先企业。",
       "home.story.vision.imgAlt": "粉末涂料产业展望",
 
       "products.h1": "产品",
