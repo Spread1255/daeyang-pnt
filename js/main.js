@@ -13,6 +13,7 @@
   const navLinks = document.querySelector(".nav-links");
   const logo = document.querySelector(".logo");
   const langSwitch = document.querySelector(".lang-switch");
+  const headerLogin = document.querySelector(".header-login");
   const triggers = document.querySelectorAll(".nav-trigger");
   const cols = document.querySelectorAll(".nav-mega-col");
 
@@ -26,9 +27,11 @@
     if (logo) {
       minLeft = Math.max(minLeft, logo.getBoundingClientRect().right - headerRect.left + margin);
     }
-    if (langSwitch) {
-      maxRight = Math.min(maxRight, langSwitch.getBoundingClientRect().left - headerRect.left - margin);
-    }
+    [headerLogin, langSwitch].forEach(function (el) {
+      if (el) {
+        maxRight = Math.min(maxRight, el.getBoundingClientRect().left - headerRect.left - margin);
+      }
+    });
     return { minLeft: minLeft, maxRight: maxRight, width: headerRect.width };
   }
 
@@ -99,21 +102,44 @@
 
     let available = availableWidth();
     let step = Math.max(maxWidth(triggers) + linkGap, maxWidth(cols) + colGap);
+    let evenSpacing = true;
     if (step * triggers.length > available) {
       header.classList.add("nav-compact");
       if ((maxWidth(triggers) + linkGap) * triggers.length > available) {
         header.classList.add("nav-tight");
         available = availableWidth();
       }
-      step = Math.max(maxWidth(triggers) + linkGap, available / triggers.length);
-      cols.forEach(function (col) {
-        col.style.width = (step - colGap) + "px";
-      });
+      if ((maxWidth(triggers) + linkGap) * triggers.length > available) {
+        // 같은 간격으로는 안 들어가는 좁은 화면: 메뉴는 글자 폭대로 붙이고, 하위 메뉴 열은 메뉴 폭에 맞춰 줄바꿈
+        evenSpacing = false;
+        const natural = Array.prototype.map.call(triggers, function (trigger) {
+          return trigger.offsetWidth;
+        });
+        const used = natural.reduce(function (sum, w) {
+          return sum + w + linkGap;
+        }, 0);
+        const extra = Math.max(0, (available - used) / triggers.length);
+        triggers.forEach(function (trigger, i) {
+          trigger.style.width = (natural[i] + extra) + "px";
+        });
+        cols.forEach(function (col, i) {
+          if (triggers[i]) {
+            col.style.width = Math.max(natural[i] + extra - colGap / 2, 72) + "px";
+          }
+        });
+      } else {
+        step = Math.max(maxWidth(triggers) + linkGap, available / triggers.length);
+        cols.forEach(function (col) {
+          col.style.width = (step - colGap) + "px";
+        });
+      }
     }
 
-    triggers.forEach(function (trigger) {
-      trigger.style.width = (step - linkGap) + "px";
-    });
+    if (evenSpacing) {
+      triggers.forEach(function (trigger) {
+        trigger.style.width = (step - linkGap) + "px";
+      });
+    }
 
     layoutNavLinks();
 

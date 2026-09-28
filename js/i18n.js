@@ -7,6 +7,7 @@
   var DICT = {
     ko: {
       "common.menu": "메뉴",
+      "common.login": "로그인",
       "common.colorSearchPlaceholder": "DY#1-BK001, SILVER…",
 
       "nav.home": "홈",
@@ -351,6 +352,7 @@
 
     en: {
       "common.menu": "Menu",
+      "common.login": "Login",
       "common.colorSearchPlaceholder": "DY#1-BK001, SILVER…",
 
       "nav.home": "Home",
@@ -695,6 +697,7 @@
 
     ja: {
       "common.menu": "メニュー",
+      "common.login": "ログイン",
       "common.colorSearchPlaceholder": "DY#1-BK001, SILVER…",
 
       "nav.home": "ホーム",
@@ -1039,6 +1042,7 @@
 
     zh: {
       "common.menu": "菜单",
+      "common.login": "登录",
       "common.colorSearchPlaceholder": "DY#1-BK001, SILVER…",
 
       "nav.home": "首页",

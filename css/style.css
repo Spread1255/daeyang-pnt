@@ -184,6 +184,10 @@ a {
   font-size: 0.88rem;
 }
 
+.nav-tight .header-login {
+  padding-inline: 0.6rem;
+}
+
 .nav-compact .nav-mega-col a {
   font-size: 0.88rem;
   white-space: normal;
@@ -203,6 +207,26 @@ a {
   padding: 0.4rem 0.7rem;
   border-radius: 0.4rem;
   cursor: pointer;
+}
+
+.header-login {
+  margin-left: auto;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid rgb(244 232 214 / 0.28);
+  border-radius: 999px;
+  background: rgb(12 14 22 / 0.48);
+  color: #efe4d2;
+  font-size: 0.75rem !important;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.header-login:hover,
+.header-login:focus-visible {
+  border-color: var(--accent);
+  color: #fff;
 }
 
 .lang-switch {
@@ -2454,6 +2478,12 @@ th {
   .lang-switch {
     margin-left: 0;
     margin-top: 0.25rem;
+  }
+
+  .header-login {
+    align-self: flex-start;
+    margin: 0.5rem 0 0;
+    padding: 0.45rem 0.9rem;
   }
 
   .cards,
