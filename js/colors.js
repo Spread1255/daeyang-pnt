@@ -170,7 +170,7 @@ window.COLOR_CHART = [
   [169, "DY#4-BK001", "내장형 T/X BLACK 반광", "#1c1b1d"],
   [170, "DY#4-BK009", "내장형 T/X TW BLACK 반광", "#222222"],
   [171, "DY#4-BK002", "내장형 T/X BLACK 무광", "#161618"],
-  [172, "DY#4-BK003", "외장재 T/X BLACK 반광", "#1e1f1e"],
+  [172, "DY#4-BK003", "외장형 T/X BLACK 반광", "#1e1f1e"],
   [173, "DY#3-WH003", "내장형 S/T WHITE 반광", "#c7c2c0"],
   [174, "DY#3-IV014", "내장형 S/T IVORY 유광", "#c0b5a7"],
   [175, "DY#3-BE007", "내장형 S/T EL441K 반광", "#b1afa8"],
