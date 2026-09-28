@@ -6,9 +6,9 @@
 # Secrets가 없으면 어떤 값이 빠졌는지 표시하고 실패합니다.
 name: Deploy to daeyangpnt.co.kr (FTP)
 
+# 카페24가 GitHub(해외) 접속의 쓰기를 막고 있어서, 해결될 때까지 자동 실행(push)은 꺼 두고 수동 실행만 둡니다.
+# 해결되면 아래에 다시 추가:  push: { branches: [main] }
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 concurrency:
