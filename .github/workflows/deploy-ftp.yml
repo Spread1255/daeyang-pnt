@@ -1,0 +1,45 @@
+# main에 push될 때마다 카페24 호스팅(daeyangpnt.co.kr)에 FTP로 자동 업로드합니다.
+# 필요한 GitHub Secrets (Settings → Secrets and variables → Actions):
+#   FTP_USERNAME   FTP 아이디
+#   FTP_PASSWORD   FTP 비밀번호
+#   FTP_SERVER_DIR (선택) 업로드할 폴더. 기본값 ./www/
+# Secrets가 없으면 업로드 단계는 건너뜁니다.
+name: Deploy to daeyangpnt.co.kr (FTP)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-ftp
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Skip notice (secrets not set)
+        if: env.FTP_USERNAME == ''
+        run: echo "FTP_USERNAME/FTP_PASSWORD secrets가 없어 업로드를 건너뜁니다."
+
+      - name: Upload via FTP
+        if: env.FTP_USERNAME != ''
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: 183.111.174.78
+          port: 21
+          protocol: ftp
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR || './www/' }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            CLAUDE.md
+            README.md
