@@ -3,7 +3,7 @@
 #   FTP_USERNAME   FTP 아이디
 #   FTP_PASSWORD   FTP 비밀번호
 #   FTP_SERVER_DIR (선택) 업로드할 폴더. 기본값 ./www/
-# Secrets가 없으면 업로드 단계는 건너뜁니다.
+# Secrets가 없으면 어떤 값이 빠졌는지 표시하고 실패합니다.
 name: Deploy to daeyangpnt.co.kr (FTP)
 
 on:
@@ -18,17 +18,24 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Skip notice (secrets not set)
-        if: env.FTP_USERNAME == ''
-        run: echo "FTP_USERNAME/FTP_PASSWORD secrets가 없어 업로드를 건너뜁니다."
+      - name: Check FTP secrets
+        env:
+          HAS_USER: ${{ secrets.FTP_USERNAME != '' }}
+          HAS_PASS: ${{ secrets.FTP_PASSWORD != '' }}
+          HAS_DIR: ${{ secrets.FTP_SERVER_DIR != '' }}
+        run: |
+          echo "FTP_USERNAME 등록됨: $HAS_USER"
+          echo "FTP_PASSWORD 등록됨: $HAS_PASS"
+          echo "FTP_SERVER_DIR 등록됨: $HAS_DIR (없으면 ./www/ 사용)"
+          if [ "$HAS_USER" != "true" ] || [ "$HAS_PASS" != "true" ]; then
+            echo "::error::Repository secrets에 FTP_USERNAME / FTP_PASSWORD가 없습니다. Settings → Secrets and variables → Actions → Repository secrets 에 정확한 이름으로 등록해 주세요."
+            exit 1
+          fi
 
       - name: Upload via FTP
-        if: env.FTP_USERNAME != ''
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: 183.111.174.78
