@@ -2,7 +2,7 @@
 # 필요한 GitHub Secrets (Settings → Secrets and variables → Actions):
 #   FTP_USERNAME   FTP 아이디
 #   FTP_PASSWORD   FTP 비밀번호
-#   FTP_SERVER_DIR (선택) 업로드할 폴더. 기본값 ./www/
+#   FTP_SERVER_DIR (선택) 업로드할 폴더. 기본값 /www/
 # Secrets가 없으면 어떤 값이 빠졌는지 표시하고 실패합니다.
 name: Deploy to daeyangpnt.co.kr (FTP)
 
@@ -29,7 +29,7 @@ jobs:
         run: |
           echo "FTP_USERNAME 등록됨: $HAS_USER"
           echo "FTP_PASSWORD 등록됨: $HAS_PASS"
-          echo "FTP_SERVER_DIR 등록됨: $HAS_DIR (없으면 ./www/ 사용)"
+          echo "FTP_SERVER_DIR 등록됨: $HAS_DIR (없으면 /www/ 사용)"
           if [ "$HAS_USER" != "true" ] || [ "$HAS_PASS" != "true" ]; then
             echo "::error::Repository secrets에 FTP_USERNAME / FTP_PASSWORD가 없습니다. Settings → Secrets and variables → Actions → Repository secrets 에 정확한 이름으로 등록해 주세요."
             exit 1
@@ -43,7 +43,8 @@ jobs:
           protocol: ftp
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR || './www/' }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR || '/www/' }}
+          log-level: verbose
           exclude: |
             **/.git*
             **/.git*/**
