@@ -43,10 +43,6 @@
     return window.I18N ? window.I18N.t(key) : key;
   }
 
-  function seriesName(id) {
-    return window.I18N ? window.I18N.seriesName(id) : (window.SERIES_NAMES[id] || "");
-  }
-
   function colorName(code) {
     return window.I18N ? window.I18N.colorName(code) : (window.COLOR_NAMES[code] || "");
   }
@@ -75,13 +71,6 @@
       article.innerHTML =
         '<img class="swatch-color" src="' + item.swatch + '" alt="" loading="lazy" style="background-color:' + item.hex + '">' +
         '<p class="swatch-code">' + item.code + "</p>" +
-        '<p class="swatch-meta">' +
-        seriesName(item.series) +
-        " · " +
-        item.color +
-        " " +
-        colorName(item.color) +
-        "</p>" +
         '<p class="swatch-name">' + item.name + "</p>";
       grid.appendChild(article);
     });
