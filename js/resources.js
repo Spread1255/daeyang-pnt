@@ -1,8 +1,8 @@
 (function () {
   // 관리자 페이지에서 올린 자료(Supabase)를 인증서/확인서 페이지와 MSDS 페이지에 붙인다.
   var certGrid = document.querySelector("[data-resource-list='cert']");
-  var msdsList = document.querySelector("[data-resource-list='msds']");
-  if ((!certGrid && !msdsList) || !window.DY_SB) {
+  var msdsWrap = document.querySelector("[data-msds]");
+  if ((!certGrid && !msdsWrap) || !window.DY_SB) {
     return;
   }
 
@@ -59,27 +59,46 @@
     return card;
   }
 
-  function fileItem(row) {
-    var url = window.DY_RESOURCE_URL(row.file_path);
-    var li = el("li");
-    var text = el("div", "file-list-text");
-    text.appendChild(el("strong", "", row.title));
-    if (row.description) {
-      text.appendChild(el("span", "", row.description));
-    }
-    var link = el("a", "btn btn-sm", t("resources.download"));
-    link.href = url;
-    link.target = "_blank";
-    link.rel = "noopener";
-    link.setAttribute("data-i18n", "resources.download");
-    li.appendChild(text);
-    li.appendChild(link);
-    return li;
+  // ---------- MSDS 표 + 검색 ----------
+  var msdsRows = [];
+
+  function formatDate(iso) {
+    return iso ? iso.replace(/-/g, ".") : "-";
+  }
+
+  function paintMsds() {
+    var body = msdsWrap.querySelector("[data-msds-body]");
+    var search = msdsWrap.querySelector("[data-msds-search]");
+    var count = msdsWrap.querySelector("[data-msds-count]");
+    var noResult = msdsWrap.querySelector("[data-msds-noresult]");
+    var q = search.value.trim().toLowerCase();
+    var shown = msdsRows.filter(function (row) {
+      return !q || [row.product_code, row.product_name, row.title].some(function (v) {
+        return v && v.toLowerCase().indexOf(q) !== -1;
+      });
+    });
+    body.replaceChildren();
+    shown.forEach(function (row) {
+      var tr = el("tr");
+      tr.appendChild(el("td", "msds-code", row.product_code || "-"));
+      tr.appendChild(el("td", "msds-name", row.product_name || row.title));
+      tr.appendChild(el("td", "msds-date", formatDate(row.revised_on)));
+      var cell = el("td", "msds-file");
+      var link = el("a", "btn btn-sm", t("resources.download"));
+      link.href = window.DY_RESOURCE_URL(row.file_path);
+      link.target = "_blank";
+      link.rel = "noopener";
+      cell.appendChild(link);
+      tr.appendChild(cell);
+      body.appendChild(tr);
+    });
+    count.textContent = t("msds.count").replace("{n}", q ? shown.length + " / " + msdsRows.length : msdsRows.length);
+    noResult.hidden = shown.length > 0;
   }
 
   window.DY_SB
     .from("resources")
-    .select("category, title, description, file_path, file_type")
+    .select("category, title, description, file_path, file_type, product_code, product_name, revised_on")
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false })
     .then(function (res) {
@@ -89,16 +108,22 @@
       res.data.forEach(function (row) {
         if (row.category === "cert" && certGrid) {
           certGrid.appendChild(certCard(row));
-        } else if (row.category === "msds" && msdsList) {
-          msdsList.appendChild(fileItem(row));
+        } else if (row.category === "msds") {
+          msdsRows.push(row);
         }
       });
-      if (msdsList && msdsList.children.length) {
-        msdsList.hidden = false;
+      if (msdsWrap && msdsRows.length) {
+        msdsRows.sort(function (a, b) {
+          return (a.product_code || "\uffff").localeCompare(b.product_code || "\uffff", "ko", { numeric: true });
+        });
+        msdsWrap.hidden = false;
         var prep = document.querySelector("[data-resource-empty='msds']");
         if (prep) {
           prep.hidden = true;
         }
+        msdsWrap.querySelector("[data-msds-search]").addEventListener("input", paintMsds);
+        window.addEventListener("i18n:change", paintMsds);
+        paintMsds();
       }
     });
 })();

@@ -364,6 +364,72 @@ textarea {
   color: var(--muted);
 }
 
+/* 표 (MSDS) */
+.a-card--gap {
+  margin-top: 1.5rem;
+}
+
+.a-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.a-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.a-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.a-table th,
+.a-table td {
+  padding: 0.55rem 0.5rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.a-table th {
+  color: var(--muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.a-table input {
+  width: 100%;
+  min-width: 7rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  font: inherit;
+}
+
+.a-table .a-empty {
+  padding: 1.5rem 0;
+}
+
+.a-cell-file {
+  max-width: 14rem;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.a-cell-actions {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.a-table tr.is-editing td {
+  background: rgb(224 122 40 / 0.06);
+}
+
 /* 제휴문의 */
 .inq-filter {
   margin-bottom: 1rem;

@@ -81,7 +81,26 @@
 
     <section class="section">
       <p class="prep-notice" data-resource-empty="msds" data-i18n="common.techPrepNotice">자료 준비중입니다.</p>
-      <ul class="file-list" data-resource-list="msds" hidden></ul>
+      <div class="msds-wrap" data-msds hidden>
+        <div class="msds-toolbar">
+          <input class="msds-search" type="search" data-msds-search data-i18n-placeholder="msds.search" data-i18n-aria-label="msds.search" placeholder="제품코드 또는 제품명으로 검색" aria-label="제품코드 또는 제품명으로 검색">
+          <span class="msds-count" data-msds-count></span>
+        </div>
+        <div class="msds-table-wrap">
+          <table class="msds-table">
+            <thead>
+              <tr>
+                <th data-i18n="msds.col.code">제품코드</th>
+                <th data-i18n="msds.col.name">제품명</th>
+                <th data-i18n="msds.col.date">개정일</th>
+                <th data-i18n="msds.col.file">MSDS</th>
+              </tr>
+            </thead>
+            <tbody data-msds-body></tbody>
+          </table>
+        </div>
+        <p class="msds-noresult" data-msds-noresult data-i18n="msds.noResult" hidden>검색 결과가 없습니다.</p>
+      </div>
     </section>
   </main>
 
