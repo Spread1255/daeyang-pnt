@@ -83,23 +83,33 @@
       <p class="prep-notice" data-resource-empty="msds" data-i18n="common.techPrepNotice">자료 준비중입니다.</p>
       <div class="msds-wrap" data-msds hidden>
         <div class="msds-toolbar">
-          <input class="msds-search" type="search" data-msds-search data-i18n-placeholder="msds.search" data-i18n-aria-label="msds.search" placeholder="제품코드 또는 제품명으로 검색" aria-label="제품코드 또는 제품명으로 검색">
-          <span class="msds-count" data-msds-count></span>
+          <div class="msds-toolbar-left">
+            <span class="msds-total"><span data-i18n="msds.total">전체</span> <strong data-msds-count></strong></span>
+            <select class="msds-size" data-msds-size data-i18n-aria-label="msds.perPageLabel" aria-label="한 페이지에 보기">
+              <option value="15" selected>15</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+          <input class="msds-search" type="search" data-msds-search data-i18n-placeholder="msds.search" data-i18n-aria-label="msds.search" placeholder="구분, 제품명 또는 제품코드로 검색" aria-label="구분, 제품명 또는 제품코드로 검색">
         </div>
         <div class="msds-table-wrap">
           <table class="msds-table">
             <thead>
               <tr>
-                <th data-i18n="msds.col.code">제품코드</th>
-                <th data-i18n="msds.col.name">제품명</th>
-                <th data-i18n="msds.col.date">개정일</th>
-                <th data-i18n="msds.col.file">MSDS</th>
+                <th class="msds-no" data-i18n="msds.col.no">번호</th>
+                <th class="msds-series" data-i18n="msds.col.series">구분</th>
+                <th class="msds-name" data-i18n="msds.col.name">제품명</th>
+                <th class="msds-code" data-i18n="msds.col.code">제품코드</th>
+                <th class="msds-file" data-i18n="msds.col.file">다운로드</th>
               </tr>
             </thead>
             <tbody data-msds-body></tbody>
           </table>
         </div>
         <p class="msds-noresult" data-msds-noresult data-i18n="msds.noResult" hidden>검색 결과가 없습니다.</p>
+        <nav class="msds-pager" data-msds-pager data-i18n-aria-label="msds.pager" aria-label="페이지"></nav>
       </div>
     </section>
   </main>

@@ -874,25 +874,44 @@ th {
   margin-bottom: 1rem;
 }
 
+.msds-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.msds-total {
+  white-space: nowrap;
+}
+
+.msds-total strong {
+  margin-left: 0.25rem;
+}
+
+.msds-size {
+  padding: 0.5rem 2rem 0.5rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  background: #fff;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.9rem;
+}
+
 .msds-search {
-  flex: 1;
-  max-width: 26rem;
-  padding: 0.65rem 0.9rem;
+  flex: 0 1 22rem;
+  min-width: 0;
+  padding: 0.6rem 0.9rem;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--field);
   font: inherit;
 }
 
-.msds-search:focus {
+.msds-search:focus,
+.msds-size:focus {
   outline: 2px solid rgb(224 122 40 / 0.45);
   border-color: var(--accent);
-}
-
-.msds-count {
-  flex: 0 0 auto;
-  color: var(--muted);
-  font-size: 0.9rem;
 }
 
 .msds-table-wrap {
@@ -902,42 +921,65 @@ th {
 .msds-table {
   width: 100%;
   border-collapse: collapse;
-  border-top: 1px solid var(--line);
+  border-top: 2px solid var(--ink);
 }
 
 .msds-table th,
 .msds-table td {
-  padding: 0.85rem 0.75rem;
+  padding: 0.7rem 0.75rem;
   border-bottom: 1px solid var(--line);
-  text-align: left;
+  text-align: center;
   vertical-align: middle;
 }
 
 .msds-table th {
+  background: transparent;
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.msds-table td {
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.92rem;
+}
+
+.msds-table .msds-no {
+  width: 5rem;
+}
+
+.msds-table .msds-series {
+  width: 9rem;
+}
+
+.msds-table td.msds-name {
+  color: var(--ink);
   font-weight: 600;
+}
+
+.msds-table .msds-code {
+  width: 9rem;
   white-space: nowrap;
 }
 
-.msds-code,
-.msds-date {
+.msds-table .msds-file {
+  width: 6rem;
   white-space: nowrap;
 }
 
-.msds-code {
-  font-weight: 600;
+.msds-pdf {
+  display: inline-flex;
+  padding: 0.15rem;
+  border-radius: 0.3rem;
+  line-height: 0;
+  transition: transform 0.15s ease;
 }
 
-.msds-date {
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-.msds-file {
-  width: 1%;
-  text-align: right;
-  white-space: nowrap;
+.msds-pdf:hover,
+.msds-pdf:focus-visible {
+  transform: translateY(-1px);
+  outline: 2px solid rgb(224 122 40 / 0.45);
 }
 
 .msds-noresult {
@@ -946,14 +988,55 @@ th {
   color: var(--muted);
 }
 
+.msds-pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3rem;
+  margin-top: 2rem;
+}
+
+.msds-page {
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 0.2rem;
+  background: #fff;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.msds-page:hover:not(:disabled) {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.msds-page.is-current {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #fff;
+}
+
+.msds-page:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 @media (max-width: 560px) {
   .msds-toolbar {
     flex-direction: column;
     align-items: stretch;
   }
 
+  .msds-toolbar-left {
+    justify-content: space-between;
+  }
+
   .msds-search {
-    max-width: none;
+    flex-basis: auto;
   }
 
   .msds-table thead {
@@ -963,14 +1046,24 @@ th {
   .msds-table tr {
     display: grid;
     grid-template-columns: auto 1fr auto;
-    gap: 0.15rem 0.75rem;
-    padding: 0.85rem 0;
+    gap: 0.2rem 0.6rem;
+    padding: 0.8rem 0.25rem;
     border-bottom: 1px solid var(--line);
   }
 
   .msds-table td {
+    width: auto !important;
     padding: 0;
     border: none;
+    text-align: left;
+  }
+
+  .msds-table .msds-no {
+    font-size: 0.8rem;
+  }
+
+  .msds-table .msds-series {
+    font-size: 0.85rem;
   }
 
   .msds-table .msds-name {
@@ -978,9 +1071,15 @@ th {
     grid-row: 2;
   }
 
+  .msds-table .msds-code {
+    grid-column: 1 / 3;
+    grid-row: 3;
+    font-size: 0.85rem;
+  }
+
   .msds-table .msds-file {
     grid-column: 3;
-    grid-row: 1 / 3;
+    grid-row: 1 / 4;
     align-self: center;
   }
 }

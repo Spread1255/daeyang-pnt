@@ -421,9 +421,32 @@ textarea {
   font-size: 0.82rem;
 }
 
+.a-cell-no {
+  width: 1%;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.a-bulk {
+  margin-bottom: 0.75rem;
+}
+
+.a-bulk input {
+  width: 14rem;
+  max-width: 100%;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  font: inherit;
+}
+
 .a-cell-actions {
   width: 1%;
   white-space: nowrap;
+}
+
+.a-cell-actions .a-row {
+  flex-wrap: nowrap;
 }
 
 .a-table tr.is-editing td {

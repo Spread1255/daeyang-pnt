@@ -462,14 +462,19 @@
   }
 
   async function renderMsds() {
+    var seriesList = el("datalist", { id: "msds-series-list" });
     var picker = el("input", { type: "file", multiple: true, accept: "application/pdf" });
+    var bulkSeries = el("input", { type: "text", maxlength: "100", list: "msds-series-list", placeholder: "예: 자동차보수용" });
+    var bulkApply = el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "전체에 적용", onclick: applyBulkSeries });
+    var bulkRow = el("div", { class: "a-row a-bulk", hidden: true }, [el("span", { class: "a-list-meta", text: "구분(시리즈) 한 번에 입력:" }), bulkSeries, bulkApply]);
     var previewBody = el("tbody");
     var previewWrap = el("div", { class: "a-table-wrap", hidden: true }, [
       el("table", { class: "a-table" }, [
         el("thead", {}, [el("tr", {}, [
           el("th", { text: "파일" }),
-          el("th", { text: "제품코드" }),
+          el("th", { text: "구분(시리즈)" }),
           el("th", { text: "제품명" }),
+          el("th", { text: "제품코드" }),
           el("th", { text: "개정일" }),
           el("th", { text: "상태" })
         ])]),
@@ -481,13 +486,14 @@
     var upMsg = msgNode();
     var picked = [];
 
-    var search = el("input", { type: "search", placeholder: "제품코드 또는 제품명 검색" });
+    var search = el("input", { type: "search", placeholder: "구분·제품명·제품코드 검색" });
     var countText = el("span", { class: "a-list-meta" });
     var listBody = el("tbody");
     var listMsg = msgNode();
     var rows = [];
 
-    main.replaceChildren.apply(main, header("MSDS", "올린 MSDS는 홈페이지 MSDS 페이지에 표로 표시되고, 방문자가 제품코드·제품명으로 검색할 수 있습니다.").concat([
+    main.replaceChildren.apply(main, header("MSDS", "올린 MSDS는 홈페이지 MSDS 페이지에 번호·구분·제품명·제품코드·다운로드 표로 표시됩니다. 최근에 올린 것이 위에 나옵니다.").concat([
+      seriesList,
       el("section", { class: "a-card" }, [
         el("h2", { text: "여러 파일 한 번에 올리기" }),
         el("label", { class: "a-field" }, [
@@ -495,6 +501,7 @@
           el("small", { text: "여러 개를 한꺼번에 선택할 수 있습니다 · 파일당 최대 20MB · 파일 이름에서 제품코드·제품명·개정일을 자동으로 채우니, 올리기 전에 확인·수정해 주세요." }),
           picker
         ]),
+        bulkRow,
         previewWrap,
         el("div", { class: "a-row" }, [uploadBtn, clearBtn]),
         upMsg
@@ -505,8 +512,10 @@
         el("div", { class: "a-table-wrap" }, [
           el("table", { class: "a-table" }, [
             el("thead", {}, [el("tr", {}, [
-              el("th", { text: "제품코드" }),
+              el("th", { text: "번호" }),
+              el("th", { text: "구분" }),
               el("th", { text: "제품명" }),
+              el("th", { text: "제품코드" }),
               el("th", { text: "개정일" }),
               el("th", { text: "" })
             ])]),
@@ -517,13 +526,25 @@
       ])
     ]));
 
+    function refreshSeriesOptions() {
+      var seen = {};
+      seriesList.replaceChildren();
+      rows.forEach(function (r) {
+        if (r.series && !seen[r.series]) {
+          seen[r.series] = true;
+          seriesList.appendChild(el("option", { value: r.series }));
+        }
+      });
+    }
+
     picker.addEventListener("change", function () {
       picked = Array.prototype.slice.call(picker.files).map(function (f) {
         var g = guessFromFileName(f.name);
         return {
           file: f,
-          code: el("input", { type: "text", maxlength: "100", value: g.code }),
+          series: el("input", { type: "text", maxlength: "100", list: "msds-series-list", value: bulkSeries.value.trim() }),
           name: el("input", { type: "text", maxlength: "200", value: g.name }),
+          code: el("input", { type: "text", maxlength: "100", value: g.code }),
           revised: el("input", { type: "date", value: g.revised }),
           status: el("span", { class: "a-list-meta", text: f.size > 20 * 1024 * 1024 ? "20MB 초과" : "대기" }),
           done: false
@@ -532,25 +553,36 @@
       previewBody.replaceChildren.apply(previewBody, picked.map(function (p) {
         return el("tr", {}, [
           el("td", { class: "a-cell-file", text: p.file.name }),
-          el("td", {}, [p.code]),
+          el("td", {}, [p.series]),
           el("td", {}, [p.name]),
+          el("td", {}, [p.code]),
           el("td", {}, [p.revised]),
           el("td", {}, [p.status])
         ]);
       }));
       var any = picked.length > 0;
       previewWrap.hidden = !any;
+      bulkRow.hidden = !any;
       uploadBtn.hidden = !any;
       clearBtn.hidden = !any;
       uploadBtn.textContent = picked.length + "개 업로드";
       setMsg(upMsg, "");
     });
 
+    function applyBulkSeries() {
+      picked.forEach(function (p) {
+        if (!p.done) {
+          p.series.value = bulkSeries.value.trim();
+        }
+      });
+    }
+
     function clearPicked() {
       picked = [];
       picker.value = "";
       previewBody.replaceChildren();
       previewWrap.hidden = true;
+      bulkRow.hidden = true;
       uploadBtn.hidden = true;
       clearBtn.hidden = true;
       setMsg(upMsg, "");
@@ -583,6 +615,7 @@
         var res = await sb.from("resources").insert({
           category: "msds",
           title: name || code || p.file.name.replace(/\.pdf$/i, ""),
+          series: p.series.value.trim() || null,
           product_code: code || null,
           product_name: name || null,
           revised_on: p.revised.value || null,
@@ -612,7 +645,7 @@
       if (!q) {
         return true;
       }
-      return [row.product_code, row.product_name, row.title].some(function (v) {
+      return [row.series, row.product_code, row.product_name, row.title].some(function (v) {
         return v && v.toLowerCase().indexOf(q) !== -1;
       });
     }
@@ -620,10 +653,10 @@
     function paint() {
       var q = search.value.trim().toLowerCase();
       var shown = rows.filter(function (r) { return matches(r, q); });
-      countText.textContent = q ? shown.length + " / " + rows.length + "개" : rows.length + "개";
+      countText.textContent = q ? shown.length + " / " + rows.length + "개" : "전체 " + rows.length + "개";
       listBody.replaceChildren();
       if (!shown.length) {
-        listBody.appendChild(el("tr", {}, [el("td", { class: "a-empty", colspan: "4", text: rows.length ? "검색 결과가 없습니다." : "등록된 MSDS가 없습니다." })]));
+        listBody.appendChild(el("tr", {}, [el("td", { class: "a-empty", colspan: "6", text: rows.length ? "검색 결과가 없습니다." : "등록된 MSDS가 없습니다." })]));
         return;
       }
       shown.forEach(function (row) {
@@ -633,8 +666,10 @@
 
     function viewRow(row) {
       var tr = el("tr", {}, [
-        el("td", { text: row.product_code || "-" }),
+        el("td", { class: "a-cell-no", text: String(row.no) }),
+        el("td", { text: row.series || "-" }),
         el("td", { text: row.product_name || row.title }),
+        el("td", { text: row.product_code || "-" }),
         el("td", { text: formatDate(row.revised_on) || "-" }),
         el("td", { class: "a-cell-actions" }, [el("div", { class: "a-row" }, [
           el("a", { class: "a-btn a-btn--ghost a-btn--sm", href: window.DY_RESOURCE_URL(row.file_path), target: "_blank", rel: "noopener", text: "보기" }),
@@ -646,12 +681,15 @@
     }
 
     function editRow(row) {
-      var code = el("input", { type: "text", maxlength: "100", value: row.product_code || "" });
+      var series = el("input", { type: "text", maxlength: "100", list: "msds-series-list", value: row.series || "" });
       var name = el("input", { type: "text", maxlength: "200", value: row.product_name || row.title });
+      var code = el("input", { type: "text", maxlength: "100", value: row.product_code || "" });
       var revised = el("input", { type: "date", value: row.revised_on || "" });
       var tr = el("tr", { class: "is-editing" }, [
-        el("td", {}, [code]),
+        el("td", { class: "a-cell-no", text: String(row.no) }),
+        el("td", {}, [series]),
         el("td", {}, [name]),
+        el("td", {}, [code]),
         el("td", {}, [revised]),
         el("td", { class: "a-cell-actions" }, [el("div", { class: "a-row" }, [
           el("button", { class: "a-btn a-btn--sm", type: "button", text: "저장", onclick: save }),
@@ -660,6 +698,7 @@
       ]);
       async function save() {
         var payload = {
+          series: series.value.trim() || null,
           product_code: code.value.trim() || null,
           product_name: name.value.trim() || null,
           revised_on: revised.value || null
@@ -671,6 +710,7 @@
           return;
         }
         Object.assign(row, payload);
+        refreshSeriesOptions();
         setMsg(listMsg, "저장했습니다.", "ok");
         tr.replaceWith(viewRow(row));
       }
@@ -678,7 +718,7 @@
     }
 
     async function remove(row) {
-      if (!confirm("'" + (row.product_code ? row.product_code + " " : "") + (row.product_name || row.title) + "' MSDS를 삭제할까요? 홈페이지에서도 사라집니다.")) {
+      if (!confirm("'" + (row.product_name || row.title) + (row.product_code ? " (" + row.product_code + ")" : "") + "' MSDS를 삭제할까요? 홈페이지에서도 사라집니다.")) {
         return;
       }
       var st = await sb.storage.from("resources").remove([row.file_path]);
@@ -696,12 +736,17 @@
     }
 
     async function load() {
-      var res = await sb.from("resources").select("*").eq("category", "msds").order("product_code", { ascending: true, nullsFirst: false }).order("created_at", { ascending: false });
+      // 먼저 올린 순서대로 번호를 매기고(1번이 가장 오래됨), 화면에는 최근 것부터 보여 준다.
+      var res = await sb.from("resources").select("*").eq("category", "msds").order("created_at", { ascending: true }).order("id", { ascending: true });
       if (res.error) {
         setMsg(listMsg, "목록을 불러오지 못했습니다.", "error");
         return;
       }
-      rows = res.data;
+      rows = res.data.map(function (row, i) {
+        row.no = i + 1;
+        return row;
+      }).reverse();
+      refreshSeriesOptions();
       paint();
     }
 

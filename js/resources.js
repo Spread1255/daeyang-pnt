@@ -59,48 +59,96 @@
     return card;
   }
 
-  // ---------- MSDS 표 + 검색 ----------
+  // ---------- MSDS 표: 번호 · 구분 · 제품명 · 제품코드 · 다운로드 (검색 + 페이지) ----------
   var msdsRows = [];
+  var page = 1;
+  var PDF_ICON = '<svg viewBox="0 0 24 28" width="22" height="26" aria-hidden="true"><path d="M3 1h12l6 6v19a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" fill="#fff" stroke="#b9b4ad"/><path d="M15 1v6h6" fill="none" stroke="#b9b4ad"/><rect x="0" y="12" width="17" height="8" rx="1.5" fill="#d93025"/><text x="8.5" y="18.3" text-anchor="middle" font-family="Arial,sans-serif" font-size="6" font-weight="700" fill="#fff">PDF</text></svg>';
 
-  function formatDate(iso) {
-    return iso ? iso.replace(/-/g, ".") : "-";
+  function msdsFiltered() {
+    var q = msdsWrap.querySelector("[data-msds-search]").value.trim().toLowerCase();
+    return msdsRows.filter(function (row) {
+      return !q || [row.series, row.product_code, row.product_name, row.title].some(function (v) {
+        return v && v.toLowerCase().indexOf(q) !== -1;
+      });
+    });
+  }
+
+  function pagerButton(label, target, opts) {
+    var btn = el("button", "msds-page" + (opts && opts.current ? " is-current" : ""), label);
+    btn.type = "button";
+    if (opts && opts.aria) {
+      btn.setAttribute("aria-label", opts.aria);
+    }
+    if (opts && opts.current) {
+      btn.setAttribute("aria-current", "page");
+    }
+    if (opts && opts.disabled) {
+      btn.disabled = true;
+    } else {
+      btn.addEventListener("click", function () {
+        page = target;
+        paintMsds();
+        msdsWrap.scrollIntoView({ block: "start", behavior: "smooth" });
+      });
+    }
+    return btn;
   }
 
   function paintMsds() {
     var body = msdsWrap.querySelector("[data-msds-body]");
-    var search = msdsWrap.querySelector("[data-msds-search]");
-    var count = msdsWrap.querySelector("[data-msds-count]");
-    var noResult = msdsWrap.querySelector("[data-msds-noresult]");
-    var q = search.value.trim().toLowerCase();
-    var shown = msdsRows.filter(function (row) {
-      return !q || [row.product_code, row.product_name, row.title].some(function (v) {
-        return v && v.toLowerCase().indexOf(q) !== -1;
-      });
+    var size = parseInt(msdsWrap.querySelector("[data-msds-size]").value, 10) || 15;
+    var pager = msdsWrap.querySelector("[data-msds-pager]");
+    var list = msdsFiltered();
+    var pages = Math.max(1, Math.ceil(list.length / size));
+    page = Math.min(Math.max(1, page), pages);
+    var slice = list.slice((page - 1) * size, page * size);
+
+    msdsWrap.querySelector("[data-msds-count]").textContent = String(list.length);
+    Array.prototype.forEach.call(msdsWrap.querySelectorAll("[data-msds-size] option"), function (opt) {
+      opt.textContent = t("msds.perPage").replace("{n}", opt.value);
     });
+    msdsWrap.querySelector("[data-msds-noresult]").hidden = list.length > 0;
+
     body.replaceChildren();
-    shown.forEach(function (row) {
+    slice.forEach(function (row) {
+      var name = row.product_name || row.title;
       var tr = el("tr");
+      tr.appendChild(el("td", "msds-no", String(row.no)));
+      tr.appendChild(el("td", "msds-series", row.series || "-"));
+      tr.appendChild(el("td", "msds-name", name));
       tr.appendChild(el("td", "msds-code", row.product_code || "-"));
-      tr.appendChild(el("td", "msds-name", row.product_name || row.title));
-      tr.appendChild(el("td", "msds-date", formatDate(row.revised_on)));
       var cell = el("td", "msds-file");
-      var link = el("a", "btn btn-sm", t("resources.download"));
+      var link = el("a", "msds-pdf");
       link.href = window.DY_RESOURCE_URL(row.file_path);
       link.target = "_blank";
       link.rel = "noopener";
+      link.setAttribute("aria-label", t("resources.download") + ": " + name);
+      link.innerHTML = PDF_ICON;
       cell.appendChild(link);
       tr.appendChild(cell);
       body.appendChild(tr);
     });
-    count.textContent = t("msds.count").replace("{n}", q ? shown.length + " / " + msdsRows.length : msdsRows.length);
-    noResult.hidden = shown.length > 0;
+
+    pager.replaceChildren();
+    if (pages > 1) {
+      var start = Math.floor((page - 1) / 10) * 10 + 1;
+      var end = Math.min(start + 9, pages);
+      pager.appendChild(pagerButton("«", 1, { aria: "1", disabled: page === 1 }));
+      pager.appendChild(pagerButton("‹", start > 1 ? start - 1 : 1, { aria: "prev", disabled: start === 1 }));
+      for (var i = start; i <= end; i++) {
+        pager.appendChild(pagerButton(String(i), i, { current: i === page }));
+      }
+      pager.appendChild(pagerButton("›", end + 1, { aria: "next", disabled: end === pages }));
+      pager.appendChild(pagerButton("»", pages, { aria: String(pages), disabled: page === pages }));
+    }
   }
 
   window.DY_SB
     .from("resources")
-    .select("category, title, description, file_path, file_type, product_code, product_name, revised_on")
+    .select("id, category, title, description, file_path, file_type, series, product_code, product_name, created_at")
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false })
+    .order("id", { ascending: false })
     .then(function (res) {
       if (res.error || !res.data) {
         return;
@@ -113,15 +161,23 @@
         }
       });
       if (msdsWrap && msdsRows.length) {
-        msdsRows.sort(function (a, b) {
-          return (a.product_code || "\uffff").localeCompare(b.product_code || "\uffff", "ko", { numeric: true });
+        // 최근 것이 위, 번호는 올린 순서(가장 오래된 것이 1번)
+        msdsRows.forEach(function (row, i) {
+          row.no = msdsRows.length - i;
         });
         msdsWrap.hidden = false;
         var prep = document.querySelector("[data-resource-empty='msds']");
         if (prep) {
           prep.hidden = true;
         }
-        msdsWrap.querySelector("[data-msds-search]").addEventListener("input", paintMsds);
+        msdsWrap.querySelector("[data-msds-search]").addEventListener("input", function () {
+          page = 1;
+          paintMsds();
+        });
+        msdsWrap.querySelector("[data-msds-size]").addEventListener("change", function () {
+          page = 1;
+          paintMsds();
+        });
         window.addEventListener("i18n:change", paintMsds);
         paintMsds();
       }
