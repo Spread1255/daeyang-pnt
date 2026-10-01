@@ -492,6 +492,13 @@
     return text;
   }
 
+  // 원본 보관함(비공개 msds-archive 버킷) 경로: msds/2026-10/1790....-abc123.xls
+  function archivePathFor(ext) {
+    var d = new Date();
+    var ym = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
+    return "msds/" + ym + "/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
+  }
+
   async function renderMsds() {
     var seriesList = el("datalist", { id: "msds-series-list" });
     var picker = el("input", { type: "file", multiple: true, accept: ".pdf,.xls,.xlsx,application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
@@ -516,6 +523,10 @@
     var clearBtn = el("button", { class: "a-btn a-btn--ghost", type: "button", text: "선택 취소", hidden: true, onclick: clearPicked });
     var upMsg = msgNode();
     var picked = [];
+
+    var archiveBody = el("tbody");
+    var archiveCount = el("span", { class: "a-list-meta" });
+    var archiveMsg = msgNode();
 
     var search = el("input", { type: "search", placeholder: "구분·제품명·제품코드 검색" });
     var countText = el("span", { class: "a-list-meta" });
@@ -554,8 +565,118 @@
           ])
         ]),
         listMsg
+      ]),
+      el("section", { class: "a-card a-card--gap" }, [
+        el("div", { class: "a-card-head" }, [el("h2", { text: "원본 보관함" }), archiveCount]),
+        el("p", { class: "a-list-meta", text: "등록할 때 원본 파일이 관리자만 볼 수 있는 비공개 저장소(msds-archive)에 자동으로 복사됩니다. 홈페이지에서 MSDS를 삭제해도 원본은 여기 남습니다." }),
+        el("div", { class: "a-table-wrap" }, [
+          el("table", { class: "a-table" }, [
+            el("thead", {}, [el("tr", {}, [
+              el("th", { text: "보관일" }),
+              el("th", { text: "원본 파일명" }),
+              el("th", { text: "제품코드" }),
+              el("th", { text: "제품명" }),
+              el("th", { text: "홈페이지" }),
+              el("th", { text: "" })
+            ])]),
+            archiveBody
+          ])
+        ]),
+        archiveMsg
       ])
     ]));
+
+    // 보관함에 원본 복사본을 남긴다. body가 없으면(이미 등록된 파일) 공개 저장소에서 서버 쪽 복사.
+    async function archiveCopy(row, opts) {
+      var ext = msdsExt(row.file_path) || "bin";
+      var archivePath = archivePathFor(ext);
+      var res;
+      try {
+        res = opts.body
+          ? await sb.storage.from("msds-archive").upload(archivePath, opts.body, { contentType: row.file_type })
+          : await sb.storage.from("resources").copy(row.file_path, archivePath, { destinationBucket: "msds-archive" });
+      } catch (err) {
+        res = { error: err };
+      }
+      if (res.error) {
+        return res.error;
+      }
+      var ins = await sb.from("msds_archive").insert({
+        resource_id: row.id,
+        archive_path: archivePath,
+        original_name: opts.originalName,
+        file_type: row.file_type,
+        file_size: opts.size || null,
+        series: row.series || null,
+        product_code: row.product_code || null,
+        product_name: row.product_name || null
+      });
+      return ins.error || null;
+    }
+
+    async function loadArchive() {
+      var res = await sb.from("msds_archive").select("*").order("created_at", { ascending: false });
+      archiveBody.replaceChildren();
+      if (res.error) {
+        setMsg(archiveMsg, "보관함 목록을 불러오지 못했습니다: " + res.error.message, "error");
+        return;
+      }
+      archiveCount.textContent = "전체 " + res.data.length + "개";
+      if (!res.data.length) {
+        archiveBody.appendChild(el("tr", {}, [el("td", { class: "a-empty", colspan: "6", text: "보관된 파일이 없습니다." })]));
+        return;
+      }
+      res.data.forEach(function (a) {
+        archiveBody.appendChild(el("tr", {}, [
+          el("td", { class: "a-cell-no", text: A.formatDateTime(a.created_at) }),
+          el("td", { class: "a-cell-file", text: a.original_name }),
+          el("td", { text: a.product_code || "-" }),
+          el("td", { text: a.product_name || "-" }),
+          el("td", { text: a.resource_id ? "게시 중" : "삭제됨" }),
+          el("td", { class: "a-cell-actions" }, [
+            el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "다운로드", onclick: function () { downloadArchived(a); } })
+          ])
+        ]));
+      });
+    }
+
+    async function downloadArchived(a) {
+      var res = await sb.storage.from("msds-archive").createSignedUrl(a.archive_path, 60, { download: a.original_name });
+      if (res.error) {
+        setMsg(archiveMsg, "다운로드 주소를 만들지 못했습니다: " + res.error.message, "error");
+        return;
+      }
+      window.location.href = res.data.signedUrl;
+    }
+
+    // 보관함이 생기기 전에 등록된 MSDS도 보관함에 한 번 복사해 둔다.
+    async function syncArchive() {
+      var have = await sb.from("msds_archive").select("resource_id");
+      if (have.error) {
+        return;
+      }
+      var archived = {};
+      have.data.forEach(function (a) {
+        if (a.resource_id) {
+          archived[a.resource_id] = true;
+        }
+      });
+      var missing = rows.filter(function (r) { return !archived[r.id]; });
+      if (!missing.length) {
+        return;
+      }
+      var failed = 0;
+      for (var i = 0; i < missing.length; i++) {
+        var r = missing[i];
+        setMsg(archiveMsg, "기존 MSDS를 보관함에 복사하는 중... " + (i + 1) + " / " + missing.length);
+        var name = [r.product_code, r.product_name || r.title].filter(Boolean).join(" ") + "." + (msdsExt(r.file_path) || "bin");
+        if (await archiveCopy(r, { originalName: name })) {
+          failed++;
+        }
+      }
+      setMsg(archiveMsg, failed ? failed + "개를 보관함에 복사하지 못했습니다. 페이지를 새로 고치면 다시 시도합니다." : "기존 MSDS " + missing.length + "개를 보관함에 복사했습니다.", failed ? "error" : "ok");
+      loadArchive();
+    }
 
     function refreshSeriesOptions() {
       var seen = {};
@@ -657,7 +778,7 @@
           failed++;
           continue;
         }
-        var res = await sb.from("resources").insert({
+        var row = {
           category: "msds",
           title: name || code || p.file.name.replace(/\.[a-z0-9]+$/i, ""),
           series: p.series.value.trim() || null,
@@ -666,7 +787,8 @@
           revised_on: p.revised.value || null,
           file_path: path,
           file_type: type
-        });
+        };
+        var res = await sb.from("resources").insert(row).select("id").single();
         if (res.error) {
           await sb.storage.from("resources").remove([path]);
           p.status.textContent = "실패: " + res.error.message;
@@ -674,7 +796,9 @@
           continue;
         }
         p.done = true;
-        p.status.textContent = "완료";
+        row.id = res.data.id;
+        var archErr = await archiveCopy(row, { body: body, originalName: p.file.name, size: p.file.size });
+        p.status.textContent = archErr ? "완료 (보관함 복사 실패: " + uploadErrorText(archErr) + ")" : "완료 · 보관함 저장";
         ok++;
       }
       uploadBtn.disabled = false;
@@ -684,6 +808,7 @@
         uploadBtn.hidden = true;
       }
       load();
+      loadArchive();
     }
 
     function matches(row, q) {
@@ -763,7 +888,7 @@
     }
 
     async function remove(row) {
-      if (!confirm("'" + (row.product_name || row.title) + (row.product_code ? " (" + row.product_code + ")" : "") + "' MSDS를 삭제할까요? 홈페이지에서도 사라집니다.")) {
+      if (!confirm("'" + (row.product_name || row.title) + (row.product_code ? " (" + row.product_code + ")" : "") + "' MSDS를 삭제할까요? 홈페이지에서 사라지지만, 원본은 보관함에 남습니다.")) {
         return;
       }
       var st = await sb.storage.from("resources").remove([row.file_path]);
@@ -776,8 +901,9 @@
         setMsg(listMsg, "삭제하지 못했습니다: " + res.error.message, "error");
         return;
       }
-      setMsg(listMsg, "삭제했습니다.", "ok");
+      setMsg(listMsg, "삭제했습니다. 원본은 보관함에 남아 있습니다.", "ok");
       load();
+      loadArchive();
     }
 
     async function load() {
@@ -796,7 +922,8 @@
     }
 
     search.addEventListener("input", paint);
-    load();
+    loadArchive();
+    load().then(syncArchive);
   }
 
   // ---------------- 공통 ----------------
