@@ -368,7 +368,7 @@
             el("span", { class: "a-list-meta", text: CATEGORY_LABEL[row.category] + (row.description ? " · " + row.description : "") })
           ]),
           el("div", { class: "a-row" }, [
-            el("a", { class: "a-btn a-btn--ghost a-btn--sm", href: window.DY_RESOURCE_URL(row.file_path), target: "_blank", rel: "noopener", text: "보기" }),
+            el("a", { class: "a-btn a-btn--ghost a-btn--sm", href: window.DY_RESOURCE_URL(row.file_path, row.title + "." + (row.file_path.split(".").pop() || "pdf")), text: "다운로드" }),
             el("button", { class: "a-btn a-btn--danger a-btn--sm", type: "button", text: "삭제", onclick: function () { remove(row); } })
           ])
         ]));
@@ -842,7 +842,7 @@
         el("td", { text: row.product_code || "-" }),
         el("td", { text: formatDate(row.revised_on) || "-" }),
         el("td", { class: "a-cell-actions" }, [el("div", { class: "a-row" }, [
-          el("a", { class: "a-btn a-btn--ghost a-btn--sm", href: window.DY_RESOURCE_URL(row.file_path), target: "_blank", rel: "noopener", text: "보기" }),
+          el("a", { class: "a-btn a-btn--ghost a-btn--sm", href: window.DY_RESOURCE_URL(row.file_path, window.DY_MSDS_FILENAME(row)), text: "다운로드" }),
           el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "수정", onclick: function () { tr.replaceWith(editRow(row)); } }),
           el("button", { class: "a-btn a-btn--danger a-btn--sm", type: "button", text: "삭제", onclick: function () { remove(row); } })
         ])])

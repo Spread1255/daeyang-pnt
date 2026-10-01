@@ -35,8 +35,6 @@
     } else {
       media = el("a", "cert-media");
       media.href = url;
-      media.target = "_blank";
-      media.rel = "noopener";
       var img = document.createElement("img");
       img.src = url;
       img.alt = row.title;
@@ -50,8 +48,6 @@
     }
     var open = el("a", "", t("resources.cert.viewFull"));
     open.href = url;
-    open.target = "_blank";
-    open.rel = "noopener";
     open.setAttribute("data-i18n", "resources.cert.viewFull");
     info.appendChild(open);
     card.appendChild(media);
@@ -125,9 +121,7 @@
       tr.appendChild(el("td", "msds-code", row.product_code || "-"));
       var cell = el("td", "msds-file");
       var link = el("a", "msds-pdf");
-      link.href = window.DY_RESOURCE_URL(row.file_path);
-      link.target = "_blank";
-      link.rel = "noopener";
+      link.href = window.DY_RESOURCE_URL(row.file_path, window.DY_MSDS_FILENAME(row));
       link.setAttribute("aria-label", t("resources.download") + ": " + name);
       link.innerHTML = isExcel(row) ? XLS_ICON : PDF_ICON;
       cell.appendChild(link);
