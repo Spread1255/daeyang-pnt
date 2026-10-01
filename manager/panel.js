@@ -405,11 +405,18 @@
         return;
       }
       var ext = (f.name.match(/\.([a-z0-9]+)$/i) || [, "bin"])[1].toLowerCase();
+      var CERT_TYPES = { pdf: "application/pdf", jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" };
+      var type = CERT_TYPES[ext];
+      if (!type) {
+        setMsg(msg, "PDF, JPG, PNG, WEBP 파일만 올릴 수 있습니다.", "error");
+        return;
+      }
       var path = category.value + "/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
 
       submitBtn.disabled = true;
       setMsg(msg, "업로드 중...");
-      var up = await sb.storage.from("resources").upload(path, f, { contentType: f.type });
+      // 파일 형식 이름은 브라우저/설치 프로그램마다 다를 수 있어 확장자 기준 표준 형식으로 다시 감싼다.
+      var up = await sb.storage.from("resources").upload(path, new Blob([f], { type: type }), { contentType: type });
       if (up.error) {
         submitBtn.disabled = false;
         setMsg(msg, "업로드하지 못했습니다: " + up.error.message, "error");
@@ -420,7 +427,7 @@
         title: title.value.trim(),
         description: desc.value.trim() || null,
         file_path: path,
-        file_type: f.type
+        file_type: type
       });
       submitBtn.disabled = false;
       if (res.error) {
@@ -639,7 +646,9 @@
         p.status.textContent = "올리는 중";
         var up;
         try {
-          up = await sb.storage.from("resources").upload(path, p.file, { contentType: type });
+          // 한컴오피스가 깔린 PC는 엑셀 형식을 "application/haansoftxls" 같은 이름으로 넘기므로, 확장자에 맞는 표준 형식으로 다시 감싸서 보낸다.
+          var body = new Blob([p.file], { type: type });
+          up = await sb.storage.from("resources").upload(path, body, { contentType: type });
         } catch (err) {
           up = { error: err };
         }
