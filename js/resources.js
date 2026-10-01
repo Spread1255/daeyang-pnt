@@ -64,6 +64,12 @@
   var page = 1;
   var PDF_ICON = '<svg viewBox="0 0 24 28" width="22" height="26" aria-hidden="true"><path d="M3 1h12l6 6v19a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" fill="#fff" stroke="#b9b4ad"/><path d="M15 1v6h6" fill="none" stroke="#b9b4ad"/><rect x="0" y="12" width="17" height="8" rx="1.5" fill="#d93025"/><text x="8.5" y="18.3" text-anchor="middle" font-family="Arial,sans-serif" font-size="6" font-weight="700" fill="#fff">PDF</text></svg>';
 
+  var XLS_ICON = '<svg viewBox="0 0 24 28" width="22" height="26" aria-hidden="true"><path d="M3 1h12l6 6v19a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" fill="#fff" stroke="#b9b4ad"/><path d="M15 1v6h6" fill="none" stroke="#b9b4ad"/><rect x="0" y="12" width="17" height="8" rx="1.5" fill="#1d7a45"/><text x="8.5" y="18.3" text-anchor="middle" font-family="Arial,sans-serif" font-size="6" font-weight="700" fill="#fff">XLS</text></svg>';
+
+  function isExcel(row) {
+    return /excel|spreadsheet/.test(row.file_type || "") || /\.xlsx?$/i.test(row.file_path || "");
+  }
+
   function msdsFiltered() {
     var q = msdsWrap.querySelector("[data-msds-search]").value.trim().toLowerCase();
     return msdsRows.filter(function (row) {
@@ -123,7 +129,7 @@
       link.target = "_blank";
       link.rel = "noopener";
       link.setAttribute("aria-label", t("resources.download") + ": " + name);
-      link.innerHTML = PDF_ICON;
+      link.innerHTML = isExcel(row) ? XLS_ICON : PDF_ICON;
       cell.appendChild(link);
       tr.appendChild(cell);
       body.appendChild(tr);

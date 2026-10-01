@@ -461,9 +461,33 @@
     return iso ? iso.replace(/-/g, ".") : "";
   }
 
+  // MSDS로 받는 파일 형식: PDF, 엑셀
+  var MSDS_TYPES = {
+    pdf: "application/pdf",
+    xls: "application/vnd.ms-excel",
+    xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  };
+
+  function msdsExt(fileName) {
+    var m = fileName.match(/\.([a-z0-9]+)$/i);
+    return m ? m[1].toLowerCase() : "";
+  }
+
+  // 브라우저가 파일을 못 읽거나 서버에 닿지 못했을 때의 오류를 알기 쉬운 문장으로
+  function uploadErrorText(err) {
+    var text = (err && err.message) || String(err);
+    if (/failed to fetch|networkerror|load failed/i.test(text)) {
+      return "파일을 보내지 못했습니다. 파일이 엑셀 등 다른 프로그램에서 열려 있으면 닫고 다시 시도하세요. 계속되면 인터넷 연결을 확인해 주세요.";
+    }
+    if (/mime|not supported|invalid.*type/i.test(text)) {
+      return "지원하지 않는 파일 형식입니다 (PDF, XLS, XLSX만 가능).";
+    }
+    return text;
+  }
+
   async function renderMsds() {
     var seriesList = el("datalist", { id: "msds-series-list" });
-    var picker = el("input", { type: "file", multiple: true, accept: "application/pdf" });
+    var picker = el("input", { type: "file", multiple: true, accept: ".pdf,.xls,.xlsx,application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     var bulkSeries = el("input", { type: "text", maxlength: "100", list: "msds-series-list", placeholder: "예: 자동차보수용" });
     var bulkApply = el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "전체에 적용", onclick: applyBulkSeries });
     var bulkRow = el("div", { class: "a-row a-bulk", hidden: true }, [el("span", { class: "a-list-meta", text: "구분(시리즈) 한 번에 입력:" }), bulkSeries, bulkApply]);
@@ -497,8 +521,8 @@
       el("section", { class: "a-card" }, [
         el("h2", { text: "여러 파일 한 번에 올리기" }),
         el("label", { class: "a-field" }, [
-          "PDF 파일 선택",
-          el("small", { text: "여러 개를 한꺼번에 선택할 수 있습니다 · 파일당 최대 20MB · 파일 이름에서 제품코드·제품명·개정일을 자동으로 채우니, 올리기 전에 확인·수정해 주세요." }),
+          "MSDS 파일 선택 (PDF · 엑셀)",
+          el("small", { text: "PDF, XLS, XLSX · 여러 개를 한꺼번에 선택할 수 있습니다 · 파일당 최대 20MB · 파일 이름에서 제품코드·제품명·개정일을 자동으로 채우니, 올리기 전에 확인·수정해 주세요." }),
           picker
         ]),
         bulkRow,
@@ -546,7 +570,7 @@
           name: el("input", { type: "text", maxlength: "200", value: g.name }),
           code: el("input", { type: "text", maxlength: "100", value: g.code }),
           revised: el("input", { type: "date", value: g.revised }),
-          status: el("span", { class: "a-list-meta", text: f.size > 20 * 1024 * 1024 ? "20MB 초과" : "대기" }),
+          status: el("span", { class: "a-list-meta", text: !MSDS_TYPES[msdsExt(f.name)] ? "형식 불가 (PDF·XLS·XLSX만)" : f.size > 20 * 1024 * 1024 ? "20MB 초과" : "대기" }),
           done: false
         };
       });
@@ -604,23 +628,35 @@
         }
         var code = p.code.value.trim();
         var name = p.name.value.trim();
-        var path = "msds/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + ".pdf";
+        var ext = msdsExt(p.file.name);
+        var type = MSDS_TYPES[ext];
+        if (!type) {
+          p.status.textContent = "실패: PDF, XLS, XLSX만 올릴 수 있습니다";
+          failed++;
+          continue;
+        }
+        var path = "msds/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
         p.status.textContent = "올리는 중";
-        var up = await sb.storage.from("resources").upload(path, p.file, { contentType: "application/pdf" });
+        var up;
+        try {
+          up = await sb.storage.from("resources").upload(path, p.file, { contentType: type });
+        } catch (err) {
+          up = { error: err };
+        }
         if (up.error) {
-          p.status.textContent = "실패: " + up.error.message;
+          p.status.textContent = "실패: " + uploadErrorText(up.error);
           failed++;
           continue;
         }
         var res = await sb.from("resources").insert({
           category: "msds",
-          title: name || code || p.file.name.replace(/\.pdf$/i, ""),
+          title: name || code || p.file.name.replace(/\.[a-z0-9]+$/i, ""),
           series: p.series.value.trim() || null,
           product_code: code || null,
           product_name: name || null,
           revised_on: p.revised.value || null,
           file_path: path,
-          file_type: "application/pdf"
+          file_type: type
         });
         if (res.error) {
           await sb.storage.from("resources").remove([path]);
