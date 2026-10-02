@@ -202,6 +202,7 @@
     const data = Object.fromEntries(new FormData(form).entries());
     data.lang = document.documentElement.lang;
 
+    status.classList.remove("is-ok", "is-error");
     status.textContent = t("contact.status.sending");
     if (button) {
       button.disabled = true;
@@ -210,7 +211,10 @@
       if (!window.DY_SB) {
         throw new Error("supabase unavailable");
       }
+      // id를 미리 만들어 두면 저장 뒤 같은 문의를 메일로 보내 달라고 요청할 수 있다.
+      const id = window.crypto && window.crypto.randomUUID ? window.crypto.randomUUID() : undefined;
       const res = await window.DY_SB.from("inquiries").insert({
+        id: id,
         data: data,
         page: window.location.pathname.split("/").pop() || "index.html"
       });
@@ -219,8 +223,14 @@
       }
       form.reset();
       status.textContent = t("contact.status.submitted");
+      status.classList.add("is-ok");
+      // 담당자 메일(daeyang@daeyangpnt.co.kr) 알림. 문의는 이미 저장됐으므로 실패해도 접수 표시는 그대로 둔다.
+      if (id && window.DY_SB.functions) {
+        window.DY_SB.functions.invoke("notify-inquiry", { body: { id: id } }).catch(function () {});
+      }
     } catch (err) {
       status.textContent = t("contact.status.error");
+      status.classList.add("is-error");
     } finally {
       if (button) {
         button.disabled = false;

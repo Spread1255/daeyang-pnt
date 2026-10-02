@@ -1426,6 +1426,15 @@ th {
   font-weight: 500;
 }
 
+.form-status.is-ok {
+  color: #1d7a45;
+  font-weight: 700;
+}
+
+.form-status.is-error {
+  color: #c0392b;
+}
+
 .site-footer {
   border-top: 1px solid rgb(244 232 214 / 0.12);
   padding: 1.5rem;

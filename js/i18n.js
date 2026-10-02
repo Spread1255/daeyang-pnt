@@ -352,7 +352,7 @@
       "contact.form.messagePlaceholder": "적용 제품, 색상(RAL), 월 소요량, 라인 온도 등",
       "contact.form.submit": "문의 보내기",
       "contact.aside.h2": "연락처",
-      "contact.status.submitted": "문의가 접수되었습니다. 확인 후 담당자가 연락드립니다.",
+      "contact.status.submitted": "문의를 접수했습니다. 확인 후 담당자가 연락드립니다.",
       "contact.status.sending": "보내는 중입니다...",
       "contact.status.error": "문의 전송에 실패했습니다. 잠시 후 다시 시도하시거나 전화·이메일로 연락해 주세요.",
       "contact.prefill.line1": "구매 선접수입니다. 금액은 접수 후 통보해 주세요.",
