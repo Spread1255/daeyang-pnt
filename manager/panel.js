@@ -529,6 +529,12 @@
     var archiveCount = el("span", { class: "a-list-meta" });
     var archiveMsg = msgNode();
 
+    var editedText = el("span");
+    var editedBanner = el("div", { class: "a-edited-banner", hidden: true }, [
+      editedText,
+      el("button", { class: "a-btn a-btn--sm", type: "button", text: "모두 원본으로 되돌리기", onclick: restoreAllEdited })
+    ]);
+
     var search = el("input", { type: "search", placeholder: "구분·제품명·제품코드·MSDS NO 검색" });
     var countText = el("span", { class: "a-list-meta" });
     var listBody = el("tbody");
@@ -551,6 +557,7 @@
       ]),
       el("section", { class: "a-card a-card--gap" }, [
         el("div", { class: "a-card-head" }, [el("h2", { text: "등록된 MSDS" }), countText]),
+        editedBanner,
         el("label", { class: "a-field" }, [search]),
         el("div", { class: "a-table-wrap" }, [
           el("table", { class: "a-table" }, [
@@ -935,6 +942,9 @@
       var q = search.value.trim().toLowerCase();
       var shown = rows.filter(function (r) { return matches(r, q); });
       countText.textContent = q ? shown.length + " / " + rows.length + "개" : "전체 " + rows.length + "개";
+      var edited = rows.filter(function (r) { return r.file_edited_at; }).length;
+      editedBanner.hidden = !edited;
+      editedText.textContent = "관리자 수정으로 엑셀 파일 내용이 바뀐 MSDS " + edited + "개 (노란 표시). 처음 올린 원본 파일로 되돌릴 수 있습니다. 목록 정보(품명·MSDS NO 등)는 그대로 둡니다.";
       listBody.replaceChildren();
       if (!shown.length) {
         listBody.appendChild(el("tr", {}, [el("td", { class: "a-empty", colspan: "7", text: rows.length ? "검색 결과가 없습니다." : "등록된 MSDS가 없습니다." })]));
@@ -946,20 +956,80 @@
     }
 
     function viewRow(row) {
-      var tr = el("tr", {}, [
+      var tr = el("tr", { class: row.file_edited_at ? "is-file-edited" : null }, [
         el("td", { class: "a-cell-no", text: String(row.no) }),
         el("td", { text: row.series || "-" }),
-        el("td", { text: row.product_name || row.title }),
+        el("td", {}, [
+          row.product_name || row.title,
+          row.file_edited_at ? el("small", { class: "a-dup-note", text: "파일 수정됨 · " + A.formatDateTime(row.file_edited_at) }) : null
+        ]),
         el("td", { text: row.product_code || "-" }),
         el("td", { text: row.msds_no || "-" }),
         el("td", { text: formatDate(row.revised_on) || "-" }),
         el("td", { class: "a-cell-actions" }, [el("div", { class: "a-row" }, [
           el("a", { class: "a-btn a-btn--ghost a-btn--sm", href: window.DY_RESOURCE_URL(row.file_path, window.DY_MSDS_FILENAME(row)), text: "다운로드" }),
+          row.file_edited_at ? el("button", { class: "a-btn a-btn--sm", type: "button", text: "원본으로", onclick: function () { restoreOne(row, true); } }) : null,
           el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "수정", onclick: function () { tr.replaceWith(editRow(row)); } }),
           el("button", { class: "a-btn a-btn--danger a-btn--sm", type: "button", text: "삭제", onclick: function () { remove(row); } })
         ])])
       ]);
       return tr;
+    }
+
+    // 원본 보관함(msds-archive)에 있는 처음 올린 파일을 공개 저장소로 다시 복사해 연결한다.
+    async function restoreOriginal(row) {
+      var arch = await sb.from("msds_archive").select("archive_path").eq("resource_id", row.id).order("created_at", { ascending: true }).limit(1);
+      if (arch.error || !arch.data || !arch.data.length) {
+        return "보관함에서 원본을 찾지 못했습니다";
+      }
+      var ext = msdsExt(arch.data[0].archive_path) || msdsExt(row.file_path);
+      var path = "msds/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
+      var cp;
+      try {
+        cp = await sb.storage.from("msds-archive").copy(arch.data[0].archive_path, path, { destinationBucket: "resources" });
+      } catch (err) {
+        cp = { error: err };
+      }
+      if (cp.error) {
+        return uploadErrorText(cp.error);
+      }
+      var up = await sb.from("resources").update({ file_path: path, file_type: MSDS_TYPES[ext] || row.file_type, file_edited_at: null }).eq("id", row.id);
+      if (up.error) {
+        await sb.storage.from("resources").remove([path]);
+        return up.error.message;
+      }
+      await sb.storage.from("resources").remove([row.file_path]);
+      row.file_path = path;
+      row.file_type = MSDS_TYPES[ext] || row.file_type;
+      row.file_edited_at = null;
+      return null;
+    }
+
+    async function restoreOne(row, ask) {
+      if (ask && !confirm("'" + (row.product_name || row.title) + "' 파일을 처음 올린 원본으로 되돌릴까요?\n(목록의 품명·MSDS NO 등은 그대로 둡니다)")) {
+        return;
+      }
+      setMsg(listMsg, "원본으로 되돌리는 중...");
+      var err = await restoreOriginal(row);
+      setMsg(listMsg, err ? "되돌리지 못했습니다: " + err : "원본 파일로 되돌렸습니다.", err ? "error" : "ok");
+      paint();
+    }
+
+    async function restoreAllEdited() {
+      var targets = rows.filter(function (r) { return r.file_edited_at; });
+      if (!targets.length || !confirm("파일이 수정된 MSDS " + targets.length + "개를 모두 처음 올린 원본 파일로 되돌릴까요?\n(목록의 품명·MSDS NO 등은 그대로 둡니다)")) {
+        return;
+      }
+      var failed = [];
+      for (var i = 0; i < targets.length; i++) {
+        setMsg(listMsg, "원본으로 되돌리는 중... " + (i + 1) + " / " + targets.length);
+        var err = await restoreOriginal(targets[i]);
+        if (err) {
+          failed.push((targets[i].product_name || targets[i].title) + ": " + err);
+        }
+      }
+      setMsg(listMsg, failed.length ? "일부를 되돌리지 못했습니다 — " + failed.join(" / ") : targets.length + "개를 모두 원본 파일로 되돌렸습니다.", failed.length ? "error" : "ok");
+      paint();
     }
 
     function editRow(row) {
@@ -1001,6 +1071,7 @@
           } else if (fx.path) {
             oldPath = row.file_path;
             payload.file_path = fx.path;
+            payload.file_edited_at = new Date().toISOString();
             fileNote = " 엑셀 파일도 " + fx.changed + "곳 수정했습니다." + (fx.missing.length ? " (파일에 없는 항목: " + fx.missing.join(", ") + ")" : "");
           } else if (fx.note) {
             fileNote = " " + fx.note;
@@ -1049,8 +1120,9 @@
         if (!result.wanted) {
           return { note: result.missing.length ? "엑셀 파일에서 찾지 못한 항목이 있어 파일은 그대로 두었습니다: " + result.missing.join(", ") : "" };
         }
-        if (result.lossy && !confirm("이 파일은 옛 엑셀 형식(.xls)이라 다시 저장하면 글꼴·색 같은 서식이 단순해질 수 있습니다.\n엑셀 파일 내용도 함께 수정할까요?\n(취소하면 목록 정보만 수정하고 파일은 그대로 둡니다. 원본은 보관함에 남아 있습니다.)")) {
-          return { note: "엑셀 파일은 그대로 두었습니다." };
+        // 옛 엑셀 형식(이진 .xls)은 다시 저장하면 서식이 크게 바뀌므로 파일은 건드리지 않는다.
+        if (result.lossy) {
+          return { note: "옛 엑셀 형식(.xls)이라 서식 보호를 위해 파일 내용은 그대로 두고 목록 정보만 수정했습니다." };
         }
         if (!result.changed) {
           return { note: "엑셀 파일에서 바꿀 값을 찾지 못해 파일은 그대로 두었습니다." };
