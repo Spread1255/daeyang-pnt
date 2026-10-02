@@ -974,17 +974,83 @@
           revised_on: revised.value || null
         };
         payload.title = payload.product_name || payload.product_code || row.title;
+
+        // 엑셀 MSDS면 파일 안의 품명·제품코드·MSDS NO·개정일도 같이 바꾼다 (원본은 보관함에 그대로 남음).
+        var fileNote = "";
+        var oldPath = null;
+        if (/^xlsx?$/.test(msdsExt(row.file_path))) {
+          setMsg(listMsg, "엑셀 파일을 수정하는 중...");
+          var fx = await rewriteExcelFile(row, payload);
+          if (fx.error) {
+            fileNote = " 엑셀 파일은 수정하지 못했습니다: " + fx.error;
+          } else if (fx.path) {
+            oldPath = row.file_path;
+            payload.file_path = fx.path;
+            fileNote = " 엑셀 파일도 " + fx.changed + "곳 수정했습니다." + (fx.missing.length ? " (파일에 없는 항목: " + fx.missing.join(", ") + ")" : "");
+          } else if (fx.note) {
+            fileNote = " " + fx.note;
+          }
+        }
+
         var res = await sb.from("resources").update(payload).eq("id", row.id);
         if (res.error) {
+          if (payload.file_path) {
+            await sb.storage.from("resources").remove([payload.file_path]);
+          }
           setMsg(listMsg, "저장하지 못했습니다: " + res.error.message, "error");
           return;
         }
+        if (oldPath) {
+          await sb.storage.from("resources").remove([oldPath]);
+        }
         Object.assign(row, payload);
         refreshSeriesOptions();
-        setMsg(listMsg, "저장했습니다.", "ok");
+        setMsg(listMsg, "저장했습니다." + fileNote, fileNote.indexOf("못했습니다") !== -1 ? "error" : "ok");
         tr.replaceWith(viewRow(row));
       }
       return tr;
+    }
+
+    // 공개 저장소의 엑셀 파일을 내려받아 값만 바꾼 새 파일로 올린다. 브라우저 캐시 문제를 피하려고 새 경로에 올리고,
+    // 성공하면 호출한 쪽에서 목록의 file_path를 바꾸고 옛 파일을 지운다.
+    async function rewriteExcelFile(row, payload) {
+      if (!window.DY_MSDS_REWRITE || !window.DY_MSDS_EXTRACT || !window.XLSX) {
+        return { error: "엑셀 도구를 불러오지 못했습니다" };
+      }
+      try {
+        var resp = await fetch(window.DY_RESOURCE_URL(row.file_path), { cache: "no-store" });
+        if (!resp.ok) {
+          return { error: "파일을 내려받지 못했습니다 (" + resp.status + ")" };
+        }
+        var bytes = new Uint8Array(await resp.arrayBuffer());
+        var before = window.DY_MSDS_EXTRACT(bytes, window.XLSX);
+        var after = {
+          name: payload.product_name || "",
+          code: payload.product_code || "",
+          msdsNo: payload.msds_no || "",
+          revised: payload.revised_on || ""
+        };
+        var result = window.DY_MSDS_REWRITE(bytes, window.XLSX, before, after);
+        if (!result.wanted) {
+          return { note: result.missing.length ? "엑셀 파일에서 찾지 못한 항목이 있어 파일은 그대로 두었습니다: " + result.missing.join(", ") : "" };
+        }
+        if (result.lossy && !confirm("이 파일은 옛 엑셀 형식(.xls)이라 다시 저장하면 글꼴·색 같은 서식이 단순해질 수 있습니다.\n엑셀 파일 내용도 함께 수정할까요?\n(취소하면 목록 정보만 수정하고 파일은 그대로 둡니다. 원본은 보관함에 남아 있습니다.)")) {
+          return { note: "엑셀 파일은 그대로 두었습니다." };
+        }
+        if (!result.changed) {
+          return { note: "엑셀 파일에서 바꿀 값을 찾지 못해 파일은 그대로 두었습니다." };
+        }
+        var ext = msdsExt(row.file_path);
+        var path = "msds/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
+        var type = MSDS_TYPES[ext];
+        var up = await sb.storage.from("resources").upload(path, new Blob([result.bytes], { type: type }), { contentType: type });
+        if (up.error) {
+          return { error: uploadErrorText(up.error) };
+        }
+        return { path: path, changed: result.changed, missing: result.missing };
+      } catch (err) {
+        return { error: uploadErrorText(err) };
+      }
     }
 
     async function remove(row) {
