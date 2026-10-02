@@ -136,6 +136,82 @@
     return parseWorkbook(wb, XLSX);
   };
 
+  // ---------- PDF ----------
+  // PDF는 정해진 칸이 없어서 글자를 읽어 찾는다: MSDS NO(예: AA14944-0000000001), "제품명" 줄의 품명(코드).
+  // 개정일은 PDF에 명확히 없으므로 정해진 날짜로 채운다.
+  root.DY_MSDS_PDF_REVISED = "2026-01-05";
+
+  function linesFromItems(items) {
+    var sorted = items.filter(function (it) { return it.str && it.str.trim(); }).sort(function (a, b) {
+      return Math.abs(b.y - a.y) > 3 ? b.y - a.y : a.x - b.x;
+    });
+    var lines = [];
+    var cur = null;
+    sorted.forEach(function (it) {
+      if (!cur || Math.abs(cur.y - it.y) > 3) {
+        cur = { y: it.y, text: "", end: null };
+        lines.push(cur);
+      }
+      var gap = cur.end === null ? 0 : it.x - cur.end;
+      cur.text += (cur.end !== null && gap > Math.max(1.5, it.h * 0.25) ? " " : "") + it.str;
+      cur.end = it.x + it.w;
+    });
+    return lines.map(function (l) { return l.text.replace(/\s+/g, " ").trim(); });
+  }
+
+  function extractFromPdfText(lines) {
+    var out = { name: "", code: "", msdsNo: "", revised: root.DY_MSDS_PDF_REVISED };
+    var all = lines.join("\n");
+    var no = all.match(MSDS_NO_SHAPE);
+    if (no) {
+      out.msdsNo = no[1];
+    }
+    for (var i = 0; i < lines.length; i++) {
+      var m = lines[i].match(/제\s*품\s*명\s*[:：]?\s*(.*)$/);
+      if (!m) {
+        continue;
+      }
+      var value = m[1].trim() || (lines[i + 1] || "").trim();
+      if (value) {
+        var split = splitNameCode(value.replace(/\s*([(（])\s*/, "$1"));
+        out.name = split.name;
+        out.code = split.code;
+        break;
+      }
+    }
+    return out;
+  }
+
+  root.DY_MSDS_PARSE_PDF = function (file) {
+    var pdfjs = root.pdfjsLib;
+    if (!pdfjs) {
+      return Promise.reject(new Error("PDF 읽기 도구를 불러오지 못했습니다."));
+    }
+    return file.arrayBuffer().then(function (buf) {
+      return pdfjs.getDocument({ data: new Uint8Array(buf), isEvalSupported: false, disableFontFace: true }).promise;
+    }).then(async function (doc) {
+      var lines = [];
+      var pages = Math.min(doc.numPages, 2);
+      for (var n = 1; n <= pages; n++) {
+        var page = await doc.getPage(n);
+        var content = await page.getTextContent();
+        lines = lines.concat(linesFromItems(content.items.map(function (it) {
+          return { str: it.str, x: it.transform[4], y: it.transform[5], w: it.width || 0, h: Math.abs(it.transform[3]) || 10 };
+        })));
+        // 빨간 글씨 메모(주석)로 들어간 MSDS NO도 읽는다
+        var annots = await page.getAnnotations();
+        annots.forEach(function (a) {
+          var t = (a.contentsObj && a.contentsObj.str) || a.contents || "";
+          if (t) {
+            lines.push(String(t));
+          }
+        });
+      }
+      doc.destroy();
+      return extractFromPdfText(lines);
+    });
+  };
+
   root.DY_MSDS_PARSE = function (file) {
     var XLSX = root.XLSX;
     if (!XLSX) {

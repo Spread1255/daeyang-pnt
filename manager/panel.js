@@ -541,7 +541,7 @@
         el("h2", { text: "여러 파일 한 번에 올리기" }),
         el("label", { class: "a-field" }, [
           "MSDS 파일 선택 (PDF · 엑셀)",
-          el("small", { text: "PDF, XLS, XLSX · 여러 개를 한꺼번에 선택할 수 있습니다 · 파일당 최대 20MB · 엑셀은 파일 안의 품명·제품코드·MSDS NO·최종개정일자를, PDF는 파일 이름을 읽어 자동으로 채우니 올리기 전에 확인·수정해 주세요." }),
+          el("small", { text: "PDF, XLS, XLSX · 여러 개를 한꺼번에 선택할 수 있습니다 · 파일당 최대 20MB · 엑셀은 파일 안의 품명·제품코드·MSDS NO·최종개정일자를, PDF는 글자에서 MSDS NO·품명(코드)을 읽고 개정일은 2026-01-05로 채웁니다. 올리기 전에 확인·수정해 주세요." }),
           picker
         ]),
         bulkRow,
@@ -777,39 +777,54 @@
     }
 
     // 엑셀 MSDS는 파일 안의 품명·제품코드·MSDS NO·최종개정일자를 읽어 칸을 채운다 (파일 이름에서 추측한 값보다 우선).
+    // 파일 안의 품명·제품코드·MSDS NO·개정일을 읽어 칸을 채운다 (파일 이름에서 추측한 값보다 우선).
+    //  - 엑셀: 정해진 칸에서 읽음
+    //  - PDF: 글자에서 MSDS NO와 "제품명" 줄의 품명(코드)을 찾고, 개정일은 정해진 날짜(2026-01-05)로 채움
     async function readExcelContents(list) {
-      var excel = list.filter(function (p) { return /^xlsx?$/.test(msdsExt(p.file.name)); });
-      if (!excel.length) {
-        return;
-      }
-      if (!window.DY_MSDS_PARSE || !window.XLSX) {
-        setMsg(upMsg, "엑셀 내용을 읽는 도구를 불러오지 못했습니다. 파일 이름에서 채운 값을 확인해 주세요.", "error");
+      var targets = list.filter(function (p) { return /^(xlsx?|pdf)$/.test(msdsExt(p.file.name)); });
+      if (!targets.length) {
         return;
       }
       uploadBtn.disabled = true;
       var read = 0;
-      for (var i = 0; i < excel.length; i++) {
-        var p = excel[i];
+      var toolMissing = false;
+      for (var i = 0; i < targets.length; i++) {
+        var p = targets[i];
         if (picked.indexOf(p) === -1) {
           return;
         }
+        var isPdf = msdsExt(p.file.name) === "pdf";
+        if (isPdf && window.DY_MSDS_PDF_REVISED) {
+          p.revised.value = window.DY_MSDS_PDF_REVISED;
+        }
+        var parser = isPdf ? (window.pdfjsLib && window.DY_MSDS_PARSE_PDF) : (window.XLSX && window.DY_MSDS_PARSE);
+        if (!parser) {
+          toolMissing = true;
+          p.status.textContent = "읽기 도구 없음 · 직접 입력";
+          continue;
+        }
         p.status.textContent = "파일 읽는 중";
         try {
-          var info = await window.DY_MSDS_PARSE(p.file);
+          var info = await parser(p.file);
           if (info.name) { p.name.value = info.name; }
           if (info.code) { p.code.value = info.code; }
           if (info.msdsNo) { p.msdsNo.value = info.msdsNo; }
           if (info.revised) { p.revised.value = info.revised; }
           checkDuplicates();
-          var found = [info.name && "품명", info.code && "코드", info.msdsNo && "MSDS NO", info.revised && "개정일"].filter(Boolean);
-          p.status.textContent = found.length ? "파일에서 읽음 (" + found.join("·") + ")" : "파일에서 못 찾음 · 직접 입력";
+          var found = [info.name && "품명", info.code && "코드", info.msdsNo && "MSDS NO"].filter(Boolean);
+          if (!isPdf && info.revised) {
+            found.push("개정일");
+          }
+          p.status.textContent = (found.length ? "파일에서 읽음 (" + found.join("·") + ")" : "파일에서 못 찾음 · 직접 입력") +
+            (isPdf ? " · 개정일 " + window.DY_MSDS_PDF_REVISED + " 고정" : "");
           if (found.length) { read++; }
         } catch (err) {
-          p.status.textContent = "파일을 읽지 못함 · 직접 입력";
+          p.status.textContent = "파일을 읽지 못함 · 직접 입력" + (isPdf ? " · 개정일 " + window.DY_MSDS_PDF_REVISED + " 고정" : "");
         }
       }
       uploadBtn.disabled = false;
-      setMsg(upMsg, "엑셀 " + excel.length + "개 중 " + read + "개에서 내용을 읽었습니다. 올리기 전에 확인해 주세요.", "ok");
+      setMsg(upMsg, targets.length + "개 중 " + read + "개에서 내용을 읽었습니다. 올리기 전에 확인해 주세요." +
+        (toolMissing ? " (일부 파일은 읽기 도구를 불러오지 못해 직접 입력이 필요합니다)" : ""), toolMissing ? "error" : "ok");
     }
 
     function applyBulkSeries() {
