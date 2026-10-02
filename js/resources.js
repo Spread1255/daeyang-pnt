@@ -68,10 +68,52 @@
 
   function msdsFiltered() {
     var q = msdsWrap.querySelector("[data-msds-search]").value.trim().toLowerCase();
+    var series = msdsWrap.querySelector("[data-msds-series]").value;
     return msdsRows.filter(function (row) {
+      if (series && row.series !== series) {
+        return false;
+      }
       return !q || [row.series, row.product_code, row.product_name, row.msds_no, row.title].some(function (v) {
         return v && v.toLowerCase().indexOf(q) !== -1;
       });
+    });
+  }
+
+  // MSDS NO 끝자리 숫자 기준 오름차순: "AA14944-0000000065" → 65. MSDS NO가 없는 것은 맨 뒤.
+  function msdsTailNumber(row) {
+    var m = String(row.msds_no || "").match(/(\d+)\s*$/);
+    return m ? parseInt(m[1], 10) : Infinity;
+  }
+
+  function sortMsds(rows) {
+    rows.sort(function (a, b) {
+      var na = msdsTailNumber(a);
+      var nb = msdsTailNumber(b);
+      if (na !== nb) {
+        return na < nb ? -1 : 1;
+      }
+      var sa = String(a.msds_no || "");
+      var sb = String(b.msds_no || "");
+      if (sa !== sb) {
+        return sa < sb ? -1 : 1;
+      }
+      return String(b.created_at).localeCompare(String(a.created_at));
+    });
+  }
+
+  function fillSeriesOptions() {
+    var select = msdsWrap.querySelector("[data-msds-series]");
+    var seen = {};
+    msdsRows.forEach(function (row) {
+      if (row.series) {
+        seen[row.series] = true;
+      }
+    });
+    Object.keys(seen).sort(function (a, b) { return a.localeCompare(b, "ko"); }).forEach(function (name) {
+      var opt = document.createElement("option");
+      opt.value = name;
+      opt.textContent = name;
+      select.appendChild(opt);
     });
   }
 
@@ -161,10 +203,8 @@
         }
       });
       if (msdsWrap && msdsRows.length) {
-        // 최근 것이 위, 번호는 올린 순서(가장 오래된 것이 1번)
-        msdsRows.forEach(function (row, i) {
-          row.no = msdsRows.length - i;
-        });
+        sortMsds(msdsRows);
+        fillSeriesOptions();
         msdsWrap.hidden = false;
         var prep = document.querySelector("[data-resource-empty='msds']");
         if (prep) {
@@ -175,6 +215,10 @@
           paintMsds();
         });
         msdsWrap.querySelector("[data-msds-size]").addEventListener("change", function () {
+          page = 1;
+          paintMsds();
+        });
+        msdsWrap.querySelector("[data-msds-series]").addEventListener("change", function () {
           page = 1;
           paintMsds();
         });
