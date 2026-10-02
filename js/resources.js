@@ -55,7 +55,7 @@
     return card;
   }
 
-  // ---------- MSDS 표: 번호 · 구분 · 제품명 · 제품코드 · 다운로드 (검색 + 페이지) ----------
+  // ---------- MSDS 표: MSDS NO · 구분 · 제품명 · 제품코드 · 다운로드 (검색 + 페이지) ----------
   var msdsRows = [];
   var page = 1;
   var PDF_ICON = '<svg viewBox="0 0 24 28" width="22" height="26" aria-hidden="true"><path d="M3 1h12l6 6v19a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" fill="#fff" stroke="#b9b4ad"/><path d="M15 1v6h6" fill="none" stroke="#b9b4ad"/><rect x="0" y="12" width="17" height="8" rx="1.5" fill="#d93025"/><text x="8.5" y="18.3" text-anchor="middle" font-family="Arial,sans-serif" font-size="6" font-weight="700" fill="#fff">PDF</text></svg>';
@@ -69,7 +69,7 @@
   function msdsFiltered() {
     var q = msdsWrap.querySelector("[data-msds-search]").value.trim().toLowerCase();
     return msdsRows.filter(function (row) {
-      return !q || [row.series, row.product_code, row.product_name, row.title].some(function (v) {
+      return !q || [row.series, row.product_code, row.product_name, row.msds_no, row.title].some(function (v) {
         return v && v.toLowerCase().indexOf(q) !== -1;
       });
     });
@@ -115,7 +115,7 @@
     slice.forEach(function (row) {
       var name = row.product_name || row.title;
       var tr = el("tr");
-      tr.appendChild(el("td", "msds-no", String(row.no)));
+      tr.appendChild(el("td", "msds-no", row.msds_no || "-"));
       tr.appendChild(el("td", "msds-series", row.series || "-"));
       tr.appendChild(el("td", "msds-name", name));
       tr.appendChild(el("td", "msds-code", row.product_code || "-"));
@@ -145,7 +145,7 @@
 
   window.DY_SB
     .from("resources")
-    .select("id, category, title, description, file_path, file_type, series, product_code, product_name, created_at")
+    .select("id, category, title, description, file_path, file_type, series, product_code, product_name, msds_no, created_at")
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false })
     .order("id", { ascending: false })

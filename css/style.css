@@ -946,7 +946,8 @@ th {
 }
 
 .msds-table .msds-no {
-  width: 5rem;
+  width: 12rem;
+  white-space: nowrap;
 }
 
 .msds-table .msds-series {
