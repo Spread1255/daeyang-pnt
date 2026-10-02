@@ -535,7 +535,7 @@
     var listMsg = msgNode();
     var rows = [];
 
-    main.replaceChildren.apply(main, header("MSDS", "올린 MSDS는 홈페이지 MSDS 페이지에 번호·구분·제품명·제품코드·다운로드 표로 표시됩니다. 최근에 올린 것이 위에 나옵니다.").concat([
+    main.replaceChildren.apply(main, header("MSDS", "올린 MSDS는 홈페이지 MSDS 페이지에 MSDS NO·구분·제품명·제품코드·다운로드 표로 표시됩니다. 같은 MSDS NO가 이미 있거나 고른 파일끼리 겹치면 노란색으로 표시됩니다. 최근에 올린 것이 위에 나옵니다.").concat([
       seriesList,
       el("section", { class: "a-card" }, [
         el("h2", { text: "여러 파일 한 번에 올리기" }),
@@ -707,15 +707,18 @@
         };
       });
       previewBody.replaceChildren.apply(previewBody, picked.map(function (p) {
-        return el("tr", {}, [
+        p.dupNote = el("small", { class: "a-dup-note", hidden: true });
+        p.msdsNo.addEventListener("input", checkDuplicates);
+        p.tr = el("tr", {}, [
           el("td", { class: "a-cell-file", text: p.file.name }),
           el("td", {}, [p.series]),
           el("td", {}, [p.name]),
           el("td", {}, [p.code]),
-          el("td", {}, [p.msdsNo]),
+          el("td", {}, [p.msdsNo, p.dupNote]),
           el("td", {}, [p.revised]),
           el("td", {}, [p.status])
         ]);
+        return p.tr;
       }));
       var any = picked.length > 0;
       previewWrap.hidden = !any;
@@ -724,8 +727,54 @@
       clearBtn.hidden = !any;
       uploadBtn.textContent = picked.length + "개 업로드";
       setMsg(upMsg, "");
+      checkDuplicates();
       readExcelContents(picked);
     });
+
+    // MSDS NO 중복 표시: 이미 등록된 것 또는 이번에 고른 파일끼리 같으면 노란색으로 칠한다.
+    function normNo(v) {
+      return String(v || "").replace(/\s+/g, "").toUpperCase();
+    }
+
+    function checkDuplicates() {
+      var registered = {};
+      rows.forEach(function (r) {
+        var k = normNo(r.msds_no);
+        if (k) {
+          registered[k] = r;
+        }
+      });
+      var inBatch = {};
+      picked.forEach(function (p) {
+        var k = normNo(p.msdsNo.value);
+        if (k) {
+          inBatch[k] = (inBatch[k] || 0) + 1;
+        }
+      });
+      var count = 0;
+      picked.forEach(function (p) {
+        if (!p.tr || p.done) {
+          return;
+        }
+        var k = normNo(p.msdsNo.value);
+        var notes = [];
+        if (k && registered[k]) {
+          var r = registered[k];
+          notes.push("이미 등록됨: " + (r.product_name || r.title) + (r.product_code ? " (" + r.product_code + ")" : ""));
+        }
+        if (k && inBatch[k] > 1) {
+          notes.push("선택한 파일 중 같은 번호 " + inBatch[k] + "개");
+        }
+        p.dup = notes.length > 0;
+        p.tr.classList.toggle("is-dup", p.dup);
+        p.dupNote.hidden = !p.dup;
+        p.dupNote.textContent = notes.length ? "MSDS NO 중복 · " + notes.join(" · ") : "";
+        if (p.dup) {
+          count++;
+        }
+      });
+      return count;
+    }
 
     // 엑셀 MSDS는 파일 안의 품명·제품코드·MSDS NO·최종개정일자를 읽어 칸을 채운다 (파일 이름에서 추측한 값보다 우선).
     async function readExcelContents(list) {
@@ -751,6 +800,7 @@
           if (info.code) { p.code.value = info.code; }
           if (info.msdsNo) { p.msdsNo.value = info.msdsNo; }
           if (info.revised) { p.revised.value = info.revised; }
+          checkDuplicates();
           var found = [info.name && "품명", info.code && "코드", info.msdsNo && "MSDS NO", info.revised && "개정일"].filter(Boolean);
           p.status.textContent = found.length ? "파일에서 읽음 (" + found.join("·") + ")" : "파일에서 못 찾음 · 직접 입력";
           if (found.length) { read++; }
@@ -783,6 +833,10 @@
 
     async function uploadAll() {
       var todo = picked.filter(function (p) { return !p.done; });
+      var dups = checkDuplicates();
+      if (dups && !confirm("MSDS NO가 중복된 파일이 " + dups + "개 있습니다 (노란색 표시). 그래도 올릴까요?")) {
+        return;
+      }
       uploadBtn.disabled = true;
       clearBtn.disabled = true;
       var ok = 0;
@@ -965,6 +1019,7 @@
       }).reverse();
       refreshSeriesOptions();
       paint();
+      checkDuplicates();
     }
 
     // 이미 등록된 엑셀 MSDS 중 MSDS NO가 비어 있는 것은 파일을 열어 내용(MSDS NO·개정일 등)을 채운다.

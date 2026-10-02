@@ -449,6 +449,23 @@ textarea {
   flex-wrap: nowrap;
 }
 
+.a-table tr.is-dup td {
+  background: #fff4c2;
+}
+
+.a-table tr.is-dup input {
+  border-color: #e0b400;
+}
+
+.a-dup-note {
+  display: block;
+  margin-top: 0.3rem;
+  color: #8a6d00;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
 .a-table tr.is-editing td {
   background: rgb(224 122 40 / 0.06);
 }
