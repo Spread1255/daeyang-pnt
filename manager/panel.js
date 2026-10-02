@@ -492,6 +492,11 @@
     return text;
   }
 
+  // MSDS NO 표기 바로잡기: 회사 기본은 "AA14944-…". 작성 중 A가 하나 빠진 "A14944-…"는 AA로 고친다.
+  function fixMsdsNo(v) {
+    return String(v || "").trim().replace(/^A(14944-)/i, "AA$1").toUpperCase();
+  }
+
   // 원본 보관함(비공개 msds-archive 버킷) 경로: msds/2026-10/1790....-abc123.xls
   function archivePathFor(ext) {
     var d = new Date();
@@ -815,7 +820,7 @@
           var info = await parser(p.file);
           if (info.name) { p.name.value = info.name; }
           if (info.code) { p.code.value = info.code; }
-          if (info.msdsNo) { p.msdsNo.value = info.msdsNo; }
+          if (info.msdsNo) { p.msdsNo.value = fixMsdsNo(info.msdsNo); }
           if (info.revised) { p.revised.value = info.revised; }
           checkDuplicates();
           var found = [info.name && "품명", info.code && "코드", info.msdsNo && "MSDS NO"].filter(Boolean);
@@ -901,7 +906,7 @@
           series: p.series.value.trim() || null,
           product_code: code || null,
           product_name: name || null,
-          msds_no: p.msdsNo.value.trim() || null,
+          msds_no: fixMsdsNo(p.msdsNo.value) || null,
           revised_on: p.revised.value || null,
           file_path: path,
           file_type: type
@@ -1055,7 +1060,7 @@
           series: series.value.trim() || null,
           product_code: code.value.trim() || null,
           product_name: name.value.trim() || null,
-          msds_no: msdsNo.value.trim() || null,
+          msds_no: fixMsdsNo(msdsNo.value) || null,
           revised_on: revised.value || null
         };
         payload.title = payload.product_name || payload.product_code || row.title;
@@ -1191,7 +1196,7 @@
           }
           var info = window.DY_MSDS_EXTRACT(new Uint8Array(await resp.arrayBuffer()), window.XLSX);
           var patch = {};
-          if (info.msdsNo) { patch.msds_no = info.msdsNo; }
+          if (info.msdsNo) { patch.msds_no = fixMsdsNo(info.msdsNo); }
           if (info.revised && !r.revised_on) { patch.revised_on = info.revised; }
           if (info.code && !r.product_code) { patch.product_code = info.code; }
           if (info.name && !r.product_name) { patch.product_name = info.name; }
