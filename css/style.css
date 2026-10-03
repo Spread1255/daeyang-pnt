@@ -832,6 +832,11 @@ th {
   padding: 0;
 }
 
+.notice-list li.is-target {
+  background: rgb(224 122 40 / 0.08);
+  box-shadow: inset 3px 0 0 #e07a28;
+}
+
 .notice-list details summary {
   display: flex;
   align-items: baseline;
@@ -2901,6 +2906,61 @@ th {
   line-height: 1.55;
   white-space: pre-line;
   overflow-wrap: anywhere;
+}
+
+.chatbot-notices {
+  align-self: stretch;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+}
+
+.chatbot-notices h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 6px;
+  color: #c45a2a;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.chatbot-notices ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chatbot-notices li + li {
+  border-top: 1px solid rgb(0 0 0 / 0.07);
+}
+
+.chatbot-notices a {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 2px;
+  color: #1c1c1c;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  text-decoration: none;
+}
+
+.chatbot-notices a span {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+
+.chatbot-notices a:hover span {
+  color: #c45a2a;
+  text-decoration: underline;
+}
+
+.chatbot-notices time {
+  flex: none;
+  color: #5b5752;
+  font-size: 0.75rem;
 }
 
 .chatbot-msg--bot {

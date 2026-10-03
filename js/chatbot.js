@@ -1,7 +1,10 @@
 (function () {
   // 메인 화면 AI 상담 챗봇: 화면 오른쪽 가운데에 고정된 버튼 → 대화창.
   // 답변은 Supabase 함수(chatbot)가 Claude로 만든다.
-  var ENDPOINT = "https://sdcffvigzrczixbdvkzu.supabase.co/functions/v1/chatbot";
+  // 첫 화면에는 관리자 페이지에서 "챗봇에 표시"로 고른 공지가 나온다.
+  var SUPABASE_URL = "https://sdcffvigzrczixbdvkzu.supabase.co";
+  var SUPABASE_KEY = "sb_publishable_VRNSegvHcAk8Rh9RSoHzDQ_2WRBaEiN";
+  var ENDPOINT = SUPABASE_URL + "/functions/v1/chatbot";
   var STORE_KEY = "daeyang.chat";
 
   var TEXT = {
@@ -9,7 +12,7 @@
       open: "AI 상담",
       title: "대양피엔티 AI 상담",
       close: "닫기",
-      greet: "안녕하세요, 대양피엔티 AI 상담입니다. 제품, 색상, MSDS, 견적·제휴 문의 방법 등을 물어보세요.",
+      notices: "공지사항",
       placeholder: "궁금한 점을 입력하세요",
       send: "보내기",
       thinking: "답변을 준비하고 있습니다…",
@@ -24,7 +27,7 @@
       open: "AI Chat",
       title: "DAEYANG P&T AI Assistant",
       close: "Close",
-      greet: "Hello! I'm the DAEYANG P&T AI assistant. Ask me about our products, colors, MSDS, or how to request a quote.",
+      notices: "Notices",
       placeholder: "Type your question",
       send: "Send",
       thinking: "Preparing an answer…",
@@ -39,7 +42,7 @@
       open: "AI相談",
       title: "大洋P&T AI相談",
       close: "閉じる",
-      greet: "こんにちは、大洋P&TのAI相談です。製品、カラー、MSDS、お見積り・提携のお問い合わせ方法などをお尋ねください。",
+      notices: "お知らせ",
       placeholder: "ご質問を入力してください",
       send: "送信",
       thinking: "回答を準備しています…",
@@ -54,7 +57,7 @@
       open: "AI咨询",
       title: "大洋P&T AI咨询",
       close: "关闭",
-      greet: "您好，这里是大洋P&T AI咨询。欢迎询问产品、颜色、MSDS、报价及合作咨询方式等。",
+      notices: "公告",
       placeholder: "请输入您的问题",
       send: "发送",
       thinking: "正在准备回答…",
@@ -104,6 +107,41 @@
       last = m.index + m[1].length;
     }
     node.appendChild(document.createTextNode(text.slice(last)));
+  }
+
+  // 챗봇에 표시할 공지 (관리자에서 체크한 것)
+  var notices = [];
+  fetch(SUPABASE_URL + "/rest/v1/notices?select=id,title,notice_date&show_in_chat=eq.true&order=notice_date.desc,id.desc&limit=10", {
+    headers: { apikey: SUPABASE_KEY }
+  }).then(function (res) {
+    return res.ok ? res.json() : [];
+  }).then(function (rows) {
+    notices = Array.isArray(rows) ? rows : [];
+    if (notices.length) {
+      paint();
+    }
+  }).catch(function () {
+    // 공지를 못 불러와도 챗봇은 그대로 쓴다
+  });
+
+  function noticeBox() {
+    var box = el("section", "chatbot-notices");
+    var h = el("h3");
+    h.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M3 10v4a1 1 0 0 0 1 1h2l5 4V5L6 9H4a1 1 0 0 0-1 1zm13.5 2A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z" fill="currentColor"/></svg>';
+    h.appendChild(document.createTextNode(tx("notices")));
+    var ul = el("ul");
+    notices.forEach(function (n) {
+      var a = el("a");
+      a.href = "notices.html#notice-" + n.id;
+      a.appendChild(el("span", "", n.title));
+      a.appendChild(el("time", "", String(n.notice_date || "").replace(/-/g, ".")));
+      var li = el("li");
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+    box.appendChild(h);
+    box.appendChild(ul);
+    return box;
   }
 
   var history = [];
@@ -187,7 +225,9 @@
     sendBtn.setAttribute("aria-label", tx("send"));
     note.textContent = tx("note");
     log.replaceChildren();
-    bubble("bot", tx("greet"));
+    if (notices.length) {
+      log.appendChild(noticeBox());
+    }
     history.forEach(function (turn) {
       bubble(turn.role === "user" ? "user" : "bot", turn.content);
     });

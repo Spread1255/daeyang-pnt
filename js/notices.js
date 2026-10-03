@@ -30,6 +30,9 @@
 
     notices.forEach(function (item) {
       const li = document.createElement("li");
+      if (item.id) {
+        li.id = "notice-" + item.id;
+      }
       const time = document.createElement("time");
       time.textContent = item.date;
       const span = document.createElement("span");
@@ -53,15 +56,32 @@
       }
       list.appendChild(li);
     });
+    openFromHash();
+  }
+
+  // 챗봇 등에서 notices.html#notice-12 로 들어오면 그 공지를 펼치고 보여준다.
+  function openFromHash() {
+    const m = window.location.hash.match(/^#notice-(\d+)$/);
+    const li = m && document.getElementById("notice-" + m[1]);
+    if (!li) {
+      return;
+    }
+    const details = li.querySelector("details");
+    if (details) {
+      details.open = true;
+    }
+    li.classList.add("is-target");
+    li.scrollIntoView({ block: "center" });
   }
 
   render();
   window.addEventListener("i18n:change", render);
+  window.addEventListener("hashchange", openFromHash);
 
   if (window.DY_SB) {
     window.DY_SB
       .from("notices")
-      .select("title, body, notice_date")
+      .select("id, title, body, notice_date")
       .order("notice_date", { ascending: false })
       .order("id", { ascending: false })
       .then(function (res) {
@@ -69,7 +89,7 @@
           return;
         }
         dbNotices = res.data.map(function (row) {
-          return { date: formatDate(row.notice_date), title: row.title, body: row.body };
+          return { id: row.id, date: formatDate(row.notice_date), title: row.title, body: row.body };
         });
         render();
       });

@@ -650,3 +650,38 @@ textarea {
     margin-bottom: 0.5rem;
   }
 }
+
+/* 공지 → 챗봇 표시 선택 */
+.notice-chat-bar {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.75rem 0.9rem;
+  margin-bottom: 0.25rem;
+  border-radius: 0.6rem;
+  background: rgb(224 122 40 / 0.08);
+}
+
+.notice-chat-bar .a-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.notice-chat-pick {
+  display: grid;
+  justify-items: center;
+  gap: 0.1rem;
+  flex: none;
+  padding-top: 0.1rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.notice-chat-pick input {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: 0;
+  accent-color: #e07a28;
+  cursor: pointer;
+}

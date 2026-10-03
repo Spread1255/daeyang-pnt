@@ -51,6 +51,13 @@
     var submitBtn = el("button", { class: "a-btn", type: "submit", text: "등록" });
     var cancelBtn = el("button", { class: "a-btn a-btn--ghost", type: "button", text: "취소", hidden: true, onclick: resetForm });
     var list = el("ul", { class: "a-list" });
+    var chatMsg = msgNode();
+    var chatBtn = el("button", { class: "a-btn a-btn--sm", type: "button", text: "선택한 공지 챗봇에 표시", onclick: saveChat });
+    var chatBox = el("div", { class: "notice-chat-bar" }, [
+      el("p", { class: "a-hint", text: "체크한 공지가 홈페이지 AI 상담 챗봇 첫 화면에 나옵니다. 체크 후 버튼을 눌러 저장하세요." }),
+      el("div", { class: "a-row" }, [chatBtn]),
+      chatMsg
+    ]);
 
     var form = el("form", { class: "a-card", onsubmit: onSubmit }, [
       formTitle,
@@ -62,7 +69,7 @@
     ]);
 
     main.replaceChildren.apply(main, header("공지사항", "등록한 공지는 홈페이지 공지사항 페이지에 바로 표시됩니다.").concat([
-      el("div", { class: "panel-grid" }, [form, el("section", { class: "a-card" }, [el("h2", { text: "등록된 공지" }), list])])
+      el("div", { class: "panel-grid" }, [form, el("section", { class: "a-card" }, [el("h2", { text: "등록된 공지" }), chatBox, list])])
     ]));
 
     function resetForm() {
@@ -86,7 +93,10 @@
         return;
       }
       res.data.forEach(function (row) {
+        var check = el("input", { type: "checkbox", class: "notice-chat-check", "data-id": String(row.id), title: "챗봇에 표시" });
+        check.checked = !!row.show_in_chat;
         list.appendChild(el("li", {}, [
+          el("label", { class: "notice-chat-pick" }, [check, el("span", { text: "챗봇" })]),
           el("div", { class: "a-list-main" }, [
             el("span", { class: "a-list-title", text: row.title }),
             el("span", { class: "a-list-meta", text: row.notice_date.replace(/-/g, ".") + (row.body ? " · 내용 있음" : "") })
@@ -97,6 +107,27 @@
           ])
         ]));
       });
+    }
+
+    // 체크한 공지만 챗봇에 표시하고, 나머지는 표시하지 않는다.
+    async function saveChat() {
+      var on = [];
+      var off = [];
+      list.querySelectorAll(".notice-chat-check").forEach(function (box) {
+        (box.checked ? on : off).push(Number(box.getAttribute("data-id")));
+      });
+      chatBtn.disabled = true;
+      var results = await Promise.all([
+        on.length ? sb.from("notices").update({ show_in_chat: true }).in("id", on) : { error: null },
+        off.length ? sb.from("notices").update({ show_in_chat: false }).in("id", off) : { error: null }
+      ]);
+      chatBtn.disabled = false;
+      var failed = results.filter(function (r) { return r.error; })[0];
+      if (failed) {
+        setMsg(chatMsg, "저장하지 못했습니다: " + failed.error.message, "error");
+        return;
+      }
+      setMsg(chatMsg, on.length ? "챗봇에 공지 " + on.length + "개를 표시합니다." : "챗봇에 표시할 공지가 없습니다.", "ok");
     }
 
     function startEdit(row) {
