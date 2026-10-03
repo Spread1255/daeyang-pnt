@@ -685,3 +685,180 @@ textarea {
   accent-color: #e07a28;
   cursor: pointer;
 }
+
+/* ---------- 컬러 연구소: 기준 1장 — 비교 3장 ---------- */
+.cl-slots {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 2.5rem minmax(0, 3fr);
+  align-items: end;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.cl-group-title {
+  margin: 0 0 0.45rem;
+  color: var(--accent-dark);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.cl-group--cmp .cl-group-title {
+  padding-bottom: 0.35rem;
+  border-bottom: 2px solid rgb(224 122 40 / 0.35);
+}
+
+.cl-cmp-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.cl-dash {
+  align-self: center;
+  height: 2px;
+  margin-top: 1rem;
+  background: var(--muted);
+}
+
+.cl-slot {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.cl-drop {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 4;
+  border: 2px dashed rgb(0 0 0 / 0.22);
+  border-radius: 0.8rem;
+  background: rgb(0 0 0 / 0.02);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.cl-drop:hover,
+.cl-drop:focus-visible,
+.cl-drop.is-over {
+  border-color: var(--accent);
+  background: rgb(224 122 40 / 0.07);
+  outline: none;
+}
+
+.cl-group--ref .cl-drop {
+  border-color: rgb(224 122 40 / 0.55);
+}
+
+.cl-drop-num {
+  position: absolute;
+  top: 0.45rem;
+  left: 0.45rem;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: var(--night);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.cl-drop-empty {
+  display: grid;
+  justify-items: center;
+  gap: 0.15rem;
+  padding: 0.5rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.cl-drop-empty strong {
+  color: var(--accent);
+  font-size: 1.8rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.cl-drop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cl-drop-clear {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  z-index: 1;
+  width: 1.7rem;
+  height: 1.7rem;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.65);
+  color: #fff;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cl-drop [hidden],
+.cl-drop-empty[hidden] {
+  display: none !important;
+}
+
+.cl-label {
+  width: 100%;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 0.45rem;
+  font: inherit;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.cl-thumbs {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+}
+
+.cl-thumb {
+  width: 2.6rem;
+  height: 3.4rem;
+  border: 1px dashed rgb(0 0 0 / 0.2);
+  border-radius: 0.35rem;
+  overflow: hidden;
+}
+
+.cl-thumb--ref {
+  margin-right: 0.6rem;
+  border-color: var(--accent);
+}
+
+.cl-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 720px) {
+  .cl-slots {
+    grid-template-columns: 1fr;
+  }
+
+  .cl-group--ref {
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  .cl-dash {
+    width: 2px;
+    height: 1.5rem;
+    margin: 0 auto;
+  }
+}

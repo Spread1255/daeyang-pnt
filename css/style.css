@@ -3101,3 +3101,142 @@ th {
     animation: none;
   }
 }
+
+/* ---------- 컬러 연구소: RAL 기준 — 비교 대상 3 ---------- */
+.lab-list {
+  display: grid;
+  gap: 2.5rem;
+  border-top: 1px solid var(--line);
+  padding-top: 2.5rem;
+}
+
+.lab-list[hidden] {
+  display: none;
+}
+
+.lab-entry {
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.lab-title {
+  margin: 0 0 0.4rem;
+  font-size: 1.3rem;
+}
+
+.lab-desc {
+  margin: 0 0 1.25rem;
+  color: var(--muted);
+  white-space: pre-line;
+}
+
+.lab-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 3rem minmax(0, 3fr);
+  align-items: end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.lab-group-title {
+  margin: 0 0 0.75rem;
+  color: var(--accent-dark);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.lab-group--cmp .lab-group-title {
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgb(224 122 40 / 0.35);
+}
+
+.lab-cmp-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.lab-dash {
+  align-self: center;
+  height: 2px;
+  margin-top: 1.5rem;
+  background: var(--muted);
+}
+
+.lab-card {
+  margin: 0;
+}
+
+.lab-frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 4;
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  background: rgb(0 0 0 / 0.03);
+  overflow: hidden;
+}
+
+.lab-card.is-empty .lab-frame {
+  border: 2px dashed rgb(0 0 0 / 0.15);
+}
+
+.lab-card--ref .lab-frame {
+  border: 2px solid #e07a28;
+}
+
+.lab-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+a.lab-frame:hover img {
+  transform: scale(1.03);
+}
+
+.lab-num {
+  position: absolute;
+  top: 0.55rem;
+  left: 0.55rem;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  background: rgb(12 14 20 / 0.82);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.lab-card figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .lab-row {
+    grid-template-columns: 1fr;
+  }
+
+  .lab-group--ref {
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  .lab-dash {
+    width: 2px;
+    height: 1.75rem;
+    margin: 0 auto;
+  }
+
+  .lab-cmp-row {
+    gap: 0.6rem;
+  }
+}

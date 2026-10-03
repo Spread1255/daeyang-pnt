@@ -1,4 +1,4 @@
-// 관리자 패널: 공지사항 / 제휴문의 / 채용 / 자료실
+// 관리자 패널: 공지사항 / 제휴문의 / 채용 / MSDS / 자료실 / 컬러 연구소
 (function () {
   var A = window.DY_ADMIN;
   var sb = A && A.sb;
@@ -1256,13 +1256,309 @@
     }).then(backfillExcelInfo);
   }
 
+  // ---------------- 컬러 연구소 ----------------
+  // 한 항목 = RAL 기준 컬러 1장 + 비교 대상 3장. 이미지는 resources 버킷의 colorlab/ 폴더에 저장한다.
+  var LAB_SLOTS = [
+    { key: "ref", num: "1", hint: "RAL 컬러" },
+    { key: "cmp1", num: "1", hint: "예: 내부" },
+    { key: "cmp2", num: "2", hint: "예: 마감" },
+    { key: "cmp3", num: "3", hint: "예: 외부" }
+  ];
+  var LAB_TYPES = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" };
+
+  async function renderColorlab() {
+    var editingId = null;
+    var msg = msgNode();
+    var titleInput = el("input", { name: "title", type: "text", maxlength: "200", required: true, placeholder: "예: RAL 9010 퓨어 화이트" });
+    var descInput = el("textarea", { name: "description", rows: "3", maxlength: "2000", placeholder: "선택 사항 · 비교 조건, 시편 정보 등" });
+    var formTitle = el("h2", { text: "새 비교 등록" });
+    var submitBtn = el("button", { class: "a-btn", type: "submit", text: "등록" });
+    var cancelBtn = el("button", { class: "a-btn a-btn--ghost", type: "button", text: "취소", hidden: true, onclick: resetForm });
+    var list = el("ul", { class: "a-list cl-list" });
+
+    var slots = LAB_SLOTS.map(function (def) {
+      var state = { def: def, file: null, path: null, removed: false };
+      var input = el("input", { type: "file", accept: "image/jpeg,image/png,image/webp", hidden: true });
+      var img = el("img", { alt: "", hidden: true });
+      var empty = el("span", { class: "cl-drop-empty" }, [
+        el("strong", { text: "+" }),
+        el("span", { text: "클릭해서 이미지 선택" }),
+        el("span", { text: "또는 끌어다 놓기" })
+      ]);
+      var clear = el("button", { class: "cl-drop-clear", type: "button", title: "이미지 빼기", text: "×", hidden: true });
+      var drop = el("div", { class: "cl-drop", tabindex: "0", role: "button", "aria-label": (def.key === "ref" ? "기준" : "비교") + " " + def.num + " 이미지 선택" }, [
+        el("span", { class: "cl-drop-num", text: def.num }), empty, img, clear, input
+      ]);
+      var label = el("input", { type: "text", class: "cl-label", maxlength: "60", placeholder: def.hint });
+      state.input = input;
+      state.label = label;
+      state.show = function (src) {
+        img.hidden = !src;
+        empty.hidden = !!src;
+        clear.hidden = !src;
+        if (src) {
+          img.src = src;
+        } else {
+          img.removeAttribute("src");
+        }
+      };
+      state.take = function (f) {
+        var ext = (f.name.match(/\.([a-z0-9]+)$/i) || [, ""])[1].toLowerCase();
+        if (!LAB_TYPES[ext]) {
+          setMsg(msg, "JPG, PNG, WEBP 이미지만 넣을 수 있습니다.", "error");
+          return;
+        }
+        if (f.size > 10 * 1024 * 1024) {
+          setMsg(msg, "이미지가 10MB를 넘습니다.", "error");
+          return;
+        }
+        state.file = f;
+        state.removed = false;
+        state.show(URL.createObjectURL(f));
+        setMsg(msg, "");
+      };
+      drop.addEventListener("click", function (e) {
+        if (e.target !== clear) {
+          input.click();
+        }
+      });
+      drop.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          input.click();
+        }
+      });
+      input.addEventListener("change", function () {
+        if (input.files[0]) {
+          state.take(input.files[0]);
+        }
+        input.value = "";
+      });
+      ["dragenter", "dragover"].forEach(function (type) {
+        drop.addEventListener(type, function (e) {
+          e.preventDefault();
+          drop.classList.add("is-over");
+        });
+      });
+      ["dragleave", "drop"].forEach(function (type) {
+        drop.addEventListener(type, function () {
+          drop.classList.remove("is-over");
+        });
+      });
+      drop.addEventListener("drop", function (e) {
+        e.preventDefault();
+        var f = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (f) {
+          state.take(f);
+        }
+      });
+      clear.addEventListener("click", function (e) {
+        e.stopPropagation();
+        state.file = null;
+        state.removed = !!state.path;
+        state.show(null);
+      });
+      state.node = el("div", { class: "cl-slot" }, [drop, label]);
+      return state;
+    });
+
+    var slotRow = el("div", { class: "cl-slots" }, [
+      el("div", { class: "cl-group cl-group--ref" }, [el("p", { class: "cl-group-title", text: "RAL 컬러" }), slots[0].node]),
+      el("span", { class: "cl-dash", "aria-hidden": "true" }),
+      el("div", { class: "cl-group cl-group--cmp" }, [
+        el("p", { class: "cl-group-title", text: "비교 대상" }),
+        el("div", { class: "cl-cmp-row" }, [slots[1].node, slots[2].node, slots[3].node])
+      ])
+    ]);
+
+    var form = el("form", { class: "a-card", onsubmit: onSubmit }, [
+      formTitle,
+      el("label", { class: "a-field" }, ["제목", titleInput]),
+      el("div", { class: "a-field" }, [
+        "이미지",
+        el("small", { text: "칸을 클릭해서 이미지를 고르거나 끌어다 놓으세요 · JPG, PNG, WEBP · 최대 10MB · 칸 아래에 이름을 적을 수 있습니다." }),
+        slotRow
+      ]),
+      el("label", { class: "a-field" }, ["설명", descInput]),
+      el("div", { class: "a-row" }, [submitBtn, cancelBtn]),
+      msg
+    ]);
+
+    main.replaceChildren.apply(main, header("컬러 연구소", "RAL 기준 컬러와 비교 대상 3개를 나란히 등록합니다. 등록하면 홈페이지 컬러 연구소 페이지에 바로 표시됩니다.").concat([
+      form,
+      el("section", { class: "a-card" }, [el("h2", { text: "등록된 비교" }), list])
+    ]));
+
+    function url(path) {
+      return path ? window.DY_RESOURCE_URL(path) : "";
+    }
+
+    function resetForm() {
+      editingId = null;
+      form.reset();
+      slots.forEach(function (s) {
+        s.file = null;
+        s.path = null;
+        s.removed = false;
+        s.label.value = "";
+        s.show(null);
+      });
+      formTitle.textContent = "새 비교 등록";
+      submitBtn.textContent = "등록";
+      cancelBtn.hidden = true;
+    }
+
+    function startEdit(row) {
+      resetForm();
+      editingId = row.id;
+      titleInput.value = row.title;
+      descInput.value = row.description || "";
+      slots.forEach(function (s) {
+        s.path = row[s.def.key + "_path"] || null;
+        s.label.value = row[s.def.key + "_label"] || "";
+        s.show(url(s.path));
+      });
+      formTitle.textContent = "비교 수정";
+      submitBtn.textContent = "수정 저장";
+      cancelBtn.hidden = false;
+      setMsg(msg, "");
+      form.scrollIntoView({ block: "start", behavior: "smooth" });
+    }
+
+    async function load() {
+      var res = await sb.from("colorlab_entries").select("*").order("sort_order").order("created_at", { ascending: false });
+      list.replaceChildren();
+      if (res.error) {
+        list.appendChild(el("li", { class: "a-empty", text: "목록을 불러오지 못했습니다." }));
+        return;
+      }
+      if (!res.data.length) {
+        list.appendChild(el("li", { class: "a-empty", text: "등록된 비교가 없습니다." }));
+        return;
+      }
+      res.data.forEach(function (row) {
+        var thumbs = el("div", { class: "cl-thumbs" }, LAB_SLOTS.map(function (def, i) {
+          var p = row[def.key + "_path"];
+          var t = el("span", { class: "cl-thumb" + (i === 0 ? " cl-thumb--ref" : "") });
+          if (p) {
+            t.appendChild(el("img", { src: url(p), alt: "", loading: "lazy" }));
+          }
+          return t;
+        }));
+        list.appendChild(el("li", {}, [
+          el("div", { class: "a-list-main" }, [
+            el("span", { class: "a-list-title", text: row.title }),
+            thumbs
+          ]),
+          el("div", { class: "a-row" }, [
+            el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "수정", onclick: function () { startEdit(row); } }),
+            el("button", { class: "a-btn a-btn--danger a-btn--sm", type: "button", text: "삭제", onclick: function () { remove(row); } })
+          ])
+        ]));
+      });
+    }
+
+    async function remove(row) {
+      if (!confirm("'" + row.title + "' 비교를 삭제할까요? 홈페이지에서도 사라집니다.")) {
+        return;
+      }
+      var res = await sb.from("colorlab_entries").delete().eq("id", row.id);
+      if (res.error) {
+        setMsg(msg, "삭제하지 못했습니다: " + res.error.message, "error");
+        return;
+      }
+      var paths = LAB_SLOTS.map(function (d) { return row[d.key + "_path"]; }).filter(Boolean);
+      if (paths.length) {
+        await sb.storage.from("resources").remove(paths);
+      }
+      if (editingId === row.id) {
+        resetForm();
+      }
+      setMsg(msg, "삭제했습니다.", "ok");
+      load();
+    }
+
+    async function onSubmit(event) {
+      event.preventDefault();
+      var title = titleInput.value.trim();
+      if (!title) {
+        setMsg(msg, "제목을 입력해 주세요.", "error");
+        return;
+      }
+      var hasAny = slots.some(function (s) { return s.file || (s.path && !s.removed); });
+      if (!hasAny) {
+        setMsg(msg, "이미지를 한 장 이상 넣어 주세요.", "error");
+        return;
+      }
+      submitBtn.disabled = true;
+      setMsg(msg, "저장 중...");
+
+      var payload = { title: title, description: descInput.value.trim() || null };
+      var uploaded = [];
+      var oldToDelete = [];
+      for (var i = 0; i < slots.length; i++) {
+        var s = slots[i];
+        var key = s.def.key;
+        payload[key + "_label"] = s.label.value.trim() || null;
+        if (s.file) {
+          var ext = s.file.name.match(/\.([a-z0-9]+)$/i)[1].toLowerCase();
+          var type = LAB_TYPES[ext];
+          var path = "colorlab/" + Date.now() + "-" + key + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
+          var up = await sb.storage.from("resources").upload(path, new Blob([s.file], { type: type }), { contentType: type });
+          if (up.error) {
+            if (uploaded.length) {
+              await sb.storage.from("resources").remove(uploaded);
+            }
+            submitBtn.disabled = false;
+            setMsg(msg, "이미지를 올리지 못했습니다: " + up.error.message, "error");
+            return;
+          }
+          uploaded.push(path);
+          payload[key + "_path"] = path;
+          if (s.path) {
+            oldToDelete.push(s.path);
+          }
+        } else if (s.removed) {
+          payload[key + "_path"] = null;
+          oldToDelete.push(s.path);
+        } else {
+          payload[key + "_path"] = s.path;
+        }
+      }
+      if (!payload.ref_label) {
+        payload.ref_label = "RAL 컬러";
+      }
+
+      var res = editingId
+        ? await sb.from("colorlab_entries").update(Object.assign(payload, { updated_at: new Date().toISOString() })).eq("id", editingId)
+        : await sb.from("colorlab_entries").insert(payload);
+      submitBtn.disabled = false;
+      if (res.error) {
+        if (uploaded.length) {
+          await sb.storage.from("resources").remove(uploaded);
+        }
+        setMsg(msg, "저장하지 못했습니다: " + res.error.message, "error");
+        return;
+      }
+      if (oldToDelete.length) {
+        await sb.storage.from("resources").remove(oldToDelete);
+      }
+      setMsg(msg, editingId ? "수정했습니다." : "등록했습니다.", "ok");
+      resetForm();
+      load();
+    }
+
+    load();
+  }
+
   // ---------------- 공통 ----------------
   var TABS = {
     notices: renderNotices,
     inquiries: renderInquiries,
     careers: renderCareers,
     msds: renderMsds,
-    resources: renderResources
+    resources: renderResources,
+    colorlab: renderColorlab
   };
 
   async function refreshNewCount() {
