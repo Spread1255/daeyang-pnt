@@ -1547,11 +1547,34 @@ th {
   margin: 0.5rem 0 1.5rem;
 }
 
+/* 책을 본문 폭보다 넓게: 화면 너비와 높이에 맞춰 최대한 크게 */
 .cbook-stage {
-  padding: 1.5rem 0 0.5rem;
+  position: relative;
+  width: min(calc(100vw - 2rem), calc((100vh - 9rem) * 1190 / 842), 110rem);
+  margin: 0 0 0 50%;
+  padding: 1rem 0 0.5rem;
+  transform: translateX(-50%);
+  overflow: hidden;
   outline: none;
   touch-action: pan-y;
   user-select: none;
+}
+
+.cbook-stage.is-zoomed {
+  touch-action: none;
+  cursor: grab;
+}
+
+.cbook-stage.is-panning {
+  cursor: grabbing;
+}
+
+.cbook-zoom {
+  transform-origin: 0 0;
+}
+
+.cbook-stage.is-zoomed .cbook-leaf {
+  cursor: inherit;
 }
 
 .cbook-stage:focus-visible .cbook-book {
@@ -1562,7 +1585,7 @@ th {
 
 .cbook-book {
   position: relative;
-  width: min(100%, 66rem);
+  width: 100%;
   aspect-ratio: 1190 / 842;
   margin: 0 auto;
   perspective: 2600px;
@@ -1701,6 +1724,34 @@ th {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  -webkit-user-drag: none;
+}
+
+/* 색상 칩 위의 투명 링크: 누르면 색상표로 이동 */
+.cbook-chip {
+  position: absolute;
+  z-index: 1;
+  border-radius: 6%/ 10%;
+  cursor: pointer;
+  transition: box-shadow 0.15s, background-color 0.15s;
+}
+
+.cbook-chip:hover,
+.cbook-chip:focus-visible {
+  outline: none;
+  background: rgb(255 255 255 / 0.12);
+  box-shadow: 0 0 0 3px #e07a28, 0 6px 16px rgb(0 0 0 / 0.25);
+}
+
+.cbook-stage.is-panning .cbook-chip {
+  pointer-events: none;
+}
+
+/* 넘겨서 뒤집힌 면(보이지 않는 쪽)의 칩은 누를 수 없게 한다 */
+.cbook-leaf.is-flipped .cbook-face--front .cbook-chip,
+.cbook-leaf:not(.is-flipped) .cbook-face--back .cbook-chip,
+.cbook-leaf.is-turning .cbook-chip {
+  pointer-events: none;
 }
 
 .cbook-controls {
@@ -1735,6 +1786,23 @@ th {
   cursor: default;
 }
 
+.cbook-zoom-btns {
+  display: inline-flex;
+  gap: 0.4rem;
+  margin-left: 1rem;
+  padding-left: 1.25rem;
+  border-left: 1px solid var(--line);
+}
+
+.cbook-btn--zoom {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.cbook-btn--zoom[data-zoom="0"] {
+  font-size: 0.72rem;
+}
+
 .cbook-indicator {
   min-width: 4.5rem;
   text-align: center;
@@ -1759,8 +1827,17 @@ th {
 }
 
 @media (max-width: 700px) {
+  .cbook-stage {
+    width: min(calc(100vw - 1.5rem), calc((100vh - 9rem) * 595 / 842));
+  }
+
+  .cbook-zoom-btns {
+    margin-left: 0.25rem;
+    padding-left: 0.75rem;
+  }
+
   .cbook-book {
-    width: min(100%, 30rem);
+    width: 100%;
     aspect-ratio: 595 / 842;
     overflow: hidden;
     border-radius: 0.6rem;
