@@ -1609,9 +1609,25 @@
     }
   };
 
+  // 브라우저 번역(크롬·엣지 등)을 켜면 <html lang>이 번역할 언어로 바뀐다.
+  // 예: 중국어 화면에서 "한국어로 번역" → 기계번역 대신 사이트의 원래 한국어로 바꾼다.
+  function followBrowserTranslate() {
+    if (!window.MutationObserver) {
+      return;
+    }
+    var html = document.documentElement;
+    new MutationObserver(function () {
+      var target = (html.getAttribute("lang") || "").toLowerCase().split("-")[0];
+      if (target && target !== currentLang && LANGS.indexOf(target) !== -1) {
+        setLang(target);
+      }
+    }).observe(html, { attributes: true, attributeFilter: ["lang"] });
+  }
+
   function init() {
     applyStatic(document);
     buildSwitcher();
+    followBrowserTranslate();
   }
 
   if (document.readyState === "loading") {
