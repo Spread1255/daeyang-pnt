@@ -1261,8 +1261,8 @@
   var LAB_SLOTS = [
     { key: "ref", num: "1", hint: "RAL 컬러" },
     { key: "cmp1", num: "1", hint: "예: 내부" },
-    { key: "cmp2", num: "2", hint: "예: 마감" },
-    { key: "cmp3", num: "3", hint: "예: 외부" }
+    { key: "cmp2", num: "2", hint: "예: 외부" },
+    { key: "cmp3", num: "3", hint: "예: 암막" }
   ];
   var LAB_TYPES = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" };
 
