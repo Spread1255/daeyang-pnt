@@ -1,6 +1,7 @@
 (function () {
-  // 컬러 연구소: 관리자 페이지에서 등록한 비교(RAL 기준 컬러 1장 — 비교 대상 3장)를 보여준다.
-  // 비교 대상 3장은 같은 제품의 내부 / 외부 / 암막 사진이고, 제품 이름(cmp_name)은 아래에 한 번만 표시한다.
+  // 컬러 연구소: 관리자 페이지에서 등록한 비교를 보여준다.
+  // RAL 기준 컬러 1장을 비교 사진 3장(내부 / 외부 / 암막)과 각각 붙여 3쌍으로 보여주고,
+  // 제품 이름(cmp_name)은 아래에 한 번만 표시한다.
   var wrap = document.querySelector("[data-colorlab]");
   if (!wrap || !window.DY_SB) {
     return;
@@ -24,10 +25,9 @@
     return node;
   }
 
-  function card(path, label, num, isRef) {
+  function card(path, label, isRef) {
     var fig = el("figure", "lab-card" + (isRef ? " lab-card--ref" : "") + (path ? "" : " is-empty"));
     var frame = path ? el("a", "lab-frame") : el("div", "lab-frame");
-    frame.appendChild(el("span", "lab-num", num));
     if (path) {
       var url = window.DY_RESOURCE_URL(path);
       frame.href = url;
@@ -40,10 +40,23 @@
       frame.appendChild(img);
     }
     fig.appendChild(frame);
-    if (label) {
-      fig.appendChild(el("figcaption", "", label));
-    }
+    fig.appendChild(el("figcaption", "", label));
     return fig;
+  }
+
+  // 한 쌍: RAL 컬러 카드와 비교 카드(내부/외부/암막)를 딱 붙여 놓는다.
+  function pair(row, key, i) {
+    var cond = t("colorlab.cond" + (i + 1));
+    var box = el("section", "lab-pair");
+    var head = el("h3", "lab-pair-head");
+    head.appendChild(el("span", "lab-num", String(i + 1)));
+    head.appendChild(document.createTextNode(t("colorlab.ral") + " + " + cond));
+    var cards = el("div", "lab-pair-cards");
+    cards.appendChild(card(row.ref_path, row.ref_label || t("colorlab.ral"), true));
+    cards.appendChild(card(row[key + "_path"], cond, false));
+    box.appendChild(head);
+    box.appendChild(cards);
+    return box;
   }
 
   function paint() {
@@ -54,30 +67,14 @@
       if (row.description) {
         entry.appendChild(el("p", "lab-desc", row.description));
       }
-      var line = el("div", "lab-row");
-
-      var ref = el("div", "lab-group lab-group--ref");
-      ref.appendChild(el("p", "lab-group-title", t("colorlab.ral")));
-      ref.appendChild(card(row.ref_path, row.ref_label, "1", true));
-
-      var dash = el("span", "lab-dash");
-      dash.setAttribute("aria-hidden", "true");
-
-      var cmp = el("div", "lab-group lab-group--cmp");
-      cmp.appendChild(el("p", "lab-group-title", t("colorlab.compare")));
-      var cards = el("div", "lab-cmp-row");
+      var pairs = el("div", "lab-pairs");
       CMP.forEach(function (key, i) {
-        cards.appendChild(card(row[key + "_path"], t("colorlab.cond" + (i + 1)), String(i + 1), false));
+        pairs.appendChild(pair(row, key, i));
       });
-      cmp.appendChild(cards);
+      entry.appendChild(pairs);
       if (row.cmp_name) {
-        cmp.appendChild(el("p", "lab-cmp-name", row.cmp_name));
+        entry.appendChild(el("p", "lab-cmp-name", row.cmp_name));
       }
-
-      line.appendChild(ref);
-      line.appendChild(dash);
-      line.appendChild(cmp);
-      entry.appendChild(line);
       wrap.appendChild(entry);
     });
   }

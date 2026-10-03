@@ -3130,38 +3130,40 @@ th {
   white-space: pre-line;
 }
 
-.lab-row {
+.lab-pairs {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 3rem minmax(0, 3fr);
-  align-items: start;
-  gap: 0.75rem;
-  margin-top: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.75rem;
+  margin-top: 1.25rem;
 }
 
-.lab-group-title {
+.lab-pair-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   margin: 0 0 0.75rem;
   color: var(--accent-dark);
   font-size: 0.95rem;
   font-weight: 700;
-  text-align: center;
 }
 
-.lab-group--cmp .lab-group-title {
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid rgb(224 122 40 / 0.35);
-}
-
-.lab-cmp-row {
+.lab-num {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: #0c0e14;
+  color: #fff;
+  font-size: 0.8rem;
 }
 
-.lab-dash {
-  align-self: center;
-  height: 2px;
-  margin-top: 1.5rem;
-  background: var(--muted);
+/* 두 카드를 실물 카드처럼 딱 붙여 놓는다 */
+.lab-pair-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
 }
 
 .lab-card {
@@ -3171,19 +3173,16 @@ th {
 .lab-frame {
   position: relative;
   display: block;
-  aspect-ratio: 3 / 4;
-  border: 1px solid var(--line);
-  border-radius: 0.9rem;
-  background: rgb(0 0 0 / 0.03);
+  aspect-ratio: 5 / 8;
+  border-radius: 0.6rem;
+  background: rgb(0 0 0 / 0.04);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.18);
   overflow: hidden;
 }
 
 .lab-card.is-empty .lab-frame {
+  box-shadow: none;
   border: 2px dashed rgb(0 0 0 / 0.15);
-}
-
-.lab-card--ref .lab-frame {
-  border: 2px solid #e07a28;
 }
 
 .lab-frame img {
@@ -3197,53 +3196,29 @@ a.lab-frame:hover img {
   transform: scale(1.03);
 }
 
-.lab-num {
-  position: absolute;
-  top: 0.55rem;
-  left: 0.55rem;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  width: 1.7rem;
-  height: 1.7rem;
-  border-radius: 50%;
-  background: rgb(12 14 20 / 0.82);
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-
 .lab-card figcaption {
   margin-top: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   text-align: center;
 }
 
-@media (max-width: 760px) {
-  .lab-row {
+.lab-card--ref figcaption {
+  color: var(--accent-dark);
+}
+
+@media (max-width: 860px) {
+  .lab-pairs {
     grid-template-columns: 1fr;
-  }
-
-  .lab-group--ref {
-    width: 50%;
-    margin: 0 auto;
-  }
-
-  .lab-dash {
-    width: 2px;
-    height: 1.75rem;
-    margin: 0 auto;
-  }
-
-  .lab-cmp-row {
-    gap: 0.6rem;
+    max-width: 26rem;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
 .lab-cmp-name {
-  margin: 0.85rem 0 0;
-  padding-top: 0.6rem;
+  margin: 1.25rem 0 0;
+  padding-top: 0.75rem;
   border-top: 1px dashed var(--line);
   font-weight: 700;
   text-align: center;
