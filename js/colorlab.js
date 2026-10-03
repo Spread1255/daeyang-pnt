@@ -1,5 +1,6 @@
 (function () {
   // 컬러 연구소: 관리자 페이지에서 등록한 비교(RAL 기준 컬러 1장 — 비교 대상 3장)를 보여준다.
+  // 비교 대상 3장은 같은 제품의 내부 / 외부 / 암막 사진이고, 제품 이름(cmp_name)은 아래에 한 번만 표시한다.
   var wrap = document.querySelector("[data-colorlab]");
   if (!wrap || !window.DY_SB) {
     return;
@@ -66,9 +67,12 @@
       cmp.appendChild(el("p", "lab-group-title", t("colorlab.compare")));
       var cards = el("div", "lab-cmp-row");
       CMP.forEach(function (key, i) {
-        cards.appendChild(card(row[key + "_path"], row[key + "_label"], String(i + 1), false));
+        cards.appendChild(card(row[key + "_path"], t("colorlab.cond" + (i + 1)), String(i + 1), false));
       });
       cmp.appendChild(cards);
+      if (row.cmp_name) {
+        cmp.appendChild(el("p", "lab-cmp-name", row.cmp_name));
+      }
 
       line.appendChild(ref);
       line.appendChild(dash);
@@ -80,7 +84,7 @@
 
   window.DY_SB
     .from("colorlab_entries")
-    .select("id, title, description, ref_path, ref_label, cmp1_path, cmp1_label, cmp2_path, cmp2_label, cmp3_path, cmp3_label")
+    .select("id, title, description, ref_path, ref_label, cmp1_path, cmp2_path, cmp3_path, cmp_name")
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false })
     .then(function (res) {

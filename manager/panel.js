@@ -1258,11 +1258,12 @@
 
   // ---------------- 컬러 연구소 ----------------
   // 한 항목 = RAL 기준 컬러 1장 + 비교 대상 3장. 이미지는 resources 버킷의 colorlab/ 폴더에 저장한다.
+  // 비교 대상 3칸은 같은 제품을 내부 / 외부 / 암막 조건에서 찍은 사진이다. 이름은 cmp_name 하나로 저장한다.
   var LAB_SLOTS = [
     { key: "ref", num: "1", hint: "RAL 컬러" },
-    { key: "cmp1", num: "1", hint: "예: 내부" },
-    { key: "cmp2", num: "2", hint: "예: 외부" },
-    { key: "cmp3", num: "3", hint: "예: 암막" }
+    { key: "cmp1", num: "1", hint: "내부" },
+    { key: "cmp2", num: "2", hint: "외부" },
+    { key: "cmp3", num: "3", hint: "암막" }
   ];
   var LAB_TYPES = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" };
 
@@ -1281,6 +1282,7 @@
       var input = el("input", { type: "file", accept: "image/jpeg,image/png,image/webp", hidden: true });
       var img = el("img", { alt: "", hidden: true });
       var empty = el("span", { class: "cl-drop-empty" }, [
+        def.key === "ref" ? null : el("b", { class: "cl-drop-cond", text: def.hint }),
         el("strong", { text: "+" }),
         el("span", { text: "클릭해서 이미지 선택" }),
         el("span", { text: "또는 끌어다 놓기" })
@@ -1289,7 +1291,7 @@
       var drop = el("div", { class: "cl-drop", tabindex: "0", role: "button", "aria-label": (def.key === "ref" ? "기준" : "비교") + " " + def.num + " 이미지 선택" }, [
         el("span", { class: "cl-drop-num", text: def.num }), empty, img, clear, input
       ]);
-      var label = el("input", { type: "text", class: "cl-label", maxlength: "60", placeholder: def.hint });
+      var label = def.key === "ref" ? el("input", { type: "text", class: "cl-label", maxlength: "60", placeholder: def.hint }) : null;
       state.input = input;
       state.label = label;
       state.show = function (src) {
@@ -1362,12 +1364,14 @@
       return state;
     });
 
+    var cmpName = el("input", { type: "text", class: "cl-label cl-label--cmp", maxlength: "100", placeholder: "비교 대상 이름 (예: DY#1-IV064 아이보리)" });
     var slotRow = el("div", { class: "cl-slots" }, [
       el("div", { class: "cl-group cl-group--ref" }, [el("p", { class: "cl-group-title", text: "RAL 컬러" }), slots[0].node]),
       el("span", { class: "cl-dash", "aria-hidden": "true" }),
       el("div", { class: "cl-group cl-group--cmp" }, [
         el("p", { class: "cl-group-title", text: "비교 대상" }),
-        el("div", { class: "cl-cmp-row" }, [slots[1].node, slots[2].node, slots[3].node])
+        el("div", { class: "cl-cmp-row" }, [slots[1].node, slots[2].node, slots[3].node]),
+        cmpName
       ])
     ]);
 
@@ -1376,7 +1380,7 @@
       el("label", { class: "a-field" }, ["제목", titleInput]),
       el("div", { class: "a-field" }, [
         "이미지",
-        el("small", { text: "칸을 클릭해서 이미지를 고르거나 끌어다 놓으세요 · JPG, PNG, WEBP · 최대 10MB · 칸 아래에 이름을 적을 수 있습니다." }),
+        el("small", { text: "칸을 클릭해서 이미지를 고르거나 끌어다 놓으세요 · JPG, PNG, WEBP · 최대 10MB · 비교 대상 이름은 3칸 아래에 한 번만 적으면 됩니다." }),
         slotRow
       ]),
       el("label", { class: "a-field" }, ["설명", descInput]),
@@ -1400,7 +1404,9 @@
         s.file = null;
         s.path = null;
         s.removed = false;
-        s.label.value = "";
+        if (s.label) {
+          s.label.value = "";
+        }
         s.show(null);
       });
       formTitle.textContent = "새 비교 등록";
@@ -1413,9 +1419,12 @@
       editingId = row.id;
       titleInput.value = row.title;
       descInput.value = row.description || "";
+      cmpName.value = row.cmp_name || "";
       slots.forEach(function (s) {
         s.path = row[s.def.key + "_path"] || null;
-        s.label.value = row[s.def.key + "_label"] || "";
+        if (s.label) {
+          s.label.value = row[s.def.key + "_label"] || "";
+        }
         s.show(url(s.path));
       });
       formTitle.textContent = "비교 수정";
@@ -1448,6 +1457,7 @@
         list.appendChild(el("li", {}, [
           el("div", { class: "a-list-main" }, [
             el("span", { class: "a-list-title", text: row.title }),
+            row.cmp_name ? el("span", { class: "a-list-meta", text: "비교 대상: " + row.cmp_name }) : null,
             thumbs
           ]),
           el("div", { class: "a-row" }, [
@@ -1499,7 +1509,9 @@
       for (var i = 0; i < slots.length; i++) {
         var s = slots[i];
         var key = s.def.key;
-        payload[key + "_label"] = s.label.value.trim() || null;
+        if (s.label) {
+          payload[key + "_label"] = s.label.value.trim() || null;
+        }
         if (s.file) {
           var ext = s.file.name.match(/\.([a-z0-9]+)$/i)[1].toLowerCase();
           var type = LAB_TYPES[ext];
@@ -1525,6 +1537,7 @@
           payload[key + "_path"] = s.path;
         }
       }
+      payload.cmp_name = cmpName.value.trim() || null;
       if (!payload.ref_label) {
         payload.ref_label = "RAL 컬러";
       }

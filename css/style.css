@@ -3133,7 +3133,7 @@ th {
 .lab-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 3rem minmax(0, 3fr);
-  align-items: end;
+  align-items: start;
   gap: 0.75rem;
   margin-top: 1rem;
 }
@@ -3239,4 +3239,12 @@ a.lab-frame:hover img {
   .lab-cmp-row {
     gap: 0.6rem;
   }
+}
+
+.lab-cmp-name {
+  margin: 0.85rem 0 0;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--line);
+  font-weight: 700;
+  text-align: center;
 }

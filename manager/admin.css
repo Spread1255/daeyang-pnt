@@ -690,7 +690,7 @@ textarea {
 .cl-slots {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 2.5rem minmax(0, 3fr);
-  align-items: end;
+  align-items: start;
   gap: 0.5rem;
   margin-top: 0.4rem;
 }
@@ -861,4 +861,15 @@ textarea {
     height: 1.5rem;
     margin: 0 auto;
   }
+}
+
+.cl-drop-cond {
+  margin-bottom: 0.35rem;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.cl-label--cmp {
+  margin-top: 0.4rem;
 }
