@@ -571,6 +571,19 @@
       el("button", { class: "a-btn a-btn--sm", type: "button", text: "모두 원본으로 되돌리기", onclick: restoreAllEdited })
     ]);
 
+    // 엑셀 MSDS → PDF 변환 (다른 컴퓨터에서 엑셀 파일이 안 열리는 문제 대응)
+    var convInfo = el("p", { class: "a-list-meta" });
+    var convMsg = msgNode();
+    var convLink = el("a", { class: "a-btn a-btn--ghost a-btn--sm", target: "_blank", rel: "noopener", hidden: true, text: "미리보기 PDF 열기" });
+    var convPreviewBtn = el("button", { class: "a-btn a-btn--ghost", type: "button", text: "1개 미리보기", onclick: previewConvert });
+    var convAllBtn = el("button", { class: "a-btn", type: "button", text: "전체 PDF로 변환", onclick: convertAll });
+    var convCard = el("section", { class: "a-card a-card--gap", hidden: true }, [
+      el("h2", { text: "엑셀 MSDS → PDF 변환" }),
+      convInfo,
+      el("div", { class: "a-row" }, [convPreviewBtn, convAllBtn, convLink]),
+      convMsg
+    ]);
+
     var search = el("input", { type: "search", placeholder: "구분·제품명·제품코드·MSDS NO 검색" });
     var countText = el("span", { class: "a-list-meta" });
     var listBody = el("tbody");
@@ -591,6 +604,7 @@
         el("div", { class: "a-row" }, [uploadBtn, clearBtn]),
         upMsg
       ]),
+      convCard,
       el("section", { class: "a-card a-card--gap" }, [
         el("div", { class: "a-card-head" }, [el("h2", { text: "등록된 MSDS" }), countText]),
         editedBanner,
@@ -1209,6 +1223,87 @@
       refreshSeriesOptions();
       paint();
       checkDuplicates();
+      updateConvCard();
+    }
+
+    function excelRows() {
+      return rows.filter(function (r) { return r.file_type !== "application/pdf"; });
+    }
+
+    function updateConvCard() {
+      var n = excelRows().length;
+      convCard.hidden = !n;
+      convInfo.textContent = "홈페이지에 엑셀로 올라간 MSDS가 " + n + "개 있습니다. 엑셀 파일은 컴퓨터에 따라 열리지 않을 수 있어 PDF로 바꿔 다시 올립니다. " +
+        "원본 엑셀은 아래 원본 보관함에 그대로 남습니다. 먼저 [1개 미리보기]로 모양을 확인한 뒤 [전체 PDF로 변환]을 눌러 주세요. 변환 중에는 이 창을 닫지 마세요.";
+    }
+
+    async function rowToPdf(row) {
+      var dl = await sb.storage.from("resources").download(row.file_path);
+      if (dl.error) {
+        throw new Error("파일을 받지 못했습니다: " + dl.error.message);
+      }
+      var bytes = new Uint8Array(await dl.data.arrayBuffer());
+      return window.DY_MSDS_TO_PDF(bytes, window.XLSX);
+    }
+
+    async function previewConvert() {
+      var row = excelRows()[0];
+      if (!row) {
+        return;
+      }
+      convPreviewBtn.disabled = true;
+      convLink.hidden = true;
+      setMsg(convMsg, "변환 중... (" + (row.product_name || row.title) + ")");
+      try {
+        var blob = await rowToPdf(row);
+        convLink.href = URL.createObjectURL(blob);
+        convLink.download = window.DY_MSDS_FILENAME(Object.assign({}, row, { file_path: "x.pdf" }));
+        convLink.hidden = false;
+        setMsg(convMsg, "미리보기를 만들었습니다 (" + Math.round(blob.size / 1024) + "KB). [미리보기 PDF 열기]로 확인해 주세요. 홈페이지에는 아직 반영되지 않았습니다.", "ok");
+      } catch (err) {
+        setMsg(convMsg, "변환하지 못했습니다: " + (err.message || err), "error");
+      }
+      convPreviewBtn.disabled = false;
+    }
+
+    async function convertAll() {
+      var list = excelRows();
+      if (!list.length || !confirm("엑셀 MSDS " + list.length + "개를 PDF로 바꿔 홈페이지에 다시 올릴까요?\n원본 엑셀은 원본 보관함에 남습니다.")) {
+        return;
+      }
+      convAllBtn.disabled = true;
+      convPreviewBtn.disabled = true;
+      var stay = function (e) { e.preventDefault(); e.returnValue = ""; };
+      window.addEventListener("beforeunload", stay);
+      var ok = 0;
+      var failed = [];
+      for (var i = 0; i < list.length; i++) {
+        var row = list[i];
+        setMsg(convMsg, "변환 중 " + (i + 1) + " / " + list.length + " — " + (row.product_name || row.title));
+        var newPath = "msds/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + ".pdf";
+        try {
+          var blob = await rowToPdf(row);
+          var up = await sb.storage.from("resources").upload(newPath, new Blob([blob], { type: "application/pdf" }), { contentType: "application/pdf" });
+          if (up.error) {
+            throw new Error("업로드 실패: " + up.error.message);
+          }
+          var res = await sb.from("resources").update({ file_path: newPath, file_type: "application/pdf" }).eq("id", row.id);
+          if (res.error) {
+            await sb.storage.from("resources").remove([newPath]);
+            throw new Error("저장 실패: " + res.error.message);
+          }
+          // 원본 엑셀은 보관함(msds-archive)에 있으므로 공개 저장소의 엑셀만 지운다.
+          await sb.storage.from("resources").remove([row.file_path]);
+          ok++;
+        } catch (err) {
+          failed.push((row.product_name || row.title) + ": " + (err.message || err));
+        }
+      }
+      window.removeEventListener("beforeunload", stay);
+      convAllBtn.disabled = false;
+      convPreviewBtn.disabled = false;
+      setMsg(convMsg, ok + "개를 PDF로 바꿨습니다." + (failed.length ? " 실패 " + failed.length + "개 — " + failed.join(" / ") : ""), failed.length ? "error" : "ok");
+      await load();
     }
 
     // 이미 등록된 엑셀 MSDS 중 MSDS NO가 비어 있는 것은 파일을 열어 내용(MSDS NO·개정일 등)을 채운다.
