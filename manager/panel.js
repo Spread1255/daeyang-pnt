@@ -1020,10 +1020,60 @@
           el("a", { class: "a-btn a-btn--ghost a-btn--sm", href: window.DY_RESOURCE_URL(row.file_path, window.DY_MSDS_FILENAME(row)), text: "다운로드" }),
           row.file_edited_at ? el("button", { class: "a-btn a-btn--sm", type: "button", text: "원본으로", onclick: function () { restoreOne(row, true); } }) : null,
           el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "수정", onclick: function () { tr.replaceWith(editRow(row)); } }),
+          el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "파일 바꾸기", onclick: function () { pickReplacement(row); } }),
           el("button", { class: "a-btn a-btn--danger a-btn--sm", type: "button", text: "삭제", onclick: function () { remove(row); } })
         ])])
       ]);
       return tr;
+    }
+
+    // 홈페이지에 걸린 파일만 새 파일(PDF·엑셀)로 바꾼다. 품명·MSDS NO 등 목록 정보와 원본 보관함은 그대로 둔다.
+    function pickReplacement(row) {
+      var input = el("input", { type: "file", accept: ".pdf,.xls,.xlsx,application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      input.addEventListener("change", function () {
+        if (input.files[0]) {
+          replaceFile(row, input.files[0]);
+        }
+      });
+      input.click();
+    }
+
+    async function replaceFile(row, f) {
+      var ext = msdsExt(f.name);
+      var type = MSDS_TYPES[ext];
+      if (!type) {
+        setMsg(listMsg, "PDF, XLS, XLSX 파일만 올릴 수 있습니다.", "error");
+        return;
+      }
+      if (f.size > 20 * 1024 * 1024) {
+        setMsg(listMsg, "파일이 20MB를 넘습니다.", "error");
+        return;
+      }
+      var name = row.product_name || row.title;
+      if (!confirm("'" + name + "' 의 홈페이지 파일을 '" + f.name + "' 로 바꿀까요?\n(목록 정보와 원본 보관함은 그대로 둡니다)")) {
+        return;
+      }
+      setMsg(listMsg, "파일을 바꾸는 중... (" + name + ")");
+      var path = "msds/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
+      var up;
+      try {
+        up = await sb.storage.from("resources").upload(path, new Blob([f], { type: type }), { contentType: type });
+      } catch (err) {
+        up = { error: err };
+      }
+      if (up.error) {
+        setMsg(listMsg, "올리지 못했습니다: " + uploadErrorText(up.error), "error");
+        return;
+      }
+      var res = await sb.from("resources").update({ file_path: path, file_type: type, file_edited_at: null }).eq("id", row.id);
+      if (res.error) {
+        await sb.storage.from("resources").remove([path]);
+        setMsg(listMsg, "저장하지 못했습니다: " + res.error.message, "error");
+        return;
+      }
+      await sb.storage.from("resources").remove([row.file_path]);
+      setMsg(listMsg, "'" + name + "' 파일을 바꿨습니다.", "ok");
+      await load();
     }
 
     // 원본 보관함(msds-archive)에 있는 처음 올린 파일을 공개 저장소로 다시 복사해 연결한다.
