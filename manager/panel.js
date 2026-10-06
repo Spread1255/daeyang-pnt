@@ -584,6 +584,24 @@
       convMsg
     ]);
 
+    // FRM 서식으로 다시 만들기: 원본 보관함의 엑셀을 읽어 새 서식 PDF로 만들어 홈페이지 파일을 바꾼다
+    var frmPick = el("select", { class: "a-frm-pick" });
+    var frmInfo = el("p", { class: "a-list-meta" });
+    var frmMsg = msgNode();
+    var frmLink = el("a", { class: "a-btn a-btn--ghost a-btn--sm", target: "_blank", rel: "noopener", hidden: true, text: "미리보기 PDF 열기" });
+    var frmManual = el("input", { type: "checkbox" });
+    var frmPreviewBtn = el("button", { class: "a-btn a-btn--ghost", type: "button", text: "미리보기", onclick: frmPreview });
+    var frmAllBtn = el("button", { class: "a-btn", type: "button", text: "전체 다시 만들기", onclick: frmAll });
+    var frmArchive = {};
+    var frmCard = el("section", { class: "a-card a-card--gap", hidden: true }, [
+      el("h2", { text: "MSDS 새 서식(FRM)으로 다시 만들기" }),
+      frmInfo,
+      el("div", { class: "a-row" }, [frmPick, frmPreviewBtn, frmLink]),
+      el("label", { class: "a-check" }, [frmManual, " [파일 바꾸기]로 직접 바꾼 파일도 다시 만들기"]),
+      el("div", { class: "a-row" }, [frmAllBtn]),
+      frmMsg
+    ]);
+
     var search = el("input", { type: "search", placeholder: "구분·제품명·제품코드·MSDS NO 검색" });
     var countText = el("span", { class: "a-list-meta" });
     var listBody = el("tbody");
@@ -605,6 +623,7 @@
         upMsg
       ]),
       convCard,
+      frmCard,
       el("section", { class: "a-card a-card--gap" }, [
         el("div", { class: "a-card-head" }, [el("h2", { text: "등록된 MSDS" }), countText]),
         editedBanner,
@@ -1065,7 +1084,7 @@
         setMsg(listMsg, "올리지 못했습니다: " + uploadErrorText(up.error), "error");
         return;
       }
-      var res = await sb.from("resources").update({ file_path: path, file_type: type, file_edited_at: null }).eq("id", row.id);
+      var res = await sb.from("resources").update({ file_path: path, file_type: type, file_edited_at: null, file_source: "manual" }).eq("id", row.id);
       if (res.error) {
         await sb.storage.from("resources").remove([path]);
         setMsg(listMsg, "저장하지 못했습니다: " + res.error.message, "error");
@@ -1274,6 +1293,126 @@
       paint();
       checkDuplicates();
       updateConvCard();
+      await updateFrmCard();
+    }
+
+    // ---------- FRM 서식으로 다시 만들기 ----------
+    function frmTargets(includeManual) {
+      return rows.filter(function (r) {
+        var a = frmArchive[r.id];
+        return a && a.file_type !== "application/pdf" && (includeManual || r.file_source !== "manual");
+      });
+    }
+
+    async function updateFrmCard() {
+      if (!window.DY_MSDS_FRM) {
+        return;
+      }
+      var res = await sb.from("msds_archive").select("resource_id, archive_path, file_type, created_at").order("created_at", { ascending: true });
+      if (res.error) {
+        return;
+      }
+      frmArchive = {};
+      res.data.forEach(function (a) {
+        if (a.resource_id && !frmArchive[a.resource_id]) {
+          frmArchive[a.resource_id] = a;
+        }
+      });
+      var all = frmTargets(true);
+      frmCard.hidden = !all.length;
+      var done = all.filter(function (r) { return r.file_source === "frm"; }).length;
+      var manual = all.filter(function (r) { return r.file_source === "manual"; }).length;
+      frmInfo.textContent = "원본 보관함에 엑셀 원본이 있는 MSDS " + all.length + "개를 오늘 만든 새 서식(파란 제목 띠·번호 섹션·그림문자)의 PDF로 다시 만듭니다. " +
+        "그림문자는 유해·위험문구(H코드)에 맞춰 넣고, 제품명·제품코드·MSDS 번호는 이 목록의 값을 씁니다. 원본 엑셀은 보관함에 그대로 남습니다. " +
+        "먼저 제품을 골라 [미리보기]로 확인해 주세요. (새 서식 완료 " + done + "개" + (manual ? ", 직접 바꾼 파일 " + manual + "개" : "") + ")";
+      var keep = frmPick.value;
+      frmPick.replaceChildren.apply(frmPick, all.slice().sort(function (a, b) {
+        return String(a.product_code || "").localeCompare(String(b.product_code || ""));
+      }).map(function (r) {
+        return el("option", { value: String(r.id), text: (r.product_code || "-") + "  " + (r.product_name || r.title) + (r.file_source === "frm" ? "  ✓" : "") });
+      }));
+      if (keep) {
+        frmPick.value = keep;
+      }
+    }
+
+    async function rowToFrmPdf(row) {
+      var a = frmArchive[row.id];
+      if (!a) {
+        throw new Error("원본 보관함에 엑셀 원본이 없습니다");
+      }
+      var dl = await sb.storage.from("msds-archive").download(a.archive_path);
+      if (dl.error) {
+        throw new Error("원본을 받지 못했습니다: " + dl.error.message);
+      }
+      var model = window.DY_MSDS_FRM.parse(new Uint8Array(await dl.data.arrayBuffer()), window.XLSX);
+      if (model.sections.length < 10) {
+        throw new Error("MSDS 양식을 읽지 못했습니다 (섹션 " + model.sections.length + "개)");
+      }
+      return window.DY_MSDS_FRM.toPdf(model, {
+        name: row.product_name || model.name,
+        code: row.product_code || "",
+        msdsNo: row.msds_no || fixMsdsNo(model.msdsNo)
+      });
+    }
+
+    async function frmPreview() {
+      var row = rows.filter(function (r) { return String(r.id) === frmPick.value; })[0];
+      if (!row) {
+        return;
+      }
+      frmPreviewBtn.disabled = true;
+      frmLink.hidden = true;
+      setMsg(frmMsg, "만드는 중... (" + (row.product_name || row.title) + ")");
+      try {
+        var blob = await rowToFrmPdf(row);
+        frmLink.href = URL.createObjectURL(blob);
+        frmLink.download = window.DY_MSDS_FILENAME(Object.assign({}, row, { file_path: "x.pdf" }));
+        frmLink.hidden = false;
+        setMsg(frmMsg, "미리보기를 만들었습니다 (" + Math.round(blob.size / 1024) + "KB). [미리보기 PDF 열기]로 확인해 주세요. 홈페이지에는 아직 반영되지 않았습니다.", "ok");
+      } catch (err) {
+        setMsg(frmMsg, "만들지 못했습니다: " + (err.message || err), "error");
+      }
+      frmPreviewBtn.disabled = false;
+    }
+
+    async function frmAll() {
+      var list = frmTargets(frmManual.checked);
+      if (!list.length || !confirm("MSDS " + list.length + "개를 새 서식 PDF로 다시 만들어 홈페이지 파일을 바꿀까요?\n원본 엑셀은 원본 보관함에 그대로 남습니다.")) {
+        return;
+      }
+      frmAllBtn.disabled = true;
+      frmPreviewBtn.disabled = true;
+      var stay = function (e) { e.preventDefault(); e.returnValue = ""; };
+      window.addEventListener("beforeunload", stay);
+      var ok = 0;
+      var failed = [];
+      for (var i = 0; i < list.length; i++) {
+        var row = list[i];
+        setMsg(frmMsg, "만드는 중 " + (i + 1) + " / " + list.length + " — " + (row.product_name || row.title));
+        var newPath = "msds/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + ".pdf";
+        try {
+          var blob = await rowToFrmPdf(row);
+          var up = await sb.storage.from("resources").upload(newPath, new Blob([blob], { type: "application/pdf" }), { contentType: "application/pdf" });
+          if (up.error) {
+            throw new Error("업로드 실패: " + up.error.message);
+          }
+          var res = await sb.from("resources").update({ file_path: newPath, file_type: "application/pdf", file_source: "frm", file_edited_at: null }).eq("id", row.id);
+          if (res.error) {
+            await sb.storage.from("resources").remove([newPath]);
+            throw new Error("저장 실패: " + res.error.message);
+          }
+          await sb.storage.from("resources").remove([row.file_path]);
+          ok++;
+        } catch (err) {
+          failed.push((row.product_code || "") + " " + (row.product_name || row.title) + ": " + (err.message || err));
+        }
+      }
+      window.removeEventListener("beforeunload", stay);
+      frmAllBtn.disabled = false;
+      frmPreviewBtn.disabled = false;
+      setMsg(frmMsg, ok + "개를 새 서식으로 바꿨습니다." + (failed.length ? " 실패 " + failed.length + "개 — " + failed.join(" / ") : ""), failed.length ? "error" : "ok");
+      await load();
     }
 
     function excelRows() {

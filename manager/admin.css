@@ -873,3 +873,32 @@ textarea {
 .cl-label--cmp {
   margin-top: 0.4rem;
 }
+
+/* MSDS 새 서식 다시 만들기 */
+.a-frm-pick {
+  min-width: 0;
+  max-width: 100%;
+  flex: 1 1 22rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 0.45rem;
+  background: #fff;
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.a-check {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.4rem 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.a-check input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--accent);
+}
