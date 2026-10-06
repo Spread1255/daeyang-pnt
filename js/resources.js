@@ -185,13 +185,32 @@
     }
   }
 
-  window.DY_SB
-    .from("resources")
-    .select("id, category, title, description, file_path, file_type, series, product_code, product_name, msds_no, created_at")
-    .order("sort_order", { ascending: true })
-    .order("created_at", { ascending: false })
-    .order("id", { ascending: false })
-    .then(function (res) {
+  // MSDS 페이지는 관리자에서 비공개로 바꾸면 '자료 준비중입니다.'만 보인다 (설정이 없으면 공개).
+  var msdsPublic = !msdsWrap
+    ? Promise.resolve(true)
+    : window.DY_SB
+      .from("site_settings")
+      .select("value")
+      .eq("key", "msds_public")
+      .maybeSingle()
+      .then(function (res) {
+        return !(res && !res.error && res.data && res.data.value === false);
+      });
+
+  Promise.all([
+    window.DY_SB
+      .from("resources")
+      .select("id, category, title, description, file_path, file_type, series, product_code, product_name, msds_no, created_at")
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: false })
+      .order("id", { ascending: false }),
+    msdsPublic
+  ])
+    .then(function (all) {
+      var res = all[0];
+      if (!all[1]) {
+        msdsWrap = null;
+      }
       if (res.error || !res.data) {
         return;
       }

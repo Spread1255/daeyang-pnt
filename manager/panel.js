@@ -608,8 +608,61 @@
     var listMsg = msgNode();
     var rows = [];
 
+    // 홈페이지 공개/비공개: 비공개면 홈페이지 MSDS 페이지에 '자료 준비중입니다.'만 보인다.
+    var pubState = el("strong");
+    var pubBtn = el("button", { class: "a-btn", type: "button", text: "불러오는 중…", disabled: true, onclick: togglePublic });
+    var pubMsg = msgNode();
+    var pubCard = el("section", { class: "a-card" }, [
+      el("h2", { text: "홈페이지 공개" }),
+      el("div", { class: "switch-row" }, [
+        el("div", {}, [
+          el("div", {}, ["현재 상태: ", pubState]),
+          el("span", { class: "a-list-meta", text: "비공개로 바꾸면 홈페이지 MSDS 페이지에 '자료 준비중입니다.' 문구만 보입니다. 올린 자료는 지워지지 않습니다." })
+        ]),
+        pubBtn
+      ]),
+      pubMsg
+    ]);
+    var isPublic = true;
+
+    function paintPublic() {
+      pubState.textContent = isPublic ? "공개 중" : "비공개";
+      pubState.style.color = isPublic ? "#1a7f37" : "#b42318";
+      pubBtn.textContent = isPublic ? "비공개로 전환" : "홈페이지에 공개";
+      pubBtn.className = isPublic ? "a-btn a-btn--ghost" : "a-btn";
+    }
+
+    async function loadPublic() {
+      var res = await sb.from("site_settings").select("value").eq("key", "msds_public").maybeSingle();
+      if (res.error) {
+        setMsg(pubMsg, "공개 설정을 불러오지 못했습니다.", "error");
+        return;
+      }
+      isPublic = !(res.data && res.data.value === false);
+      pubBtn.disabled = false;
+      paintPublic();
+    }
+
+    async function togglePublic() {
+      var next = !isPublic;
+      if (!next && !window.confirm("홈페이지 MSDS 페이지를 비공개로 바꿀까요?\n방문자에게는 '자료 준비중입니다.'만 보입니다.")) {
+        return;
+      }
+      pubBtn.disabled = true;
+      var up = await sb.from("site_settings").upsert({ key: "msds_public", value: next, updated_at: new Date().toISOString() });
+      pubBtn.disabled = false;
+      if (up.error) {
+        setMsg(pubMsg, "저장하지 못했습니다: " + up.error.message, "error");
+        return;
+      }
+      isPublic = next;
+      paintPublic();
+      setMsg(pubMsg, next ? "홈페이지에 공개했습니다." : "비공개로 바꿨습니다. 홈페이지에는 '자료 준비중입니다.'가 보입니다.", "ok");
+    }
+
     main.replaceChildren.apply(main, header("MSDS", "올린 MSDS는 홈페이지 MSDS 페이지에 MSDS NO·구분·제품명·제품코드·다운로드 표로 표시됩니다. 같은 MSDS NO가 이미 있거나 고른 파일끼리 겹치면 노란색으로 표시됩니다. 최근에 올린 것이 위에 나옵니다.").concat([
       seriesList,
+      pubCard,
       el("section", { class: "a-card" }, [
         el("h2", { text: "여러 파일 한 번에 올리기" }),
         el("label", { class: "a-field" }, [
@@ -1534,6 +1587,7 @@
     }
 
     search.addEventListener("input", paint);
+    loadPublic();
     loadArchive();
     load().then(function () {
       return syncArchive();
