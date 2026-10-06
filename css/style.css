@@ -2524,7 +2524,7 @@ th {
   background: rgb(12 14 20 / 0.45);
   backdrop-filter: blur(6px);
   color: #f4efe6;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   white-space: nowrap;
@@ -2533,7 +2533,7 @@ th {
 @media (max-width: 560px) {
   .home-stage-notice {
     top: calc(var(--header-h) + 1.25rem);
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     white-space: normal;
   }
 }
