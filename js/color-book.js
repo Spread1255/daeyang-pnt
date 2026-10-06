@@ -87,7 +87,7 @@
         return "";
       }
       const label = color[1] + " " + color[2];
-      return '<a class="cbook-chip" href="colors.html?q=' + encodeURIComponent(color[1]) + '"' +
+      return '<a class="cbook-chip" href="/colors?q=' + encodeURIComponent(color[1]) + '"' +
         ' style="left:' + box[0] + "%;top:" + box[1] + "%;width:" + box[2] + "%;height:" + box[3] + '%"' +
         ' title="' + escapeAttr(label) + '" aria-label="' + escapeAttr(label) + '" draggable="false"></a>';
     }).join("");

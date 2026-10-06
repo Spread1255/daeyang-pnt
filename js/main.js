@@ -216,7 +216,7 @@
       const res = await window.DY_SB.from("inquiries").insert({
         id: id,
         data: data,
-        page: window.location.pathname.split("/").pop() || "index.html"
+        page: window.location.pathname.split("/").pop() || "/"
       });
       if (res.error) {
         throw res.error;

@@ -132,7 +132,7 @@
     var ul = el("ul");
     notices.forEach(function (n) {
       var a = el("a");
-      a.href = "notices.html#notice-" + n.id;
+      a.href = "/notice#notice-" + n.id;
       a.appendChild(el("span", "", n.title));
       a.appendChild(el("time", "", String(n.notice_date || "").replace(/-/g, ".")));
       var li = el("li");

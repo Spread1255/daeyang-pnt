@@ -1,0 +1,173 @@
+{
+  "redirects": [
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/about.html",
+      "destination": "/company",
+      "permanent": true
+    },
+    {
+      "source": "/about-vision.html",
+      "destination": "/vision",
+      "permanent": true
+    },
+    {
+      "source": "/about-info.html",
+      "destination": "/company-info",
+      "permanent": true
+    },
+    {
+      "source": "/about-history.html",
+      "destination": "/history",
+      "permanent": true
+    },
+    {
+      "source": "/products.html",
+      "destination": "/products",
+      "permanent": true
+    },
+    {
+      "source": "/product-interior.html",
+      "destination": "/interior",
+      "permanent": true
+    },
+    {
+      "source": "/product-exterior.html",
+      "destination": "/exterior",
+      "permanent": true
+    },
+    {
+      "source": "/product-pattern.html",
+      "destination": "/pattern",
+      "permanent": true
+    },
+    {
+      "source": "/product-functional.html",
+      "destination": "/functional",
+      "permanent": true
+    },
+    {
+      "source": "/applications.html",
+      "destination": "/applications",
+      "permanent": true
+    },
+    {
+      "source": "/colors.html",
+      "destination": "/colors",
+      "permanent": true
+    },
+    {
+      "source": "/colorbook.html",
+      "destination": "/colorbook",
+      "permanent": true
+    },
+    {
+      "source": "/colorlab.html",
+      "destination": "/colorlab",
+      "permanent": true
+    },
+    {
+      "source": "/msds.html",
+      "destination": "/msds",
+      "permanent": true
+    },
+    {
+      "source": "/resources.html",
+      "destination": "/certificates",
+      "permanent": true
+    },
+    {
+      "source": "/notices.html",
+      "destination": "/notice",
+      "permanent": true
+    },
+    {
+      "source": "/partnership.html",
+      "destination": "/partnership",
+      "permanent": true
+    },
+    {
+      "source": "/careers.html",
+      "destination": "/careers",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/company",
+      "destination": "/about.html"
+    },
+    {
+      "source": "/vision",
+      "destination": "/about-vision.html"
+    },
+    {
+      "source": "/company-info",
+      "destination": "/about-info.html"
+    },
+    {
+      "source": "/history",
+      "destination": "/about-history.html"
+    },
+    {
+      "source": "/products",
+      "destination": "/products.html"
+    },
+    {
+      "source": "/interior",
+      "destination": "/product-interior.html"
+    },
+    {
+      "source": "/exterior",
+      "destination": "/product-exterior.html"
+    },
+    {
+      "source": "/pattern",
+      "destination": "/product-pattern.html"
+    },
+    {
+      "source": "/functional",
+      "destination": "/product-functional.html"
+    },
+    {
+      "source": "/applications",
+      "destination": "/applications.html"
+    },
+    {
+      "source": "/colors",
+      "destination": "/colors.html"
+    },
+    {
+      "source": "/colorbook",
+      "destination": "/colorbook.html"
+    },
+    {
+      "source": "/colorlab",
+      "destination": "/colorlab.html"
+    },
+    {
+      "source": "/msds",
+      "destination": "/msds.html"
+    },
+    {
+      "source": "/certificates",
+      "destination": "/resources.html"
+    },
+    {
+      "source": "/notice",
+      "destination": "/notices.html"
+    },
+    {
+      "source": "/partnership",
+      "destination": "/partnership.html"
+    },
+    {
+      "source": "/careers",
+      "destination": "/careers.html"
+    }
+  ]
+}

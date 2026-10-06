@@ -59,7 +59,7 @@
     openFromHash();
   }
 
-  // 챗봇 등에서 notices.html#notice-12 로 들어오면 그 공지를 펼치고 보여준다.
+  // 챗봇 등에서 /notice#notice-12 로 들어오면 그 공지를 펼치고 보여준다.
   function openFromHash() {
     const m = window.location.hash.match(/^#notice-(\d+)$/);
     const li = m && document.getElementById("notice-" + m[1]);
