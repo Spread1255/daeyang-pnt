@@ -536,6 +536,8 @@
   }
 
   async function renderMsds() {
+    // MSDS 파일은 비공개 저장소(msds-files)에 둔다. 홈페이지 공개 설정이 꺼지면 방문자는 파일도 받을 수 없다.
+    var MSDS_BUCKET = window.DY_MSDS_BUCKET || "msds-files";
     var seriesList = el("datalist", { id: "msds-series-list" });
     var picker = el("input", { type: "file", multiple: true, accept: ".pdf,.xls,.xlsx,application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     var bulkSeries = el("input", { type: "text", maxlength: "100", list: "msds-series-list", placeholder: "예: 자동차보수용" });
@@ -717,7 +719,7 @@
       ])
     ]));
 
-    // 보관함에 원본 복사본을 남긴다. body가 없으면(이미 등록된 파일) 공개 저장소에서 서버 쪽 복사.
+    // 보관함에 원본 복사본을 남긴다. body가 없으면(이미 등록된 파일) MSDS 저장소에서 서버 쪽 복사.
     async function archiveCopy(row, opts) {
       var ext = msdsExt(row.file_path) || "bin";
       var archivePath = archivePathFor(ext);
@@ -725,7 +727,7 @@
       try {
         res = opts.body
           ? await sb.storage.from("msds-archive").upload(archivePath, opts.body, { contentType: row.file_type })
-          : await sb.storage.from("resources").copy(row.file_path, archivePath, { destinationBucket: "msds-archive" });
+          : await sb.storage.from(MSDS_BUCKET).copy(row.file_path, archivePath, { destinationBucket: "msds-archive" });
       } catch (err) {
         res = { error: err };
       }
@@ -1008,7 +1010,7 @@
         try {
           // 한컴오피스가 깔린 PC는 엑셀 형식을 "application/haansoftxls" 같은 이름으로 넘기므로, 확장자에 맞는 표준 형식으로 다시 감싸서 보낸다.
           var body = new Blob([p.file], { type: type });
-          up = await sb.storage.from("resources").upload(path, body, { contentType: type });
+          up = await sb.storage.from(MSDS_BUCKET).upload(path, body, { contentType: type });
         } catch (err) {
           up = { error: err };
         }
@@ -1030,7 +1032,7 @@
         };
         var res = await sb.from("resources").insert(row).select("id").single();
         if (res.error) {
-          await sb.storage.from("resources").remove([path]);
+          await sb.storage.from(MSDS_BUCKET).remove([path]);
           p.status.textContent = "실패: " + res.error.message;
           failed++;
           continue;
@@ -1089,7 +1091,9 @@
         el("td", { text: row.msds_no || "-" }),
         el("td", { text: formatDate(row.revised_on) || "-" }),
         el("td", { class: "a-cell-actions" }, [el("div", { class: "a-row" }, [
-          el("a", { class: "a-btn a-btn--ghost a-btn--sm", href: window.DY_RESOURCE_URL(row.file_path, window.DY_MSDS_FILENAME(row)), text: "다운로드" }),
+          el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "다운로드", onclick: function () {
+            window.DY_MSDS_DOWNLOAD(row.file_path, window.DY_MSDS_FILENAME(row)).catch(function (err) { setMsg(listMsg, "파일을 받지 못했습니다: " + uploadErrorText(err), "error"); });
+          } }),
           row.file_edited_at ? el("button", { class: "a-btn a-btn--sm", type: "button", text: "원본으로", onclick: function () { restoreOne(row, true); } }) : null,
           el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "수정", onclick: function () { tr.replaceWith(editRow(row)); } }),
           el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "파일 바꾸기", onclick: function () { pickReplacement(row); } }),
@@ -1129,7 +1133,7 @@
       var path = "msds/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
       var up;
       try {
-        up = await sb.storage.from("resources").upload(path, new Blob([f], { type: type }), { contentType: type });
+        up = await sb.storage.from(MSDS_BUCKET).upload(path, new Blob([f], { type: type }), { contentType: type });
       } catch (err) {
         up = { error: err };
       }
@@ -1139,16 +1143,16 @@
       }
       var res = await sb.from("resources").update({ file_path: path, file_type: type, file_edited_at: null, file_source: "manual" }).eq("id", row.id);
       if (res.error) {
-        await sb.storage.from("resources").remove([path]);
+        await sb.storage.from(MSDS_BUCKET).remove([path]);
         setMsg(listMsg, "저장하지 못했습니다: " + res.error.message, "error");
         return;
       }
-      await sb.storage.from("resources").remove([row.file_path]);
+      await sb.storage.from(MSDS_BUCKET).remove([row.file_path]);
       setMsg(listMsg, "'" + name + "' 파일을 바꿨습니다.", "ok");
       await load();
     }
 
-    // 원본 보관함(msds-archive)에 있는 처음 올린 파일을 공개 저장소로 다시 복사해 연결한다.
+    // 원본 보관함(msds-archive)에 있는 처음 올린 파일을 MSDS 저장소로 다시 복사해 연결한다.
     async function restoreOriginal(row) {
       var arch = await sb.from("msds_archive").select("archive_path").eq("resource_id", row.id).order("created_at", { ascending: true }).limit(1);
       if (arch.error || !arch.data || !arch.data.length) {
@@ -1158,7 +1162,7 @@
       var path = "msds/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
       var cp;
       try {
-        cp = await sb.storage.from("msds-archive").copy(arch.data[0].archive_path, path, { destinationBucket: "resources" });
+        cp = await sb.storage.from("msds-archive").copy(arch.data[0].archive_path, path, { destinationBucket: MSDS_BUCKET });
       } catch (err) {
         cp = { error: err };
       }
@@ -1167,10 +1171,10 @@
       }
       var up = await sb.from("resources").update({ file_path: path, file_type: MSDS_TYPES[ext] || row.file_type, file_edited_at: null }).eq("id", row.id);
       if (up.error) {
-        await sb.storage.from("resources").remove([path]);
+        await sb.storage.from(MSDS_BUCKET).remove([path]);
         return up.error.message;
       }
-      await sb.storage.from("resources").remove([row.file_path]);
+      await sb.storage.from(MSDS_BUCKET).remove([row.file_path]);
       row.file_path = path;
       row.file_type = MSDS_TYPES[ext] || row.file_type;
       row.file_edited_at = null;
@@ -1253,13 +1257,13 @@
         var res = await sb.from("resources").update(payload).eq("id", row.id);
         if (res.error) {
           if (payload.file_path) {
-            await sb.storage.from("resources").remove([payload.file_path]);
+            await sb.storage.from(MSDS_BUCKET).remove([payload.file_path]);
           }
           setMsg(listMsg, "저장하지 못했습니다: " + res.error.message, "error");
           return;
         }
         if (oldPath) {
-          await sb.storage.from("resources").remove([oldPath]);
+          await sb.storage.from(MSDS_BUCKET).remove([oldPath]);
         }
         Object.assign(row, payload);
         refreshSeriesOptions();
@@ -1269,18 +1273,18 @@
       return tr;
     }
 
-    // 공개 저장소의 엑셀 파일을 내려받아 값만 바꾼 새 파일로 올린다. 브라우저 캐시 문제를 피하려고 새 경로에 올리고,
+    // MSDS 저장소의 엑셀 파일을 내려받아 값만 바꾼 새 파일로 올린다. 브라우저 캐시 문제를 피하려고 새 경로에 올리고,
     // 성공하면 호출한 쪽에서 목록의 file_path를 바꾸고 옛 파일을 지운다.
     async function rewriteExcelFile(row, payload) {
       if (!window.DY_MSDS_REWRITE || !window.DY_MSDS_EXTRACT || !window.XLSX) {
         return { error: "엑셀 도구를 불러오지 못했습니다" };
       }
       try {
-        var resp = await fetch(window.DY_RESOURCE_URL(row.file_path), { cache: "no-store" });
-        if (!resp.ok) {
-          return { error: "파일을 내려받지 못했습니다 (" + resp.status + ")" };
+        var dl = await sb.storage.from(MSDS_BUCKET).download(row.file_path);
+        if (dl.error || !dl.data) {
+          return { error: "파일을 내려받지 못했습니다" };
         }
-        var bytes = new Uint8Array(await resp.arrayBuffer());
+        var bytes = new Uint8Array(await dl.data.arrayBuffer());
         var before = window.DY_MSDS_EXTRACT(bytes, window.XLSX);
         var after = {
           name: payload.product_name || "",
@@ -1302,7 +1306,7 @@
         var ext = msdsExt(row.file_path);
         var path = "msds/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
         var type = MSDS_TYPES[ext];
-        var up = await sb.storage.from("resources").upload(path, new Blob([result.bytes], { type: type }), { contentType: type });
+        var up = await sb.storage.from(MSDS_BUCKET).upload(path, new Blob([result.bytes], { type: type }), { contentType: type });
         if (up.error) {
           return { error: uploadErrorText(up.error) };
         }
@@ -1316,7 +1320,7 @@
       if (!confirm("'" + (row.product_name || row.title) + (row.product_code ? " (" + row.product_code + ")" : "") + "' MSDS를 삭제할까요? 홈페이지에서 사라지지만, 원본은 보관함에 남습니다.")) {
         return;
       }
-      var st = await sb.storage.from("resources").remove([row.file_path]);
+      var st = await sb.storage.from(MSDS_BUCKET).remove([row.file_path]);
       if (st.error) {
         setMsg(listMsg, "파일을 삭제하지 못했습니다: " + st.error.message, "error");
         return;
@@ -1446,16 +1450,16 @@
         var newPath = "msds/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + ".pdf";
         try {
           var blob = await rowToFrmPdf(row);
-          var up = await sb.storage.from("resources").upload(newPath, new Blob([blob], { type: "application/pdf" }), { contentType: "application/pdf" });
+          var up = await sb.storage.from(MSDS_BUCKET).upload(newPath, new Blob([blob], { type: "application/pdf" }), { contentType: "application/pdf" });
           if (up.error) {
             throw new Error("업로드 실패: " + up.error.message);
           }
           var res = await sb.from("resources").update({ file_path: newPath, file_type: "application/pdf", file_source: "frm", file_edited_at: null }).eq("id", row.id);
           if (res.error) {
-            await sb.storage.from("resources").remove([newPath]);
+            await sb.storage.from(MSDS_BUCKET).remove([newPath]);
             throw new Error("저장 실패: " + res.error.message);
           }
-          await sb.storage.from("resources").remove([row.file_path]);
+          await sb.storage.from(MSDS_BUCKET).remove([row.file_path]);
           ok++;
         } catch (err) {
           failed.push((row.product_code || "") + " " + (row.product_name || row.title) + ": " + (err.message || err));
@@ -1480,7 +1484,7 @@
     }
 
     async function rowToPdf(row) {
-      var dl = await sb.storage.from("resources").download(row.file_path);
+      var dl = await sb.storage.from(MSDS_BUCKET).download(row.file_path);
       if (dl.error) {
         throw new Error("파일을 받지 못했습니다: " + dl.error.message);
       }
@@ -1525,17 +1529,17 @@
         var newPath = "msds/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + ".pdf";
         try {
           var blob = await rowToPdf(row);
-          var up = await sb.storage.from("resources").upload(newPath, new Blob([blob], { type: "application/pdf" }), { contentType: "application/pdf" });
+          var up = await sb.storage.from(MSDS_BUCKET).upload(newPath, new Blob([blob], { type: "application/pdf" }), { contentType: "application/pdf" });
           if (up.error) {
             throw new Error("업로드 실패: " + up.error.message);
           }
           var res = await sb.from("resources").update({ file_path: newPath, file_type: "application/pdf" }).eq("id", row.id);
           if (res.error) {
-            await sb.storage.from("resources").remove([newPath]);
+            await sb.storage.from(MSDS_BUCKET).remove([newPath]);
             throw new Error("저장 실패: " + res.error.message);
           }
-          // 원본 엑셀은 보관함(msds-archive)에 있으므로 공개 저장소의 엑셀만 지운다.
-          await sb.storage.from("resources").remove([row.file_path]);
+          // 원본 엑셀은 보관함(msds-archive)에 있으므로 MSDS 저장소의 엑셀만 지운다.
+          await sb.storage.from(MSDS_BUCKET).remove([row.file_path]);
           ok++;
         } catch (err) {
           failed.push((row.product_name || row.title) + ": " + (err.message || err));
@@ -1558,11 +1562,11 @@
       for (var i = 0; i < todo.length; i++) {
         var r = todo[i];
         try {
-          var resp = await fetch(window.DY_RESOURCE_URL(r.file_path));
-          if (!resp.ok) {
+          var dl = await sb.storage.from(MSDS_BUCKET).download(r.file_path);
+          if (dl.error || !dl.data) {
             continue;
           }
-          var info = window.DY_MSDS_EXTRACT(new Uint8Array(await resp.arrayBuffer()), window.XLSX);
+          var info = window.DY_MSDS_EXTRACT(new Uint8Array(await dl.data.arrayBuffer()), window.XLSX);
           var patch = {};
           if (info.msdsNo) { patch.msds_no = fixMsdsNo(info.msdsNo); }
           if (info.revised && !r.revised_on) { patch.revised_on = info.revised; }

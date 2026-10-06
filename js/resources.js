@@ -163,7 +163,13 @@
       tr.appendChild(el("td", "msds-code", row.product_code || "-"));
       var cell = el("td", "msds-file");
       var link = el("a", "msds-pdf");
-      link.href = window.DY_RESOURCE_URL(row.file_path, window.DY_MSDS_FILENAME(row));
+      link.href = "#";
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        window.DY_MSDS_DOWNLOAD(row.file_path, window.DY_MSDS_FILENAME(row)).catch(function () {
+          window.alert(t("common.techPrepNotice"));
+        });
+      });
       link.setAttribute("aria-label", t("resources.download") + ": " + name);
       link.innerHTML = isExcel(row) ? XLS_ICON : PDF_ICON;
       cell.appendChild(link);
