@@ -1,2 +1,4 @@
 User-agent: *
 Disallow: /manager/
+
+Sitemap: https://www.daeyangpnt.co.kr/sitemap.xml
