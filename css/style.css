@@ -2509,6 +2509,35 @@ th {
   color: #f4efe6;
 }
 
+/* 첫 화면 위쪽 빈 곳의 안내 문구 */
+.home-stage-notice {
+  position: absolute;
+  top: calc(var(--header-h) + 2.5rem);
+  left: 50%;
+  width: max-content;
+  max-width: calc(100% - 2rem);
+  margin: 0;
+  padding: 0.65rem 1.4rem;
+  transform: translateX(-50%);
+  border: 1px solid rgb(244 239 230 / 0.35);
+  border-radius: 999px;
+  background: rgb(12 14 20 / 0.45);
+  backdrop-filter: blur(6px);
+  color: #f4efe6;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .home-stage-notice {
+    top: calc(var(--header-h) + 1.25rem);
+    font-size: 0.85rem;
+    white-space: normal;
+  }
+}
+
 .home-stage-hero .eyebrow {
   color: var(--accent);
 }
