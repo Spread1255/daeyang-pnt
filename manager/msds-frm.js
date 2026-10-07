@@ -2,7 +2,7 @@
 // window.DY_MSDS_FRM.parse(bytes, XLSX)            → 내용 모델
 // window.DY_MSDS_FRM.toPdf(model, meta)            → Promise<Blob>  (meta: { name, code, msdsNo })
 //
-// 원본 엑셀 구조 (대양피엔티 MSDS 엑셀 공통):
+// 원본 엑셀 구조 (대양피앤티 MSDS 엑셀 공통):
 //  - A열: 항목 이름. 앞 공백 수가 단계(2~3칸 = "가." 소제목, 8칸 = ○ 항목, 12칸 이상 = 하위 항목)
 //  - B열(B~E 병합): 값. A열이 빈 줄은 위 항목의 값이 이어지는 것
 //  - 연보라(E6E6FA) 칸: "1. …" 섹션 제목, 3번 섹션의 회색(E8E8E8) 줄: 구성성분 표 머리(A·C·D·E열)
@@ -297,7 +297,7 @@
     }).filter(Boolean);
     var body =
       '<header class="banner"><h1>물질안전보건자료 (MSDS)<small>MATERIAL SAFETY DATA SHEET</small></h1>' +
-      '<div class="brand">' + (assets.logo ? '<img src="' + assets.logo + '" alt="">' : "") + "<b>대양피엔티㈜<span>DAEYANG P&amp;T</span></b></div></header>" +
+      '<div class="brand">' + (assets.logo ? '<img src="' + assets.logo + '" alt="">' : "") + "<b>대양피앤티㈜<span>DAEYANG P&amp;T</span></b></div></header>" +
       '<div class="meta"><div class="prod">' + esc(meta.name || model.name) + (meta.code ? "<small>" + esc(meta.code) + "</small>" : "") + "</div>" +
       '<div class="msdsno"><b>MSDS 번호</b><span>' + esc(meta.msdsNo || model.msdsNo || "-") + "</span></div></div>" +
       model.sections.map(function (s) {
@@ -462,7 +462,7 @@
         ctx.textAlign = "center";
         ctx.fillStyle = "#12306e";
         ctx.font = "bold " + Math.round(7.5 * scale * 1.333) + "px 'Pretendard','Malgun Gothic',sans-serif";
-        ctx.fillText("대양피엔티주식회사", Math.round(PAGE_W / 2 * scale), fy);
+        ctx.fillText("대양피앤티주식회사", Math.round(PAGE_W / 2 * scale), fy);
         if (p > 0) {
           pdf.addPage();
         }
