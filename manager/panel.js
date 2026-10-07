@@ -803,7 +803,7 @@
       for (var i = 0; i < missing.length; i++) {
         var r = missing[i];
         setMsg(archiveMsg, "기존 MSDS를 보관함에 복사하는 중... " + (i + 1) + " / " + missing.length);
-        var name = [r.product_code, r.product_name || r.title].filter(Boolean).join(" ") + "." + (msdsExt(r.file_path) || "bin");
+        var name = window.DY_MSDS_FILENAME(Object.assign({}, r, { file_path: "x." + (msdsExt(r.file_path) || "bin") }));
         if (await archiveCopy(r, { originalName: name })) {
           failed++;
         }

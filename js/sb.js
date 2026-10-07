@@ -39,10 +39,12 @@
       });
   };
 
-  // MSDS 다운로드 파일 이름: "제품코드 제품명.확장자"
+  // MSDS 다운로드 파일 이름: "제품코드 제품명 MSDS.확장자" (제품명 앞의 내장형/외장형은 뺀다)
+  //  예) DY#2-WH029 EAGON WHITE 반광 MSDS.pdf
   window.DY_MSDS_FILENAME = function (row) {
     var ext = (String(row.file_path || "").match(/\.([a-z0-9]+)$/i) || [, "pdf"])[1];
-    var base = [row.product_code, row.product_name || row.title].filter(Boolean).join(" ") || "MSDS";
+    var name = String(row.product_name || row.title || "").replace(/^\s*(내장형|외장형)\s*/, "").trim();
+    var base = [row.product_code, name, "MSDS"].filter(Boolean).join(" ");
     return base.replace(/[\\/:*?"<>|]+/g, "_") + "." + ext;
   };
 })();
