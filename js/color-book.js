@@ -86,7 +86,7 @@
       if (!color) {
         return "";
       }
-      const label = color[1] + " " + color[2];
+      const label = color[1] + " " + (window.I18N ? window.I18N.paintName(color[2]) : color[2]);
       return '<a class="cbook-chip" href="/colors?q=' + encodeURIComponent(color[1]) + '"' +
         ' style="left:' + box[0] + "%;top:" + box[1] + "%;width:" + box[2] + "%;height:" + box[3] + '%"' +
         ' title="' + escapeAttr(label) + '" aria-label="' + escapeAttr(label) + '" draggable="false"></a>';

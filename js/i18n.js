@@ -1404,6 +1404,22 @@
     zh: { WH: "白色", IV: "象牙白", BE: "米色", GY: "灰色", BR: "棕色", GN: "绿色", BL: "蓝色", PK: "粉色", YL: "黄色", OR: "橙色", RD: "红色", SI: "银色", BK: "黑色", GD: "铜色", CL: "透明" }
   };
 
+  // 색상표 품명(예: "외장형 KW BLUE 유광")에 섞인 한글 낱말. 긴 낱말이 먼저 바뀌도록 순서를 지킨다.
+  var PAINT_TERMS = [
+    ["국방색무광", { en: "Khaki Matte", ja: "カーキ 艶消し", zh: "军绿色 哑光" }],
+    ["진회색", { en: "Dark Gray", ja: "ダークグレー", zh: "深灰色" }],
+    ["내장형", { en: "Interior", ja: "内装用", zh: "室内型" }],
+    ["외장형", { en: "Exterior", ja: "外装用", zh: "室外型" }],
+    ["함마톤", { en: "Hammertone", ja: "ハンマートーン", zh: "锤纹" }],
+    ["내쇼날", { en: "National", ja: "ナショナル", zh: "National" }],
+    ["오렌지", { en: "Orange", ja: "オレンジ", zh: "橙色" }],
+    ["유광", { en: "Gloss", ja: "艶あり", zh: "高光" }],
+    ["반광", { en: "Semi-gloss", ja: "半艶", zh: "半光" }],
+    ["무광", { en: "Matte", ja: "艶消し", zh: "哑光" }],
+    ["미광", { en: "Low-sheen", ja: "微艶", zh: "微光" }],
+    ["기와", { en: "Roof Tile", ja: "瓦", zh: "瓦" }]
+  ];
+
   var USE_BY_ID = { 1: "indoor", 2: "outdoor", 3: "both", 4: "both", 5: "both", 6: "both" };
   var USE_LABEL = {
     ko: { indoor: "실내", outdoor: "옥외", both: "실내·옥외" },
@@ -1547,6 +1563,14 @@
     },
     colorName: function (code) {
       return (COLOR_NAME[currentLang] || COLOR_NAME.ko)[code] || "";
+    },
+    paintName: function (name) {
+      if (currentLang === "ko") {
+        return name;
+      }
+      return PAINT_TERMS.reduce(function (text, term) {
+        return text.split(term[0]).join(term[1][currentLang] || term[0]);
+      }, name);
     },
     priceUse: function (id) {
       var lang = USE_LABEL[currentLang] || USE_LABEL.ko;

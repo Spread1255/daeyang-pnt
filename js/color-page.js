@@ -47,6 +47,10 @@
     return window.I18N ? window.I18N.colorName(code) : (window.COLOR_NAMES[code] || "");
   }
 
+  function paintName(name) {
+    return window.I18N ? window.I18N.paintName(name) : name;
+  }
+
   function render() {
     const series = seriesSel.value;
     const color = colorSel.value;
@@ -58,7 +62,7 @@
       if (color && item.color !== color) {
         return false;
       }
-      if (q && (item.code + " " + item.name).toLowerCase().indexOf(q) === -1) {
+      if (q && (item.code + " " + item.name + " " + paintName(item.name)).toLowerCase().indexOf(q) === -1) {
         return false;
       }
       return true;
@@ -71,7 +75,7 @@
       article.innerHTML =
         '<img class="swatch-color" src="' + item.swatch + '" alt="" loading="lazy" style="background-color:' + item.hex + '">' +
         '<p class="swatch-code">' + item.code + "</p>" +
-        '<p class="swatch-name">' + item.name + "</p>";
+        '<p class="swatch-name">' + paintName(item.name) + "</p>";
       grid.appendChild(article);
     });
   }
