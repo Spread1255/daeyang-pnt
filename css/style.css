@@ -2130,13 +2130,12 @@ th {
 }
 
 .section.product-index {
-  padding-top: clamp(2rem, 6vw, 4.5rem);
+  padding: 0;
   background: #fff;
 }
 
 .product-rows {
   display: grid;
-  gap: clamp(3rem, 8vw, 6rem);
 }
 
 .product-row {
@@ -2144,6 +2143,22 @@ th {
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: clamp(1.5rem, 6vw, 5.5rem);
+  padding: clamp(2.5rem, 7vw, 5.5rem) max(1.5rem, calc((100% - 68rem) / 2));
+  background-color: #fff;
+  background-size: cover;
+  background-position: center;
+}
+
+.product-row--interior {
+  background-image: url("../images/product-bg-interior.jpg");
+}
+
+.product-row--exterior {
+  background-image: url("../images/product-bg-exterior.jpg");
+}
+
+.product-row--pattern {
+  background-image: url("../images/product-bg-pattern.jpg");
 }
 
 .product-row-media {
@@ -2200,6 +2215,7 @@ th {
 
 .product-row-btn {
   display: inline-block;
+  background: #fff;
   padding: 0.85rem 1.6rem;
   border: 1px solid var(--line);
   border-radius: 0.2rem;
