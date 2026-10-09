@@ -63,37 +63,43 @@
     </section>
 
     <section class="section product-index">
-      <div class="product-cats">
-        <a class="product-cat product-cat--interior" href="/interior">
-          <span class="product-cat-media" aria-hidden="true"></span>
-          <span class="product-cat-copy">
-            <span class="product-cat-num">01</span>
-            <span class="eyebrow" data-i18n="products.interior.en">Interior</span>
+      <div class="product-rows">
+        <article class="product-row">
+          <a class="product-row-media" href="/interior" tabindex="-1" aria-hidden="true">
+            <img src="images/product-interior-switchgear.jpg" alt="">
+          </a>
+          <div class="product-row-copy">
+            <p class="eyebrow" data-i18n="products.interior.en">Interior</p>
             <h2 data-i18n="products.interior.h2">내부용</h2>
-            <p data-i18n="products.interior.p">실내 가전·기계·부품을 지키는 도막</p>
-            <span class="product-cat-more" data-i18n="products.more">제품 소개</span>
-          </span>
-        </a>
-        <a class="product-cat product-cat--exterior" href="/exterior">
-          <span class="product-cat-media" aria-hidden="true"></span>
-          <span class="product-cat-copy">
-            <span class="product-cat-num">02</span>
-            <span class="eyebrow" data-i18n="products.exterior.en">Exterior</span>
+            <p class="product-row-sub" data-i18n="products.interior.p">실내 가전·기계·부품을 지키는 도막</p>
+            <p class="product-row-body" data-i18n="products.interior.lede">실내 환경에 맞춘 내식·내화학 분체도료입니다. 가전, 가구, 기계 내부 부품에 사용합니다.</p>
+            <a class="product-row-btn" href="/interior" data-i18n="products.more">제품 소개</a>
+          </div>
+        </article>
+        <article class="product-row">
+          <a class="product-row-media" href="/exterior" tabindex="-1" aria-hidden="true">
+            <img src="images/app-building-fence.jpg" alt="" loading="lazy">
+          </a>
+          <div class="product-row-copy">
+            <p class="eyebrow" data-i18n="products.exterior.en">Exterior</p>
             <h2 data-i18n="products.exterior.h2">외부용</h2>
-            <p data-i18n="products.exterior.p">햇빛과 비에 버티는 옥외 전용</p>
-            <span class="product-cat-more" data-i18n="products.more">제품 소개</span>
-          </span>
-        </a>
-        <a class="product-cat product-cat--pattern" href="/pattern">
-          <span class="product-cat-media" aria-hidden="true"></span>
-          <span class="product-cat-copy">
-            <span class="product-cat-num">03</span>
-            <span class="eyebrow" data-i18n="products.pattern.en">Texture</span>
+            <p class="product-row-sub" data-i18n="products.exterior.p">햇빛과 비에 버티는 옥외 전용</p>
+            <p class="product-row-body" data-i18n="products.exterior.lede">건축 외장과 옥외 구조물에 맞춘 내후성 분체도료입니다.</p>
+            <a class="product-row-btn" href="/exterior" data-i18n="products.more">제품 소개</a>
+          </div>
+        </article>
+        <article class="product-row">
+          <a class="product-row-media" href="/pattern" tabindex="-1" aria-hidden="true">
+            <img src="images/app-industry-cabinet.jpg" alt="" loading="lazy">
+          </a>
+          <div class="product-row-copy">
+            <p class="eyebrow" data-i18n="products.pattern.en">Texture</p>
             <h2 data-i18n="products.pattern.h2">무늬</h2>
-            <p data-i18n="products.pattern.p">질감과 패턴으로 면을 살리는 마감</p>
-            <span class="product-cat-more" data-i18n="products.more">제품 소개</span>
-          </span>
-        </a>
+            <p class="product-row-sub" data-i18n="products.pattern.p">질감과 패턴으로 면을 살리는 마감</p>
+            <p class="product-row-body" data-i18n="products.pattern.lede">스크래치를 가리고 표면 표정을 만드는 특수 마감 시리즈입니다.</p>
+            <a class="product-row-btn" href="/pattern" data-i18n="products.more">제품 소개</a>
+          </div>
+        </article>
       </div>
     </section>
   </main>
@@ -104,6 +110,7 @@
   </footer>
   <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/products.js"></script>
   <script src="js/chatbot.js"></script>
 </body>
 </html>

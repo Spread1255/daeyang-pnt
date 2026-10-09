@@ -2130,119 +2130,128 @@ th {
 }
 
 .section.product-index {
-  padding-top: 1.5rem;
+  padding-top: clamp(2rem, 6vw, 4.5rem);
   background: #fff;
 }
 
-.product-cats {
+.product-rows {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  gap: clamp(3rem, 8vw, 6rem);
 }
 
-.product-cat {
-  position: relative;
-  min-height: 22rem;
-  border-radius: 1rem;
-  overflow: hidden;
-  text-decoration: none;
-  color: #f4efe6;
-  display: flex;
-  align-items: flex-end;
-  border: 1px solid var(--line);
-  isolation: isolate;
-}
-
-.product-cat-media {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  transform: scale(1.04);
-  transition: transform 0.55s ease;
-}
-
-.product-cat-media::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgb(12 14 22 / 0.18) 0%, rgb(12 14 22 / 0.55) 48%, rgb(12 14 22 / 0.88) 100%);
-}
-
-.product-cat--interior .product-cat-media {
-  background-image: url("../images/product-interior-switchgear.jpg");
-}
-
-.product-cat--exterior .product-cat-media {
-  background-image: url("../images/app-building-fence.jpg");
-}
-
-.product-cat--pattern .product-cat-media {
-  background-image: url("../images/app-industry-cabinet.jpg");
-}
-
-.product-cat-copy {
-  position: relative;
-  z-index: 1;
+.product-row {
   display: grid;
-  gap: 0.2rem;
-  padding: 1.4rem 1.35rem 1.25rem;
-  width: 100%;
-}
-
-.product-cat-copy .eyebrow {
-  margin: 0;
-}
-
-.product-cat-copy h2 {
-  margin: 0.1rem 0 0.15rem;
-  font-size: clamp(1.6rem, 3vw, 2.15rem);
-  letter-spacing: -0.03em;
-}
-
-.product-cat-copy p {
-  margin: 0;
-  color: rgb(244 239 230 / 0.85);
-  max-width: 22rem;
-}
-
-.product-cat-num {
-  position: absolute;
-  top: 1.1rem;
-  right: 1.2rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.16em;
-  color: rgb(244 239 230 / 0.72);
-}
-
-.product-cat-more {
-  margin-top: 0.85rem;
-  display: inline-flex;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.88rem;
+  gap: clamp(1.5rem, 6vw, 5.5rem);
+}
+
+.product-row-media {
+  display: block;
+  border-radius: 0.9rem;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  background: var(--panel);
+}
+
+.product-row-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.product-row-media:hover img,
+.product-row-media:focus-visible img {
+  transform: scale(1.05);
+}
+
+.product-row:nth-child(even) .product-row-media {
+  order: 2;
+}
+
+.product-row-copy {
+  min-width: 0;
+}
+
+.product-row-copy .eyebrow {
+  margin: 0 0 0.5rem;
+}
+
+.product-row-copy h2 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.product-row-sub {
+  margin: 0 0 1rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: var(--accent-dark);
+  color: var(--muted);
 }
 
-.product-cat-more::after {
-  content: "→";
-  transition: transform 0.2s ease;
+.product-row-body {
+  margin: 0 0 1.75rem;
+  max-width: 30rem;
 }
 
-.product-cat:hover .product-cat-media,
-.product-cat:focus-visible .product-cat-media {
-  transform: scale(1.1);
+.product-row-btn {
+  display: inline-block;
+  padding: 0.85rem 1.6rem;
+  border: 1px solid var(--line);
+  border-radius: 0.2rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.product-cat:hover .product-cat-more::after,
-.product-cat:focus-visible .product-cat-more::after {
-  transform: translateX(0.25rem);
+.product-row-btn:hover,
+.product-row-btn:focus-visible {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
 }
 
-.product-cat:focus-visible {
+.product-row-media:focus-visible,
+.product-row-btn:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
+}
+
+/* 스크롤해서 내려오면 한 줄씩 나타난다 (js/products.js가 클래스를 붙인다). */
+.product-rows.is-animated .product-row-media,
+.product-rows.is-animated .product-row-copy {
+  opacity: 0;
+  transform: translateY(2.5rem);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.product-rows.is-animated .product-row-copy {
+  transition-delay: 0.15s;
+}
+
+.product-rows.is-animated .product-row.is-visible .product-row-media,
+.product-rows.is-animated .product-row.is-visible .product-row-copy {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 700px) {
+  .product-row {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .product-row:nth-child(even) .product-row-media {
+    order: 0;
+  }
+
+  .product-row-media {
+    aspect-ratio: 4 / 3;
+  }
 }
 
 .crumb {
@@ -2853,27 +2862,9 @@ th {
     grid-template-columns: 1fr;
   }
 
-  .product-cats {
-    gap: 0.75rem;
-  }
-
-  .product-cat {
-    min-height: 16.5rem;
-  }
-
   .history > li {
     grid-template-columns: 1fr;
     gap: 0.35rem;
-  }
-}
-
-@media (max-width: 560px) {
-  .product-cats {
-    grid-template-columns: 1fr;
-  }
-
-  .product-cat {
-    min-height: 15rem;
   }
 }
 
