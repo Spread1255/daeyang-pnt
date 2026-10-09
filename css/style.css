@@ -2285,7 +2285,7 @@ th {
 
 .product-switch {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.85rem;
   padding: 1.5rem max(1.5rem, calc((100% - 68rem) / 2));
   background: #fff;
@@ -2326,7 +2326,11 @@ th {
 
 @media (max-width: 560px) {
   .product-switch {
-    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .product-switch a {
+    padding: 0.75rem 0.4rem;
   }
 }
 
