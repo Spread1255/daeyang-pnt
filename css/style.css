@@ -1487,6 +1487,66 @@ th {
   font-size: 0.9rem;
 }
 
+.site-footer .footer-links {
+  margin: 0.6rem 0 0;
+}
+
+.site-footer .footer-links a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.policy h2 {
+  margin: 2.2rem 0 0.6rem;
+  font-size: 1.15rem;
+}
+
+.policy ul {
+  max-width: 42rem;
+  padding-left: 1.2rem;
+  line-height: 1.7;
+}
+
+.policy-lang-note:empty {
+  display: none;
+}
+
+.policy-lang-note {
+  padding: 0.7rem 0.9rem;
+  border-left: 3px solid var(--accent);
+  background: var(--panel);
+}
+
+.policy-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.6rem 0 1rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.policy-table th,
+.policy-table td {
+  border: 1px solid var(--line);
+  padding: 0.5rem 0.65rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.policy-table th {
+  background: var(--panel);
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .policy-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
 .site-footer .footer-label {
   font-weight: 700;
   margin-right: 0.35em;
@@ -3364,4 +3424,13 @@ a.lab-frame:hover img {
   border-top: 1px dashed var(--line);
   font-weight: 700;
   text-align: center;
+}
+
+.inquiry .inquiry-policy-link {
+  justify-self: start;
+  font-size: 0.82rem;
+  color: inherit;
+  opacity: 0.8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
