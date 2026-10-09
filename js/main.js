@@ -201,6 +201,14 @@
     const button = form.querySelector('[type="submit"]');
     const data = Object.fromEntries(new FormData(form).entries());
     data.lang = document.documentElement.lang;
+    // 숨은 칸이 채워져 있으면 자동 등록 프로그램이다: 저장하지 않고 접수된 것처럼만 보인다.
+    if (data.website) {
+      form.reset();
+      status.textContent = t("contact.status.submitted");
+      status.classList.add("is-ok");
+      return;
+    }
+    delete data.website;
 
     status.classList.remove("is-ok", "is-error");
     status.textContent = t("contact.status.sending");

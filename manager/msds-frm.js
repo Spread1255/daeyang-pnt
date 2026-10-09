@@ -355,6 +355,8 @@
     return new Promise(function (resolve) {
       var frame = document.createElement("iframe");
       frame.setAttribute("aria-hidden", "true");
+      // 파일 속 HTML이 스크립트를 실행하지 못하게 막는다 (그리기용으로 내용만 읽는다).
+      frame.setAttribute("sandbox", "allow-same-origin");
       frame.style.cssText = "position:fixed;left:-10000px;top:0;width:" + Math.ceil(CONTENT_W) + "px;height:1200px;border:0;visibility:hidden;";
       frame.onload = function () {
         var doc = frame.contentDocument;
