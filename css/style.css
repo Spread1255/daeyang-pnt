@@ -2136,6 +2136,7 @@ th {
 
 .product-rows {
   display: grid;
+  background: #fff url("../images/product-bg-powder.jpg") center / 100% 100% no-repeat;
 }
 
 .product-row {
@@ -2144,21 +2145,6 @@ th {
   align-items: center;
   gap: clamp(1.5rem, 6vw, 5.5rem);
   padding: clamp(2.5rem, 7vw, 5.5rem) max(1.5rem, calc((100% - 68rem) / 2));
-  background-color: #fff;
-  background-size: cover;
-  background-position: center;
-}
-
-.product-row--interior {
-  background-image: url("../images/product-bg-interior.jpg");
-}
-
-.product-row--exterior {
-  background-image: url("../images/product-bg-exterior.jpg");
-}
-
-.product-row--pattern {
-  background-image: url("../images/product-bg-pattern.jpg");
 }
 
 .product-row-media {
@@ -2256,6 +2242,10 @@ th {
 }
 
 @media (max-width: 700px) {
+  .product-rows {
+    background-image: linear-gradient(rgb(255 255 255 / 0.6), rgb(255 255 255 / 0.6)), url("../images/product-bg-powder.jpg");
+  }
+
   .product-row {
     grid-template-columns: 1fr;
     gap: 1.25rem;
