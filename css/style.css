@@ -2136,7 +2136,7 @@ th {
 
 .product-cats {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
 }
 
@@ -2179,10 +2179,6 @@ th {
 
 .product-cat--pattern .product-cat-media {
   background-image: url("../images/app-industry-cabinet.jpg");
-}
-
-.product-cat--functional .product-cat-media {
-  background-image: url("../images/app-industry-pipe.jpg");
 }
 
 .product-cat-copy {
@@ -2620,7 +2616,7 @@ th {
 
 .home-window-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.7rem;
   min-width: 0;
 }

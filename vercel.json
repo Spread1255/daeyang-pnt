@@ -47,7 +47,7 @@
     },
     {
       "source": "/product-functional.html",
-      "destination": "/functional",
+      "destination": "/products",
       "permanent": true
     },
     {
@@ -128,10 +128,6 @@
     {
       "source": "/pattern",
       "destination": "/product-pattern.html"
-    },
-    {
-      "source": "/functional",
-      "destination": "/product-functional.html"
     },
     {
       "source": "/applications",
