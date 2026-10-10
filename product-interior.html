@@ -69,24 +69,36 @@
       <a href="/pattern" data-i18n="products.pattern.h2">무늬</a>
     </nav>
 
-    <section class="section">
-      <article class="product-spotlight">
-        <div class="product-spotlight-media">
-          <img src="images/product-interior-shelf.jpg" data-i18n-alt="products.interior.imgAlt" alt="내부용 분체도장이 적용된 가전·가구">
-          <img src="images/app-appliance-office.jpg" alt="">
-        </div>
-        <div class="product-spotlight-copy card">
-          <p class="eyebrow">DY#1</p>
-          <h2 data-i18n="products.interior.item1.h3">DY#1 내장형</h2>
-          <p data-i18n="products.interior.body">용제를 쓰지 않는 에폭시·하이브리드 계열로, 실내 하지의 녹과 화학 오염을 막습니다. 광택과 색상은 샘플 매칭이 가능합니다.</p>
-          <ul class="spec-list">
-            <li data-i18n="products.interior.spec1">적용: 실내 금속 하지</li>
-            <li data-i18n="products.interior.spec2">특성: 내식 · 내화학 · 내스크래치</li>
-            <li data-i18n="products.interior.spec3">수지: 에폭시 / 하이브리드</li>
-          </ul>
-          <p data-i18n="products.interior.item1.p">가전 패널, 사무가구, 기계 커버, 내부 브래킷용 기본 시리즈입니다.</p>
-        </div>
-      </article>
+    <section class="section product-index">
+      <div class="product-rows">
+        <article class="product-row">
+          <div class="product-row-media">
+            <img src="images/product-interior-shelf.jpg" data-i18n-alt="products.interior.imgAlt" alt="내부용 분체도장이 적용된 가전·가구">
+          </div>
+          <div class="product-row-copy">
+            <p class="eyebrow">DY#1</p>
+            <h2 data-i18n="products.interior.item1.h3">DY#1 내장형</h2>
+            <p class="product-row-body" data-i18n="products.interior.body">용제를 쓰지 않는 에폭시·하이브리드 계열로, 실내 하지의 녹과 화학 오염을 막습니다. 광택과 색상은 샘플 매칭이 가능합니다.</p>
+            <ul class="spec-list">
+              <li data-i18n="products.interior.spec1">적용: 실내 금속 하지</li>
+              <li data-i18n="products.interior.spec2">특성: 내식 · 내화학 · 내스크래치</li>
+              <li data-i18n="products.interior.spec3">수지: 에폭시 / 하이브리드</li>
+            </ul>
+            <a class="product-row-btn" href="/colors?q=DY%231" data-i18n="products.viewColors">색상 보기</a>
+          </div>
+        </article>
+        <article class="product-row">
+          <div class="product-row-media">
+            <img src="images/app-appliance-office.jpg" alt="" loading="lazy">
+          </div>
+          <div class="product-row-copy">
+            <p class="eyebrow">Applications</p>
+            <h2 data-i18n="nav.applications">적용 분야</h2>
+            <p class="product-row-body" data-i18n="products.interior.item1.p">가전 패널, 사무가구, 기계 커버, 내부 브래킷용 기본 시리즈입니다.</p>
+            <a class="product-row-btn" href="/applications" data-i18n="products.viewApps">적용 분야 보기</a>
+          </div>
+        </article>
+      </div>
     </section>
   </main>
 
@@ -97,6 +109,7 @@
   </footer>
   <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/products.js"></script>
   <script src="js/chatbot.js"></script>
 </body>
 </html>
