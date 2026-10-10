@@ -62,42 +62,88 @@
       <p class="lede" data-i18n="products.lede">내부용, 외부용, 무늬 — 필요한 분체도료를 고르세요.</p>
     </section>
 
+    <nav class="product-switch" aria-label="Product categories">
+      <a href="#dy1" data-i18n="products.interior.h2">내부용</a>
+      <a href="#dy2" data-i18n="products.exterior.h2">외부용</a>
+      <a href="#dy3" data-i18n="products.pattern.h2">무늬</a>
+    </nav>
+
     <section class="section product-index">
       <div class="product-rows">
-        <article class="product-row">
-          <a class="product-row-media" href="/interior" tabindex="-1" aria-hidden="true">
-            <img src="images/product-interior-rack.jpg" alt="">
-          </a>
+        <article class="product-row" id="dy1">
+          <div class="product-row-media">
+            <img src="images/product-interior-shelf.jpg" data-i18n-alt="products.interior.imgAlt" alt="내부용 분체도장이 적용된 가전·가구">
+          </div>
           <div class="product-row-copy">
-            <p class="eyebrow" data-i18n="products.interior.en">Interior</p>
-            <h2 data-i18n="products.interior.h2">내부용</h2>
-            <p class="product-row-sub" data-i18n="products.interior.p">실내 가전·기계·부품을 지키는 도막</p>
-            <p class="product-row-body" data-i18n="products.interior.lede">실내 환경에 맞춘 내식·내화학 분체도료입니다. 가전, 가구, 기계 내부 부품에 사용합니다.</p>
-            <a class="product-row-btn" href="/interior" data-i18n="products.more">제품 소개</a>
+            <p class="eyebrow">DY#1</p>
+            <h2 data-i18n="products.interior.item1.h3">DY#1 내장형</h2>
+            <p class="product-row-body" data-i18n="products.interior.body">용제를 쓰지 않는 에폭시·하이브리드 계열로, 실내 하지의 녹과 화학 오염을 막습니다. 광택과 색상은 샘플 매칭이 가능합니다.</p>
+            <ul class="spec-list">
+              <li data-i18n="products.interior.spec1">적용: 실내 금속 하지</li>
+              <li data-i18n="products.interior.spec2">특성: 내식 · 내화학 · 내스크래치</li>
+              <li data-i18n="products.interior.spec3">수지: 에폭시 / 하이브리드</li>
+            </ul>
+            <a class="product-row-btn" href="/colors?q=DY%231" data-i18n="products.viewColors">색상 보기</a>
           </div>
         </article>
-        <article class="product-row">
-          <a class="product-row-media" href="/exterior" tabindex="-1" aria-hidden="true">
-            <img src="images/app-building-fence.jpg" alt="" loading="lazy">
-          </a>
+        <article class="product-row" id="dy2">
+          <div class="product-row-media">
+            <img src="images/app-building-fence.jpg" data-i18n-alt="products.exterior.imgAlt" alt="외부용 분체도장이 적용된 펜스와 난간" loading="lazy">
+          </div>
           <div class="product-row-copy">
-            <p class="eyebrow" data-i18n="products.exterior.en">Exterior</p>
-            <h2 data-i18n="products.exterior.h2">외부용</h2>
-            <p class="product-row-sub" data-i18n="products.exterior.p">햇빛과 비에 버티는 옥외 전용</p>
-            <p class="product-row-body" data-i18n="products.exterior.lede">건축 외장과 옥외 구조물에 맞춘 내후성 분체도료입니다.</p>
-            <a class="product-row-btn" href="/exterior" data-i18n="products.more">제품 소개</a>
+            <p class="eyebrow">DY#2</p>
+            <h2 data-i18n="products.exterior.item1.h3">DY#2 외장형</h2>
+            <p class="product-row-body" data-i18n="products.exterior.body">폴리에스터 계열로 자외선·우천에 의한 색차와 초킹을 관리합니다. 창호, 펜스, 난간, 외장 패널에 맞습니다.</p>
+            <ul class="spec-list">
+              <li data-i18n="products.exterior.spec1">적용: 옥외 노출 금속</li>
+              <li data-i18n="products.exterior.spec2">특성: 내후 · 내UV · 색상 유지</li>
+              <li data-i18n="products.exterior.spec3">수지: 폴리에스터</li>
+            </ul>
+            <a class="product-row-btn" href="/colors?q=DY%232" data-i18n="products.viewColors">색상 보기</a>
           </div>
         </article>
-        <article class="product-row">
-          <a class="product-row-media" href="/pattern" tabindex="-1" aria-hidden="true">
-            <img src="images/app-industry-cabinet.jpg" alt="" loading="lazy">
-          </a>
+        <article class="product-row" id="dy3">
+          <div class="product-row-media">
+            <img src="images/product-pattern-dy3.jpg" data-i18n-alt="products.pattern.imgAlt" alt="무늬 분체도장 질감 마감" loading="lazy">
+          </div>
           <div class="product-row-copy">
-            <p class="eyebrow" data-i18n="products.pattern.en">Texture</p>
-            <h2 data-i18n="products.pattern.h2">무늬</h2>
-            <p class="product-row-sub" data-i18n="products.pattern.p">질감과 패턴으로 면을 살리는 마감</p>
-            <p class="product-row-body" data-i18n="products.pattern.lede">스크래치를 가리고 표면 표정을 만드는 특수 마감 시리즈입니다.</p>
-            <a class="product-row-btn" href="/pattern" data-i18n="products.more">제품 소개</a>
+            <p class="eyebrow">DY#3</p>
+            <h2 data-i18n="products.pattern.item1.h3">DY#3 스트럭쳐</h2>
+            <p class="product-row-body" data-i18n="products.pattern.item1.p">링클·구조 질감. 설비함, 가구, 산업 패널의 지문과 스크래치를 가립니다.</p>
+            <a class="product-row-btn" href="/colors?q=DY%233" data-i18n="products.viewColors">색상 보기</a>
+          </div>
+        </article>
+        <article class="product-row" id="dy4">
+          <div class="product-row-media">
+            <img src="images/product-pattern-dy4.jpg" alt="" loading="lazy">
+          </div>
+          <div class="product-row-copy">
+            <p class="eyebrow">DY#4</p>
+            <h2 data-i18n="products.pattern.item2.h3">DY#4 텍스쳐</h2>
+            <p class="product-row-body" data-i18n="products.pattern.item2.p">샌드·미세 요철. 무광에 가까운 질감 마감이 필요할 때 씁니다.</p>
+            <a class="product-row-btn" href="/colors?q=DY%234" data-i18n="products.viewColors">색상 보기</a>
+          </div>
+        </article>
+        <article class="product-row" id="dy5">
+          <div class="product-row-media">
+            <img src="images/app-auto-wheel.jpg" alt="" loading="lazy">
+          </div>
+          <div class="product-row-copy">
+            <p class="eyebrow">DY#5</p>
+            <h2 data-i18n="products.pattern.item3.h3">DY#5 메탈릭</h2>
+            <p class="product-row-body" data-i18n="products.pattern.item3.p">금속 입자 외관. 실버·메탈 톤의 입자 분포와 광택을 지정할 수 있습니다.</p>
+            <a class="product-row-btn" href="/colors?q=DY%235" data-i18n="products.viewColors">색상 보기</a>
+          </div>
+        </article>
+        <article class="product-row" id="dy6">
+          <div class="product-row-media">
+            <img src="images/product-pattern-dy6.jpg" alt="" loading="lazy">
+          </div>
+          <div class="product-row-copy">
+            <p class="eyebrow">DY#6</p>
+            <h2 data-i18n="products.pattern.item4.h3">DY#6 함마톤</h2>
+            <p class="product-row-body" data-i18n="products.pattern.item4.p">해머톤(타격 무늬) 특수 마감. 산업 설비와 공구함 외관에 자주 쓰입니다.</p>
+            <a class="product-row-btn" href="/colors?q=DY%236" data-i18n="products.viewColors">색상 보기</a>
           </div>
         </article>
       </div>

@@ -32,18 +32,33 @@
     },
     {
       "source": "/product-interior.html",
-      "destination": "/interior",
+      "destination": "/products#dy1",
       "permanent": true
     },
     {
       "source": "/product-exterior.html",
-      "destination": "/exterior",
+      "destination": "/products#dy2",
       "permanent": true
     },
     {
       "source": "/product-pattern.html",
-      "destination": "/pattern",
+      "destination": "/products#dy3",
       "permanent": true
+    },
+    {
+      "source": "/interior",
+      "destination": "/products#dy1",
+      "permanent": false
+    },
+    {
+      "source": "/exterior",
+      "destination": "/products#dy2",
+      "permanent": false
+    },
+    {
+      "source": "/pattern",
+      "destination": "/products#dy3",
+      "permanent": false
     },
     {
       "source": "/product-functional.html",
@@ -121,18 +136,6 @@
     {
       "source": "/products",
       "destination": "/products.html"
-    },
-    {
-      "source": "/interior",
-      "destination": "/product-interior.html"
-    },
-    {
-      "source": "/exterior",
-      "destination": "/product-exterior.html"
-    },
-    {
-      "source": "/pattern",
-      "destination": "/product-pattern.html"
     },
     {
       "source": "/applications",

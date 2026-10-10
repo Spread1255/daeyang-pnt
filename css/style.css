@@ -2238,19 +2238,12 @@ th {
 }
 
 .product-row {
+  scroll-margin-top: var(--header-h);
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: clamp(1.5rem, 6vw, 5.5rem);
   padding: clamp(2.5rem, 7vw, 5.5rem) max(1.5rem, calc((100% - 68rem) / 2));
-}
-
-.product-rows-lead {
-  margin: 0;
-  padding: clamp(2rem, 5vw, 3.5rem) max(1.5rem, calc((100% - 68rem) / 2)) 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--muted);
 }
 
 .product-row-media {
@@ -2280,6 +2273,9 @@ th {
 
 .product-row-copy {
   min-width: 0;
+  background: rgb(255 255 255 / 0.8);
+  box-shadow: 0 0 2.5rem 2.5rem rgb(255 255 255 / 0.8);
+  border-radius: 1rem;
 }
 
 .product-row-copy .eyebrow {
