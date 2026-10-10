@@ -2881,10 +2881,8 @@ th {
     display: none;
   }
 
-  .nav-mega-col--about a:first-child,
-  .nav-mega-col--support a:first-child,
-  .nav-mega-col--products a:first-child,
-  .nav-mega-col--tech a:first-child {
+  /* 회사소개만 상단 메뉴와 이름·주소가 같아 첫 항목을 숨긴다. */
+  .nav-mega-col--about a:first-child {
     display: none;
   }
 
