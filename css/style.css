@@ -2235,6 +2235,7 @@ th {
 .product-rows {
   display: grid;
   background: #fff;
+  overflow: hidden;
 }
 
 .product-row {
@@ -2244,12 +2245,33 @@ th {
   align-items: center;
   gap: clamp(1.5rem, 6vw, 5.5rem);
   padding: clamp(2.5rem, 7vw, 5.5rem) max(1.5rem, calc((100% - 68rem) / 2));
-  background: url("../images/product-bg-edge-left.jpg") left center / auto 100% no-repeat;
+  position: relative;
 }
 
-.product-row:nth-of-type(even) {
+/* 가장자리 파우더. 줄보다 크게 깔아 위아래 줄로 자연스럽게 넘친다. */
+.product-row::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: min(185%, 1254px);
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  background: url("../images/product-bg-edge-left.jpg") center / contain no-repeat;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  z-index: 0;
+}
+
+.product-row:nth-of-type(even)::before {
+  left: auto;
+  right: 0;
   background-image: url("../images/product-bg-edge-right.jpg");
-  background-position: right center;
+}
+
+.product-row > * {
+  position: relative;
+  z-index: 1;
 }
 
 .product-row-media {
@@ -2358,12 +2380,13 @@ th {
   .product-row {
     grid-template-columns: 1fr;
     gap: 1.25rem;
-    background-size: auto 60%;
-    background-position: left top;
   }
 
-  .product-row:nth-of-type(even) {
-    background-position: right top;
+  .product-row::before {
+    top: 0;
+    height: auto;
+    width: 130vw;
+    transform: none;
   }
 
   .product-row:nth-of-type(even) .product-row-media {
