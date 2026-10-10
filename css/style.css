@@ -2234,7 +2234,7 @@ th {
 
 .product-rows {
   display: grid;
-  background: #fff url("../images/product-bg-powder.jpg") center / 100% 100% no-repeat;
+  background: #fff;
 }
 
 .product-row {
@@ -2244,6 +2244,12 @@ th {
   align-items: center;
   gap: clamp(1.5rem, 6vw, 5.5rem);
   padding: clamp(2.5rem, 7vw, 5.5rem) max(1.5rem, calc((100% - 68rem) / 2));
+  background: url("../images/product-bg-edge-left.jpg") left center / auto 100% no-repeat;
+}
+
+.product-row:nth-of-type(even) {
+  background-image: url("../images/product-bg-edge-right.jpg");
+  background-position: right center;
 }
 
 .product-row-media {
@@ -2349,13 +2355,15 @@ th {
 }
 
 @media (max-width: 700px) {
-  .product-rows {
-    background-image: linear-gradient(rgb(255 255 255 / 0.6), rgb(255 255 255 / 0.6)), url("../images/product-bg-powder.jpg");
-  }
-
   .product-row {
     grid-template-columns: 1fr;
     gap: 1.25rem;
+    background-size: auto 60%;
+    background-position: left top;
+  }
+
+  .product-row:nth-of-type(even) {
+    background-position: right top;
   }
 
   .product-row:nth-of-type(even) .product-row-media {
