@@ -2390,57 +2390,6 @@ th {
   padding-bottom: 1.5rem;
 }
 
-.product-switch {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.85rem;
-  padding: 1.5rem max(1.5rem, calc((100% - 68rem) / 2));
-  background: #fff;
-}
-
-.product-switch + .section {
-  background: #fff;
-}
-
-.product-switch a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 3.5rem;
-  padding: 0.75rem 1rem;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 0.75rem;
-  text-decoration: none;
-  text-align: center;
-  color: var(--ink);
-  font-weight: 700;
-  font-size: 0.98rem;
-  transition: border-color 0.15s ease, background 0.15s ease;
-}
-
-.product-switch a:hover,
-.product-switch a:focus-visible {
-  border-color: var(--accent);
-  background: rgb(224 122 40 / 0.08);
-}
-
-.product-switch a[aria-current="page"] {
-  border-color: var(--accent);
-  background: rgb(224 122 40 / 0.1);
-  color: var(--accent-dark);
-}
-
-@media (max-width: 560px) {
-  .product-switch {
-    gap: 0.5rem;
-  }
-
-  .product-switch a {
-    padding: 0.75rem 0.4rem;
-  }
-}
-
 .spec-list {
   margin: 0.85rem 0;
   padding: 0;
