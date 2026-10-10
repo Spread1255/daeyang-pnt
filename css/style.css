@@ -2235,7 +2235,8 @@ th {
 .product-rows {
   display: grid;
   background: #fff;
-  overflow: hidden;
+  /* hidden이면 #dy1 같은 위치 이동 때 이 상자 자체가 스크롤돼 위가 잘린다. */
+  overflow: clip;
 }
 
 .product-row {
