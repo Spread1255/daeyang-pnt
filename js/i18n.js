@@ -69,7 +69,7 @@
       "meta.resources.title": "인증서/확인서 | 대양피앤티㈜",
 
       "home.hero.title": "금속을 지키는 도막,<br>현장에서 통하는 분체도료",
-      "home.hero.lede": "친환경 분체도료로 내식(耐蝕)·내후(耐候)·내화학성을 맞춥니다. 표준 색상부터 라인 맞춤 색상까지 생산합니다.",
+      "home.hero.lede": "친환경 분체도료로 내식(耐蝕)·내후(耐候)·내화학성을 맞춥니다.<br>표준 색상부터 라인 맞춤 색상까지 생산합니다.",
       "home.hero.btn1": "제품 보기",
       "home.hero.btn2": "문의하기",
       "home.hero.notice": "준비중 입니다, 문의를 이용해주세요.",
@@ -423,7 +423,7 @@
       "meta.resources.title": "Certificates/Confirmations | DAEYANG P&T",
 
       "home.hero.title": "Coatings that protect metal,<br>powder coatings that work on site",
-      "home.hero.lede": "Eco-friendly powder coatings tailored for corrosion, weather, and chemical resistance. We produce everything from standard colors to line-matched custom colors.",
+      "home.hero.lede": "Eco-friendly powder coatings tailored for corrosion, weather, and chemical resistance.<br>We produce everything from standard colors to line-matched custom colors.",
       "home.hero.btn1": "View Products",
       "home.hero.btn2": "Contact Us",
       "home.hero.notice": "This site is being prepared. Please use the inquiry form.",
@@ -777,7 +777,7 @@
       "meta.resources.title": "認証書/確認書 | DAEYANG P&T",
 
       "home.hero.title": "金属を守る塗膜、<br>現場で通用する粉体塗料",
-      "home.hero.lede": "環境に優しい粉体塗料で耐食性・耐候性・耐薬品性を調整します。標準色からライン仕様のカスタムカラーまで生産します。",
+      "home.hero.lede": "環境に優しい粉体塗料で耐食性・耐候性・耐薬品性を調整します。<br>標準色からライン仕様のカスタムカラーまで生産します。",
       "home.hero.btn1": "製品を見る",
       "home.hero.btn2": "お問い合わせ",
       "home.hero.notice": "ただいま準備中です。お問い合わせをご利用ください。",
@@ -1131,7 +1131,7 @@
       "meta.resources.title": "认证证书/确认书 | DAEYANG P&T",
 
       "home.hero.title": "守护金属的涂层，<br>现场适用的粉末涂料",
-      "home.hero.lede": "采用环保粉末涂料，满足耐蚀、耐候、耐化学性需求。从标准色到产线定制颜色均可生产。",
+      "home.hero.lede": "采用环保粉末涂料，满足耐蚀、耐候、耐化学性需求。<br>从标准色到产线定制颜色均可生产。",
       "home.hero.btn1": "查看产品",
       "home.hero.btn2": "咨询",
       "home.hero.notice": "网站正在准备中，请通过咨询表单联系我们。",
