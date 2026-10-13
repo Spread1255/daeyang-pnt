@@ -1,0 +1,304 @@
+Daeyang P&T Co., Ltd.
+- Filtering facepiece dust mask or air-purifying dust mask (high-efficiency particulate filter), or powered fan dust mask (filter for dust, mist and fume)
+- Filtering facepiece dust mask or air-purifying dust mask (high-efficiency particulate filter), or powered fan dust mask (filter for dust, mist and fume)
+1
+Polymer of 1,3-benzenedicarboxylic acid with 1,4-benzenedicarboxylic acid, 2,2-dimethyl-1,3-propanediol, 1,2-ethanediol and hexanedioic acid
+Repeated exposure over 10 years or more causes chronic bronchitis, impaired lung function, pneumoconiosis, etc.
+2 (only for powder containing 1 % or more of particles with aerodynamic diameter of 10 μm or less)
+2,2'-((3,3'-Dichloro(1,1'-biphenyl)-4,4'-diyl)bis(azo))bis(N-
+2-Propenoic acid, butyl ester, homopolymer (2-PROPENOIC ACID, BUTYL ESTER,
+2-Propenoic acid, polymer with ethene (2-PROPENOIC ACID, POLYMER WITH ETHENE);
+Where two or more designated wastes are mixed and difficult to separate, they may be reduced and stabilized by incineration or a similar method
+3,9-Bis(2,4-bis(1,1-dimethylethyl)phenoxy)-2,4,8,10-tetraoxa-3,9-diphosphaspiro[5.5]undecane
+ACGIH
+C.I. Pigment Yellow 83
+EC50 29.401 ㎎/ℓ 96 hr (estimated)
+EU classification (safety phrases)
+EU classification (risk phrases)
+EU classification (harmonised classification)
+H302 Harmful if swallowed
+H315 Causes skin irritation
+H351 Suspected of causing cancer
+Prepared based on KOSHA, NITE, ESIS, NLM, SIDS, IPCS, etc.
+LC50 24000 ㎎/ℓ 48 hr (estimated)
+NITE classification 2
+P201 Obtain special instructions before use.
+P202 Do not handle until all safety precautions have been read and understood.
+P264 Wash hands thoroughly after handling.
+P270 Do not eat, drink or smoke when using this product.
+P280 Wear protective gloves/protective clothing/eye protection/face protection.
+P301+P312 IF SWALLOWED: Call a POISON CENTER/doctor if you feel unwell.
+P302+P352 IF ON SKIN: Wash with plenty of water.
+P308+P313 IF exposed or concerned: Get medical advice/attention.
+P321 Specific treatment (see on this label).
+P330 Rinse mouth.
+P332+P313 If skin irritation occurs: Get medical advice/attention.
+P362+P364 Take off contaminated clothing and wash it before reuse.
+P405 Store locked up.
+P501 Dispose of contents/container in accordance with waste regulations.
+TWA - 10 mg/m3 (Carcinogen category 2)
+TWA - 10 mg/m3 (Limestone)
+TWA - 10 mg/m3 (Aluminium metal dust)
+TWA - 3.5 mg/m3 (Carcinogen category 2, inhalable)
+TWA - 5 ㎎/㎥ (respirable)
+No UN transport classification information
+In vitro chromosomal aberration test in mammalian cells: positive (without metabolic activation), OECD TG 473
+log Kow -3.82 (estimated)
+log Kow 1.84 (estimated)
+Rabbit, no effect, STANDARD DRAIZE TEST, Not Reported
+A. Information on likely routes of exposure
+A. Eye contact
+A. Regulations under the Occupational Safety and Health Act
+A. Ecotoxicity
+A. Precautions for safe handling
+A. Appearance
+A. UN number
+A. Hazard classification
+A. Personal precautions and protective equipment
+A. Sources of data
+A. Suitable (unsuitable) extinguishing media
+A. Product name
+A. Disposal methods
+A. Occupational exposure limits, biological exposure limits, etc.
+A. Chemical stability and possibility of hazardous reactions
+Containers may explode when heated
+Crustaceans
+Open the lid carefully before opening.
+Number of revisions
+O. n-Octanol/water partition coefficient (Kow)
+Warning
+Oral
+39-17, Aegibong-ro 774beon-gil, Haseong-myeon, Gimpo-si, Gyeonggi-do, Korea
+In case of minor skin contact, prevent spreading of contamination
+Dermal
+May decompose at high temperature to produce toxic gases
+Ministry of Employment and Labor notice
+Use process enclosure, local exhaust ventilation or other engineering controls to keep airborne levels below exposure limits.
+Not sensitising, Guinea pig, Guinea Pig Maximisation Test (GPMT), OECD TG 406
+Hazardous substance subject to control
+Composition / information on ingredients
+Rescuers should wear appropriate protective equipment.
+Korea
+Domestic regulations
+Foreign regulations
+Stable under recommended storage and handling conditions
+Other information
+Pictograms
+Acute toxicity (oral) : Category 4
+Acute toxicity
+Guinea pig sensitisation test: not sensitising
+Guinea pig skin sensitisation test (OECD TG 406, GLP): not sensitising
+Guinea pig skin sensitisation test: no skin sensitisation, OECD TG 403
+Other domestic regulations
+Other hazardous effects
+Get emergency medical attention
+Emergency phone number
+B. Information on health hazards
+B. Odour
+B. Conditions for safe storage
+B. Label elements, including precautionary statements
+B. Persistence and degradability
+B. Appropriate engineering controls
+B. Proper shipping name
+B. Recommended use of the product and restrictions on use
+B. Date of first issue
+B. Precautions for disposal
+B. Skin contact
+B. Regulations under the Chemical Substances Control Act
+B. Specific hazards arising from the chemical
+B. Environmental precautions
+P. Auto-ignition temperature
+Substance with occupational exposure limit
+At concentrations below 100000 mg/m3, wear a self-contained breathing apparatus (SCBA) or pressure-demand SCBA with appropriate filter
+At concentrations below 10000 mg/m3, wear a full-face or helmet/hood type pressure-demand supplied-air respirator with appropriate filter
+At concentrations below 100 mg/m3, wear a half-mask respirator with an appropriate type of filter
+At concentrations below 250 mg/m3, wear a loose-fitting hood/helmet powered air-purifying respirator or continuous-flow dust mask with an appropriate type of filter
+At concentrations below 500 mg/m3, wear a full-face or powered half-mask, or supplied-air continuous-flow/pressure-demand half-mask respirator with appropriate filter
+IF exposed or concerned: Get medical advice/attention.
+Wear respiratory protection certified by the Korea Occupational Safety and Health Agency suitable for the physicochemical properties of the particulates to which you are exposed
+Exposure controls / personal protection
+Bioaccumulation
+Accidental release measures
+Causes eye irritation
+C. Personal protective equipment
+C. Number of revisions and date of last revision
+C. Supplier information (for imports, domestic supplier available for emergency contact)
+C. Odour threshold
+C. Bioaccumulative potential
+C. Transport hazard class
+C. Methods and materials for containment and cleaning up
+C. Special protective equipment and precautions for firefighters
+C. Regulations under the Act on Registration and Evaluation of Chemicals
+C. Inhalation
+Short-term exposure causes irritation, nausea, vomiting, headache and narcosis
+Short-term exposure causes irritation
+No information on serious adverse effects of short-term exposure
+Short- and long-term exposure causes irritation
+Response
+Q. Decomposition temperature
+Toxicological information
+Keep unnecessary and unprotected personnel from entering.
+Keep warm and at rest
+D. pH
+D. Other
+D. Ingestion
+D. Packing group
+D. Regulations under the Dangerous Substances Safety Management Act
+D. Mobility in soil
+Acute oral toxicity test in rats: no deaths, no body weight changes and no significant lesions at necropsy, OECD TG 425
+Reproductive/developmental toxicity test in rats: no effects on clinical signs, body weight, etc. NOAEL = 1000 mg/kg bw/day (OECD TG 210)
+Teratogenicity/developmental toxicity test in rats: no reproductive toxicity (OECD TG 414)
+R. Viscosity
+E. Other adverse effects
+E. Notes to physician
+E. Melting point/freezing point
+E. Marine pollutant
+S. Molecular weight
+Do not handle until all safety precautions have been read and understood.
+Remove all sources of ignition
+Odourless
+Physical and chemical properties
+In case of contact, immediately flush skin and eyes with running water for at least 20 minutes
+If the substance has been swallowed or inhaled, do not give mouth-to-mouth resuscitation; use appropriate respiratory medical equipment
+Inhalation of the substance may be harmful
+US regulations (CERCLA)
+US regulations (EPCRA 302)
+US regulations (EPCRA 313)
+US regulations (OSHA)
+US regulations (Rotterdam Convention substances)
+US regulations (Montreal Protocol substances)
+US regulations (Stockholm Convention substances)
+F. Other domestic and foreign regulations
+F. Special precautions for users related to transport or means of transport
+F. Initial boiling point and boiling range
+Repeated inhalation exposure may affect the respiratory tract (siderosis)
+Carcinogenicity
+Carcinogenicity : Category 2
+White
+Regulatory information
+Benzoin
+Negative in bacterial reverse mutation, gene mutation, sister chromatid exchange and Drosophila tests (OECD TG 471, 476, 477, 479)
+Negative in reverse mutation test, chromosomal aberration test (OECD TG 473, GLP) and in vivo comet assay
+Powder
+Dust LC50 5.05 ㎎/ℓ 4 hr Rat (OECD TG 403, GLP)
+Dust LC50 > 4.6 ㎎/㎥ 4 hr Rat (no deaths)
+Dust LC50 > 6.82 ㎎/ℓ Rat (OECD TG 403, no deaths)
+Do not breathe dust/fume/gas/mist/vapours/spray.
+Degradability
+If you feel unwell, get medical advice/attention.
+Absorb spills with inert material (e.g. dry sand or earth) and place in a chemical waste container.
+Non-flammable; the substance itself does not burn but may decompose on heating to produce corrosive/toxic fumes
+Drain empty drums completely, close them properly and return them promptly to the drum reconditioner or dispose of them appropriately.
+G. Flash point
+In case of oxygen deficiency (<19.6%), wear a supplied-air respirator or self-contained breathing apparatus
+Occupational Safety and Health Act
+Iron oxide
+Colour
+Biodegradability
+Reproductive toxicity
+Germ cell mutagenicity
+Physical state
+Prevent entry into waterways, sewers, basements or confined areas
+Aluminium hydroxide
+In vitro bacterial reverse mutation test OECD TG 471, mammalian cell gene mutation test OECD TG 476 and chromosomal aberration test OECD TG 473: negative with and without metabolic activation; in vivo chromosomal aberration and micronucleus tests: negative
+Move to fresh air
+Signal word
+Serious eye damage or eye irritation
+H. Evaporation rate
+Acrylic acid-ethylene copolymer
+Acrylic acid-ethylene copolymer
+Stability and reactivity
+Absorb liquid and wash the contaminated area with detergent and water.
+Fish
+Wipe up spills immediately and follow the precautions in the protective equipment section.
+Ethanone, 2-hydroxy-1,2-diphenyl- (ETHANONE, 2-HYDROXY-1,2-DIPHENYL);
+Prevention
+Precautionary statements
+Isolate the contaminated area.
+Remove contaminated clothing and shoes and isolate the contaminated area
+EAGON WHITE Semi-gloss (Exterior)
+EAGON WHITE Semi-gloss (Exterior) (DY#2-WH029)
+Follow all MSDS/label precautions even after the container is emptied, as it may retain product residue.
+Transport information
+Stop leak if it can be done without risk
+Emergency measures in case of spillage
+Hazard statements
+Hazards identification
+Hazardous polymerization will not occur
+Negative (reverse mutation test, chromosomal aberration test)
+First-aid measures
+Ensure that medical personnel are aware of the material involved and take precautions to protect themselves
+For fires involving this material, use alcohol-resistant foam, carbon dioxide or water spray
+Titanium dioxide
+Some may burn but do not ignite readily
+For particulates, the following respiratory protection is recommended
+I. Flammability (solid, gas)
+Not irritating, Rabbit, fully reversible within 48 hours, OECD TG 405
+Not irritating, Rabbit, OECD TG 404
+No data available
+This Material Safety Data Sheet (MSDS) has been edited and partly modified with reference to the MSDS provided by the Korea Occupational Safety and Health Agency; commercial use is prohibited
+Substance subject to work environment monitoring (every 6 months)
+Persistence
+Store locked up.
+Storage
+Do not touch damaged containers or spilled material unless wearing appropriate protective clothing
+Do not enter storage areas without adequate ventilation.
+Suitable (unsuitable) extinguishing media
+Recommended use
+Restrictions on use
+Algae
+Address
+Can be absorbed into the body by inhalation of vapour
+Fight fire from a safe distance outside the area
+Designated waste
+For smothering, use dry sand or earth
+J. Upper/lower flammability or explosive limits
+Date of last revision
+Handling and storage
+Use with care during handling/storage.
+K. Vapour pressure
+Carbon black
+L. Solubility
+Rabbit eye irritation test (OECD TG 405): not irritating
+Rabbit eye irritation test (OECD TG 405, GLP): not irritating
+Rabbit skin corrosion/irritation test: not irritating, erythema score = 0, OECD TG 404
+Rabbit skin irritation test (OECD TG 404): not irritating
+Rabbit serious eye damage/irritation test: not irritating, conjunctival redness score = 1-2, OECD TG 405, GLP
+Substance subject to special health examination (every 12 months)
+Substance subject to special health examination (every 24 months)
+Specific target organ toxicity (single exposure)
+Specific target organ toxicity (repeated exposure)
+M. Vapour density
+Disposal
+Dispose of contents/container in accordance with waste regulations
+Disposal considerations
+In case of exposure, contact medical staff and take special first-aid measures such as follow-up examination.
+Fire-fighting measures
+Polybutyl acrylate
+Polyester resin
+Polyester powder coating for general use
+Cover with plastic sheet to prevent spreading
+Skin corrosion/irritation : Category 2
+Can be absorbed into the body through the skin, digestive tract and by inhalation of aerosol
+Skin sensitisation
+Skin corrosion or irritation
+Causes skin irritation
+Note materials and conditions to avoid
+N. Relative density
+Applicable
+Not applicable
+Causes respiratory tract irritation
+Respiratory sensitisation
+Emergency measures in case of fire
+Specific hazards arising from the chemical
+Korea Chemical Information System
+Identification of the substance/mixture and of the company/undertaking
+Ministry of Environment
+Ecological information
+Company name
+Aspiration hazard
+Inhalation
+Can be absorbed into the body by inhalation and ingestion
+Can be absorbed into the body by inhalation, skin contact and ingestion
+Irritates the respiratory tract on inhalation
+Can be absorbed into the body by inhalation
