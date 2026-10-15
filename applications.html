@@ -55,50 +55,141 @@
     </nav>
   </header>
 
-  <main>
-    <section class="page-hero">
-      <p class="eyebrow">Applications</p>
-      <h1 data-i18n="applications.h1">적용 분야</h1>
+  <main class="app-page">
+    <section class="page-hero app-hero">
+      <p class="eyebrow app-hero-eyebrow">DAEYANG P&amp;T / APPLICATIONS</p>
+      <h1 class="app-hero-title" data-i18n="applications.hero.title">산업의 표면을 완성하다.</h1>
+      <p class="app-hero-sub" data-i18n="applications.hero.sub">다양한 산업 현장에서 활용되는 대양피앤티의 분체도료 적용 분야를 소개합니다.</p>
     </section>
 
-    <section class="section">
-      <div class="cards">
-        <article class="card">
-          <h3 data-i18n="applications.card1.h3">건축 자재</h3>
-          <p data-i18n="applications.card1.p">알루미늄 창호, 커튼월, 난간, 펜스. 내후성 폴리에스터로 색차와 초킹을 관리합니다.</p>
-          <div class="card-photos">
-            <img src="images/app-building-stair.jpg" data-i18n-alt="applications.card1.img1alt" alt="분체도장 강재 난간과 계단">
-            <img src="images/app-building-fence.jpg" data-i18n-alt="applications.card1.img2alt" alt="분체도장 펜스와 대문">
-          </div>
-        </article>
-        <article class="card">
-          <h3 data-i18n="applications.card2.h3">가전·가구</h3>
-          <p data-i18n="applications.card2.p">냉장고 패널, 선반, 사무가구. 하이브리드로 외관과 내스크래치를 맞춥니다.</p>
-          <div class="card-photos card-photos--3">
-            <img src="images/app-appliance-fridge.jpg" data-i18n-alt="applications.card2.img1alt" alt="분체도장 냉장고 패널">
-            <img src="images/app-appliance-shelf.jpg" data-i18n-alt="applications.card2.img2alt" alt="분체도장 금속 선반">
-            <img src="images/app-appliance-office.jpg" data-i18n-alt="applications.card2.img3alt" alt="분체도장 사무가구">
-          </div>
-        </article>
-        <article class="card">
-          <h3 data-i18n="applications.card3.h3">자동차</h3>
-          <p data-i18n="applications.card3.p">섀시, 휠, 브래킷. 내식성과 내칩핑이 필요한 부품에 에폭시 또는 프라이머 시스템을 제안합니다.</p>
-          <div class="card-photos card-photos--3">
-            <img src="images/app-auto-chassis.jpg" data-i18n-alt="applications.card3.img1alt" alt="분체도장 자동차 섀시">
-            <img src="images/app-auto-wheel.jpg" data-i18n-alt="applications.card3.img2alt" alt="분체도장 자동차 휠">
-            <img src="images/app-auto-bracket.jpg" data-i18n-alt="applications.card3.img3alt" alt="분체도장 자동차 브래킷">
-          </div>
-        </article>
-        <article class="card">
-          <h3 data-i18n="applications.card4.h3">산업 설비</h3>
-          <p data-i18n="applications.card4.p">전기함, 배관, 랙. 후막 방식과 내화학 사양으로 유지보수 주기를 늘립니다.</p>
-          <div class="card-photos card-photos--3">
-            <img src="images/app-industry-cabinet.jpg" data-i18n-alt="applications.card4.img1alt" alt="분체도장 전기함">
-            <img src="images/app-industry-pipe.jpg" data-i18n-alt="applications.card4.img2alt" alt="분체도장 배관">
-            <img src="images/app-industry-rack.jpg" data-i18n-alt="applications.card4.img3alt" alt="분체도장 산업용 랙">
-          </div>
-        </article>
+    <section class="section app-showcase" aria-labelledby="app-showcase-title">
+      <div class="app-showcase-head">
+        <h2 id="app-showcase-title" data-i18n="applications.grid.title">산업별 적용 분야</h2>
+        <p data-i18n="applications.grid.hint">카드를 선택하면 아래에서 분야별 상세 정보를 볼 수 있습니다.</p>
       </div>
+
+      <!-- 카드 한 장 = 산업 하나. 상세 패널은 js/applications.js가 data-* 값으로 채운다. -->
+      <ul class="app-grid">
+        <li class="app-card app-card--large">
+          <button class="app-card-btn" type="button" id="app-card-1" aria-expanded="false" aria-controls="app-detail"
+            data-ind="ind1" data-targets="3"
+            data-panel-src="images/applications/electrical-panel-lg.webp"
+            data-panel-srcset="images/applications/electrical-panel-sm.webp 640w, images/applications/electrical-panel-lg.webp 1024w">
+            <img class="app-card-img" src="images/applications/electrical-card-lg.webp"
+              srcset="images/applications/electrical-card-sm.webp 640w, images/applications/electrical-card-lg.webp 1280w"
+              sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 34rem" width="1280" height="720" fetchpriority="high" decoding="async"
+              data-i18n-alt="applications.ind1.cardAlt" alt="분체도장된 버스바가 설치된 배전반 내부">
+            <span class="app-card-body">
+              <span class="app-card-num" aria-hidden="true">01</span>
+              <span class="app-card-en" data-i18n="applications.ind1.eyebrow">Electrical &amp; Power Distribution</span>
+              <span class="app-card-title" data-i18n="applications.ind1.name">전기·배전 설비</span>
+              <span class="app-card-line" data-i18n="applications.ind1.line">배전반과 제어함 외함의 표면 보호와 균일한 마감</span>
+            </span>
+            <span class="app-card-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </button>
+        </li>
+        <li class="app-card app-card--large">
+          <button class="app-card-btn" type="button" id="app-card-2" aria-expanded="false" aria-controls="app-detail"
+            data-ind="ind2" data-targets="3"
+            data-panel-src="images/applications/logistics-panel-lg.webp"
+            data-panel-srcset="images/applications/logistics-panel-sm.webp 640w, images/applications/logistics-panel-lg.webp 1280w">
+            <img class="app-card-img" src="images/applications/logistics-card-lg.webp"
+              srcset="images/applications/logistics-card-sm.webp 640w, images/applications/logistics-card-lg.webp 1024w"
+              sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 34rem" width="1024" height="576" fetchpriority="high" decoding="async"
+              data-i18n-alt="applications.ind2.cardAlt" alt="오렌지색 빔과 청색 프레임의 산업용 금속 랙">
+            <span class="app-card-body">
+              <span class="app-card-num" aria-hidden="true">02</span>
+              <span class="app-card-en" data-i18n="applications.ind2.eyebrow">Logistics &amp; Storage Systems</span>
+              <span class="app-card-title" data-i18n="applications.ind2.name">물류·보관 설비</span>
+              <span class="app-card-line" data-i18n="applications.ind2.line">금속 랙과 적재 구조물의 표면 마감과 색상 식별</span>
+            </span>
+            <span class="app-card-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </button>
+        </li>
+        <li class="app-card app-card--small">
+          <button class="app-card-btn" type="button" id="app-card-3" aria-expanded="false" aria-controls="app-detail"
+            data-ind="ind3" data-targets="2"
+            data-panel-src="images/applications/outdoor-panel-lg.webp"
+            data-panel-srcset="images/applications/outdoor-panel-sm.webp 640w, images/applications/outdoor-panel-lg.webp 1024w">
+            <img class="app-card-img app-card-img--left" src="images/applications/outdoor-card-lg.webp"
+              srcset="images/applications/outdoor-card-sm.webp 640w, images/applications/outdoor-card-lg.webp 1280w"
+              sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 23rem" width="1280" height="960" loading="lazy" decoding="async"
+              data-i18n-alt="applications.ind3.cardAlt" alt="도심 보도에 설치된 금속 가로등">
+            <span class="app-card-body">
+              <span class="app-card-num" aria-hidden="true">03</span>
+              <span class="app-card-en" data-i18n="applications.ind3.eyebrow">Outdoor Lighting &amp; Infrastructure</span>
+              <span class="app-card-title" data-i18n="applications.ind3.name">옥외 조명·시설물</span>
+              <span class="app-card-line" data-i18n="applications.ind3.line">옥외에 설치되는 가로등과 금속 구조물의 외관 유지</span>
+            </span>
+            <span class="app-card-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </button>
+        </li>
+        <li class="app-card app-card--small">
+          <button class="app-card-btn" type="button" id="app-card-4" aria-expanded="false" aria-controls="app-detail"
+            data-ind="ind4" data-targets="2"
+            data-panel-src="images/applications/equipment-panel-lg.webp"
+            data-panel-srcset="images/applications/equipment-panel-sm.webp 640w, images/applications/equipment-panel-lg.webp 1280w">
+            <img class="app-card-img" src="images/applications/equipment-card-lg.webp"
+              srcset="images/applications/equipment-card-sm.webp 640w, images/applications/equipment-card-lg.webp 1280w"
+              sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 23rem" width="1280" height="960" loading="lazy" decoding="async"
+              data-i18n-alt="applications.ind4.cardAlt" alt="메탈릭 실버 마감의 산업용 스프레이건">
+            <span class="app-card-body">
+              <span class="app-card-num" aria-hidden="true">04</span>
+              <span class="app-card-en" data-i18n="applications.ind4.eyebrow">Industrial Equipment</span>
+              <span class="app-card-title" data-i18n="applications.ind4.name">산업용 장비</span>
+              <span class="app-card-line" data-i18n="applications.ind4.line">산업용 장비와 부품의 금속 표면 마감</span>
+            </span>
+            <span class="app-card-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </button>
+        </li>
+        <li class="app-card app-card--small">
+          <button class="app-card-btn" type="button" id="app-card-5" aria-expanded="false" aria-controls="app-detail"
+            data-ind="ind5" data-targets="2"
+            data-panel-src="images/applications/components-panel-lg.webp"
+            data-panel-srcset="images/applications/components-panel-sm.webp 640w, images/applications/components-panel-lg.webp 1200w">
+            <img class="app-card-img" src="images/applications/components-card-lg.webp"
+              srcset="images/applications/components-card-sm.webp 640w, images/applications/components-card-lg.webp 1024w"
+              sizes="(max-width: 600px) 100vw, (max-width: 900px) 100vw, 23rem" width="1024" height="576" loading="lazy" decoding="async"
+              data-i18n-alt="applications.ind5.cardAlt" alt="블랙 분체도장 마감의 금속 가공 브래킷">
+            <span class="app-card-body">
+              <span class="app-card-num" aria-hidden="true">05</span>
+              <span class="app-card-en" data-i18n="applications.ind5.eyebrow">Metal Components &amp; Hangers</span>
+              <span class="app-card-title" data-i18n="applications.ind5.name">금속 부품·행거</span>
+              <span class="app-card-line" data-i18n="applications.ind5.line">다양한 질감과 색상으로 완성하는 금속 부품 마감</span>
+            </span>
+            <span class="app-card-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </button>
+        </li>
+      </ul>
+
+      <div class="app-detail" id="app-detail" role="region" aria-labelledby="app-detail-title" tabindex="-1" hidden>
+        <div class="app-detail-media">
+          <img class="app-detail-img is-current" alt="" sizes="(max-width: 760px) 100vw, 38rem" decoding="async">
+          <img class="app-detail-img" alt="" sizes="(max-width: 760px) 100vw, 38rem" decoding="async">
+        </div>
+        <div class="app-detail-copy">
+          <div class="app-detail-inner">
+            <p class="app-detail-en" data-i18n="applications.ind1.eyebrow"></p>
+            <h3 class="app-detail-title" id="app-detail-title" data-i18n="applications.ind1.name"></h3>
+            <p class="app-detail-intro" data-i18n="applications.ind1.intro"></p>
+            <h4 class="app-detail-label" data-i18n="applications.detail.targets">주요 적용 대상</h4>
+            <ul class="app-detail-targets"></ul>
+            <h4 class="app-detail-label" data-i18n="applications.detail.focus">표면 마감 고려 요소</h4>
+            <p class="app-detail-focus" data-i18n="applications.ind1.focus"></p>
+            <h4 class="app-detail-label" data-i18n="applications.detail.keywords">핵심 키워드</h4>
+            <ul class="app-detail-keywords"></ul>
+          </div>
+          <button class="app-detail-close" type="button" data-i18n-aria-label="applications.detail.closeLabel" aria-label="상세 정보 닫기">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+            <span data-i18n="applications.detail.close">닫기</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="app-closing">
+      <h2 class="app-closing-title" data-i18n="applications.closing.title">다양한 산업, 하나의 표면 기술.</h2>
+      <p class="app-closing-body" data-i18n="applications.closing.body">대양피앤티는 다양한 산업 분야에서 요구되는 색상과 표면 마감에 대응하는 분체도료 솔루션을 제공합니다.</p>
     </section>
   </main>
 
@@ -109,6 +200,7 @@
   </footer>
   <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/applications.js"></script>
   <script src="js/chatbot.js"></script>
 </body>
 </html>

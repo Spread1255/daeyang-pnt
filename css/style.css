@@ -3367,3 +3367,612 @@ a.lab-frame:hover img {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+/* ===== 적용 분야 (applications.html) ===== */
+
+/* 한국어만 어절 단위 줄바꿈. 중·일문은 띄어쓰기가 없어 keep-all이면 넘친다. */
+html:lang(ko) .app-page {
+  --app-break: keep-all;
+}
+
+.app-hero {
+  min-height: clamp(20rem, 46vh, 30rem);
+  padding-top: clamp(4rem, 10vw, 7rem);
+  padding-bottom: clamp(4rem, 10vw, 7rem);
+}
+
+.app-hero .app-hero-eyebrow {
+  margin-bottom: 1.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+}
+
+.app-hero-title {
+  margin: 0 0 1.1rem;
+  font-size: clamp(2.2rem, 6vw, 4.2rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+  word-break: var(--app-break, normal);
+}
+
+.page-hero .app-hero-sub {
+  margin: 0;
+  max-width: 34rem;
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  word-break: var(--app-break, normal);
+}
+
+.app-hero > * {
+  animation: app-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.app-hero .app-hero-title {
+  animation-delay: 0.12s;
+}
+
+.app-hero .app-hero-sub {
+  animation-delay: 0.26s;
+}
+
+@keyframes app-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+main > section.app-showcase {
+  background: #fff;
+  padding-top: clamp(3rem, 7vw, 5rem);
+  padding-bottom: clamp(3rem, 7vw, 5rem);
+}
+
+.app-showcase-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.app-showcase-head h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  letter-spacing: -0.03em;
+}
+
+.app-showcase-head p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.6vw, 1.25rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-card {
+  position: relative;
+  min-width: 0;
+}
+
+.app-card--large {
+  grid-column: span 3;
+}
+
+.app-card--small {
+  grid-column: span 2;
+}
+
+.app-card-btn {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0.9rem;
+  overflow: hidden;
+  background: #1a1d24;
+  color: #fff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  aspect-ratio: 7 / 5;
+  box-shadow: 0 1px 2px rgb(12 16 28 / 0.08);
+  transition: box-shadow 0.45s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-card--small .app-card-btn {
+  aspect-ratio: 1 / 1;
+}
+
+.app-card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.45s ease;
+}
+
+.app-card-img--left {
+  object-position: 28% center;
+}
+
+/* 아래쪽 그라데이션(::before) + 호버 때 살짝 진해지는 전체 오버레이(::after) */
+.app-card-btn::before,
+.app-card-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.app-card-btn::before {
+  background: linear-gradient(180deg, rgb(8 12 22 / 0) 22%, rgb(8 12 22 / 0.5) 48%, rgb(8 12 22 / 0.8) 72%, rgb(8 12 22 / 0.94));
+}
+
+.app-card-btn::after {
+  background: rgb(8 12 22 / 0.14);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.app-card-body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: clamp(1.1rem, 2.2vw, 1.75rem);
+  padding-right: 4.5rem;
+  text-shadow: 0 1px 12px rgb(8 12 22 / 0.55);
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.app-card-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #f29a4c;
+}
+
+.app-card-en {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.78);
+  overflow-wrap: anywhere;
+}
+
+.app-card-title {
+  font-size: clamp(1.3rem, 2.4vw, 1.85rem);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  word-break: var(--app-break, normal);
+}
+
+.app-card--small .app-card-title {
+  font-size: clamp(1.15rem, 1.9vw, 1.45rem);
+}
+
+.app-card-line {
+  margin-top: 0.15rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: rgb(255 255 255 / 0.86);
+  word-break: var(--app-break, normal);
+}
+
+.app-card-arrow {
+  position: absolute;
+  right: clamp(1rem, 2vw, 1.5rem);
+  bottom: clamp(1.1rem, 2.2vw, 1.75rem);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 1px solid rgb(255 255 255 / 0.45);
+  border-radius: 50%;
+  color: #fff;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.45s ease, border-color 0.45s ease;
+}
+
+@media (hover: hover) {
+  .app-card-btn:hover {
+    box-shadow: 0 1.25rem 2.5rem -1rem rgb(12 16 28 / 0.45);
+  }
+
+  .app-card-btn:hover .app-card-img {
+    transform: scale(1.04);
+  }
+
+  .app-card-btn:hover::after {
+    opacity: 1;
+  }
+
+  .app-card-btn:hover .app-card-body {
+    transform: translateY(-0.3rem);
+  }
+
+  .app-card-btn:hover .app-card-arrow {
+    transform: translate(0.2rem, -0.2rem);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+}
+
+.app-card-btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* 선택된 카드: 안쪽 브랜드 컬러 테두리 + 화살표가 아래(패널 쪽)를 가리킨다 */
+.app-card.is-active .app-card-btn {
+  box-shadow: 0 1.25rem 2.5rem -1rem rgb(12 16 28 / 0.45);
+}
+
+.app-card.is-active .app-card-btn::after {
+  opacity: 1;
+  background: none;
+  box-shadow: inset 0 0 0 3px var(--accent);
+}
+
+.app-card.is-active .app-card-arrow,
+.app-card.is-active .app-card-btn:hover .app-card-arrow {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: rotate(90deg);
+}
+
+.app-grid.has-active .app-card:not(.is-active) .app-card-img {
+  filter: saturate(0.7) brightness(0.92);
+}
+
+/* 데스크톱 스크롤 등장 (js/applications.js가 클래스를 붙인다) */
+.app-grid.is-animated .app-card {
+  opacity: 0;
+  transform: translateY(1.75rem);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.app-grid.is-animated .app-card:nth-child(2),
+.app-grid.is-animated .app-card:nth-child(4) {
+  transition-delay: 0.08s;
+}
+
+.app-grid.is-animated .app-card:nth-child(5) {
+  transition-delay: 0.16s;
+}
+
+.app-grid.is-animated .app-card.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* 상세 패널 */
+.app-detail {
+  display: grid;
+  grid-template-columns: 55fr 45fr;
+  margin-top: clamp(1rem, 2.4vw, 1.75rem);
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  overflow: hidden;
+  background: #fff;
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.app-detail[hidden] {
+  display: none;
+}
+
+.app-detail.is-open {
+  opacity: 1;
+  transform: none;
+}
+
+.app-detail-media {
+  position: relative;
+  min-height: 26rem;
+  background: #1a1d24;
+}
+
+.app-detail-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.app-detail-img.is-current {
+  opacity: 1;
+}
+
+.app-detail-img:not([src]) {
+  visibility: hidden;
+}
+
+.app-detail-copy {
+  position: relative;
+  min-width: 0;
+  padding: clamp(1.75rem, 3.5vw, 3rem);
+  border-top: 3px solid var(--accent);
+}
+
+.app-detail-inner {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.app-detail-inner.is-swapping {
+  opacity: 0;
+  transform: translateY(0.4rem);
+}
+
+.app-detail-en {
+  margin: 0 3.5rem 0.4rem 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-dark);
+  overflow-wrap: anywhere;
+}
+
+.app-detail-title {
+  margin: 0 3rem 1rem 0;
+  font-size: clamp(1.6rem, 2.8vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  word-break: var(--app-break, normal);
+}
+
+.app-detail-intro {
+  margin: 0 0 1.5rem;
+  word-break: var(--app-break, normal);
+}
+
+.app-detail-label {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.app-detail-targets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+  margin: 0 0 1.4rem;
+  padding: 0;
+  list-style: none;
+  font-weight: 600;
+}
+
+.app-detail-targets li {
+  position: relative;
+  padding-left: 0.9rem;
+}
+
+.app-detail-targets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.68em;
+  width: 0.35rem;
+  height: 0.35rem;
+  background: var(--accent);
+}
+
+.app-detail-focus {
+  margin: 0 0 1.4rem;
+  color: var(--muted);
+  word-break: var(--app-break, normal);
+}
+
+.app-detail-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-detail-keywords li {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid rgb(224 122 40 / 0.45);
+  border-radius: 999px;
+  background: rgb(224 122 40 / 0.07);
+  color: var(--accent-dark);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.app-detail-close {
+  position: absolute;
+  top: clamp(1.25rem, 3vw, 2.25rem);
+  right: clamp(1.25rem, 3vw, 2.25rem);
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.app-detail-close:hover,
+.app-detail-close:focus-visible {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.app-detail-close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 닫기 글자는 화면에서 숨기고 스크린리더용 aria-label이 대신한다 */
+.app-detail-close span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* 마무리 메시지 */
+main > section.app-closing {
+  padding: clamp(4rem, 9vw, 6.5rem) max(1.5rem, calc((100% - 68rem) / 2));
+  background: #0c1a33;
+  color: #f4efe6;
+  text-align: center;
+}
+
+.app-closing-title {
+  margin: 0 auto 1rem;
+  font-size: clamp(1.7rem, 4vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+  word-break: var(--app-break, normal);
+}
+
+.app-closing-title::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 3px;
+  margin: 0 auto 1.5rem;
+  background: var(--accent);
+}
+
+.app-closing-body {
+  max-width: 38rem;
+  margin: 0 auto;
+  color: rgb(244 239 230 / 0.82);
+  word-break: var(--app-break, normal);
+}
+
+@media (max-width: 900px) {
+  .app-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .app-card--large,
+  .app-card--small {
+    grid-column: span 1;
+  }
+
+  .app-card--large .app-card-btn,
+  .app-card--small .app-card-btn {
+    aspect-ratio: 4 / 3;
+  }
+
+  .app-card:last-child {
+    grid-column: span 2;
+  }
+
+  .app-card:last-child .app-card-btn {
+    aspect-ratio: 2 / 1;
+  }
+
+  .app-detail {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .app-detail {
+    grid-template-columns: 1fr;
+  }
+
+  .app-detail-media {
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+  }
+}
+
+@media (max-width: 600px) {
+  .app-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-card:last-child {
+    grid-column: auto;
+  }
+
+  .app-card--large .app-card-btn,
+  .app-card--small .app-card-btn,
+  .app-card:last-child .app-card-btn {
+    aspect-ratio: 4 / 3;
+  }
+
+  .app-card-body {
+    padding-right: 4rem;
+  }
+
+  .app-card-line {
+    font-size: 0.88rem;
+  }
+
+  .app-showcase-head p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-hero > * {
+    animation: none;
+  }
+
+  .app-card-btn,
+  .app-card-img,
+  .app-card-btn::after,
+  .app-card-body,
+  .app-card-arrow,
+  .app-detail,
+  .app-detail-img,
+  .app-detail-inner {
+    transition: none;
+  }
+
+  .app-card-btn:hover .app-card-img,
+  .app-card-btn:hover .app-card-body {
+    transform: none;
+  }
+}
