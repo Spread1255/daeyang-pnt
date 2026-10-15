@@ -225,7 +225,7 @@
       "colors.book.next": "다음 장",
       "colors.book.disclaimer": "※ 본 색상은 웹 컬러로, 모니터에 따라 실제 도료 색과 다르게 보일 수 있습니다. 반드시 실제 칼라북으로 재확인하시기 바랍니다.",
 
-      "applications.hero.title": "산업의 표면을 완성하다.",
+      "applications.hero.title": "적용 분야",
       "applications.hero.sub": "다양한 산업 현장에서 활용되는 대양피앤티의 분체도료 적용 분야를 소개합니다.",
       "applications.grid.title": "산업별 적용 분야",
       "applications.grid.hint": "카드를 선택하면 아래에서 분야별 상세 정보를 볼 수 있습니다.",
@@ -632,7 +632,7 @@
       "colors.book.next": "Next page",
       "colors.book.disclaimer": "※ These are web colors and may look different from the actual coating depending on your monitor. Please double-check against the physical color book.",
 
-      "applications.hero.title": "Finishing the surfaces of industry.",
+      "applications.hero.title": "Applications",
       "applications.hero.sub": "Explore the industries where DAEYANG P&T powder coatings are put to work.",
       "applications.grid.title": "Applications by Industry",
       "applications.grid.hint": "Select a card to view industry details below.",
@@ -1039,7 +1039,7 @@
       "colors.book.next": "次のページ",
       "colors.book.disclaimer": "※ 本カラーはウェブカラーのため、モニターにより実際の塗料色と異なって見える場合があります。必ず実物のカラーブックでご確認ください。",
 
-      "applications.hero.title": "産業の表面を、仕上げる。",
+      "applications.hero.title": "用途",
       "applications.hero.sub": "さまざまな産業の現場で活用される、DAEYANG P&Tの粉体塗料の用途をご紹介します。",
       "applications.grid.title": "産業別の用途",
       "applications.grid.hint": "カードを選択すると、下に分野ごとの詳細が表示されます。",
@@ -1446,7 +1446,7 @@
       "colors.book.next": "下一页",
       "colors.book.disclaimer": "※ 本色彩为网页色彩，可能因显示器不同而与实际涂料颜色有差异，请务必以实物色卡册为准。",
 
-      "applications.hero.title": "成就工业的表面。",
+      "applications.hero.title": "应用领域",
       "applications.hero.sub": "介绍DAEYANG P&T粉末涂料在各行业现场的应用领域。",
       "applications.grid.title": "各行业应用领域",
       "applications.grid.hint": "选择卡片，即可在下方查看各领域的详细信息。",
