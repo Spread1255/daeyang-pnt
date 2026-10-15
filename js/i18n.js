@@ -294,8 +294,8 @@
       "applications.ind5.k1": "표면 질감",
       "applications.ind5.k2": "색상 다양성",
       "applications.ind5.k3": "금속 마감",
-      "applications.ind5.cardAlt": "블랙 분체도장으로 마감한 금속 가공 브래킷",
-      "applications.ind5.panelAlt": "함마톤 질감이 적용된 금속 설비 외함",
+      "applications.ind5.cardAlt": "함마톤 질감 분체도장으로 마감한 금속 의류 행거",
+      "applications.ind5.panelAlt": "블랙 분체도장으로 마감한 금속 가공 브래킷",
       "applications.closing.title": "다양한 산업, 하나의 표면 기술.",
       "applications.closing.body": "대양피앤티는 다양한 산업 분야에서 요구되는 색상과 표면 마감에 대응하는 분체도료 솔루션을 제공합니다.",
 
@@ -701,8 +701,8 @@
       "applications.ind5.k1": "Surface texture",
       "applications.ind5.k2": "Color range",
       "applications.ind5.k3": "Metal finish",
-      "applications.ind5.cardAlt": "Fabricated metal brackets with a black powder-coated finish",
-      "applications.ind5.panelAlt": "Metal equipment housing with a hammertone texture",
+      "applications.ind5.cardAlt": "Metal garment rack with a hammertone powder-coated finish",
+      "applications.ind5.panelAlt": "Fabricated metal brackets with a black powder-coated finish",
       "applications.closing.title": "Many industries. One surface technology.",
       "applications.closing.body": "DAEYANG P&T provides powder coating solutions that meet the color and surface finish requirements of a wide range of industries.",
 
@@ -1108,8 +1108,8 @@
       "applications.ind5.k1": "表面の質感",
       "applications.ind5.k2": "色の多様性",
       "applications.ind5.k3": "金属仕上げ",
-      "applications.ind5.cardAlt": "黒の粉体塗装で仕上げた金属加工ブラケット",
-      "applications.ind5.panelAlt": "ハンマートーン調の質感を施した金属設備の筐体",
+      "applications.ind5.cardAlt": "ハンマートーン調の粉体塗装で仕上げた金属製ハンガーラック",
+      "applications.ind5.panelAlt": "黒の粉体塗装で仕上げた金属加工ブラケット",
       "applications.closing.title": "多様な産業に、ひとつの表面技術を。",
       "applications.closing.body": "DAEYANG P&Tは、さまざまな産業分野で求められる色と表面仕上げに応える粉体塗料ソリューションを提供します。",
 
@@ -1515,8 +1515,8 @@
       "applications.ind5.k1": "表面纹理",
       "applications.ind5.k2": "色彩多样",
       "applications.ind5.k3": "金属涂装",
-      "applications.ind5.cardAlt": "黑色粉末涂装的金属加工支架",
-      "applications.ind5.panelAlt": "锤纹涂装的金属设备外壳",
+      "applications.ind5.cardAlt": "锤纹粉末涂装的金属衣架",
+      "applications.ind5.panelAlt": "黑色粉末涂装的金属加工支架",
       "applications.closing.title": "多元产业，同一表面技术。",
       "applications.closing.body": "DAEYANG P&T为各行业所需的颜色与表面涂装要求，提供相应的粉末涂料解决方案。",
 
