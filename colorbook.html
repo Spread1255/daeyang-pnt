@@ -80,6 +80,18 @@
     </section>
 
     <section class="section">
+      <div class="cbook-picker" role="group" data-i18n-aria-label="colorbook.pickLabel" aria-label="컬러북 버전 선택">
+        <button type="button" class="cbook-pick" data-book="v4" aria-pressed="true">
+          <img src="images/colorbook/cover-thumb.webp" width="360" height="509" alt="" decoding="async">
+          <span class="cbook-pick-ver">ver.4</span>
+          <span class="cbook-pick-tag" data-i18n="colorbook.latest">최신</span>
+        </button>
+        <button type="button" class="cbook-pick" data-book="v3" aria-pressed="false">
+          <img src="images/colorbook-v3/cover-thumb.webp" width="360" height="509" alt="" decoding="async">
+          <span class="cbook-pick-ver">ver.3</span>
+          <span class="cbook-pick-tag" data-i18n="colorbook.previous">이전 버전</span>
+        </button>
+      </div>
       <div id="color-book" class="cbook"></div>
     </section>
   </main>
@@ -94,6 +106,7 @@
   <script src="js/chatbot.js"></script>
   <script src="js/colors.js"></script>
   <script src="js/colorbook-chips.js"></script>
+  <script src="js/colorbook-v3-chips.js"></script>
   <script src="js/color-book.js"></script>
 </body>
 </html>

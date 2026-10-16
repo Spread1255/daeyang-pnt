@@ -1645,6 +1645,83 @@ th {
   margin: 0.5rem 0 1.5rem;
 }
 
+/* 컬러북 선택 (ver.4 / ver.3): 표지 아래에 버전을 적는다 */
+.cbook-picker {
+  display: flex;
+  justify-content: center;
+  gap: clamp(1rem, 4vw, 2.5rem);
+  margin: 0.5rem 0 1.25rem;
+}
+
+.cbook-pick {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  width: clamp(6rem, 18vw, 8.5rem);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.cbook-pick img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 0.55rem;
+  border: 2px solid transparent;
+  border-radius: 0.35rem;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.12);
+  opacity: 0.55;
+  transition: opacity 0.25s ease, transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cbook-pick:hover img {
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+
+.cbook-pick[aria-pressed="true"] img {
+  border-color: var(--accent);
+  box-shadow: 0 8px 22px rgb(0 0 0 / 0.18);
+  opacity: 1;
+}
+
+.cbook-pick:focus-visible {
+  outline: none;
+}
+
+.cbook-pick:focus-visible img {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.cbook-pick-ver {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  color: var(--muted);
+}
+
+.cbook-pick[aria-pressed="true"] .cbook-pick-ver {
+  color: var(--ink);
+}
+
+.cbook-pick-tag {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.cbook-pick[data-book="v4"] .cbook-pick-tag {
+  color: var(--accent-dark);
+}
+
 /* 책을 본문 폭보다 넓게: 화면 너비와 높이에 맞춰 최대한 크게 */
 .cbook-stage {
   position: relative;
