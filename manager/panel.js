@@ -1,4 +1,4 @@
-// 관리자 패널: 공지사항 / 제휴문의 / 채용 / MSDS / 자료실 / 컬러 연구소 / 장치 기록(device-log.js)
+// 관리자 패널: 공지사항 / 제휴문의 / 채용 / MSDS / 자료실 / 컬러 연구소 / 장치 기록(device-log.js) / 라벨 출력(label-print.js)
 (function () {
   var A = window.DY_ADMIN;
   var sb = A && A.sb;
@@ -1916,6 +1916,9 @@
     colorlab: renderColorlab,
     devices: function () {
       window.DY_DEVICE_LOG(main);
+    },
+    labels: function () {
+      window.DY_LABEL_PRINT(main);
     }
   };
 

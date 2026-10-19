@@ -194,6 +194,11 @@
         codes.push(h);
       });
     });
+    return pictogramsForCodes(codes);
+  }
+
+  // H코드 목록 → GHS 그림문자 (라벨 출력에서도 쓴다)
+  function pictogramsForCodes(codes) {
     var found = {};
     var why = {};
     codes.forEach(function (h) {
@@ -476,5 +481,5 @@
     }
   }
 
-  root.DY_MSDS_FRM = { parse: parse, toHtml: toHtml, pictogramsFor: pictogramsFor, loadAssets: loadAssets, toPdf: toPdf };
+  root.DY_MSDS_FRM = { parse: parse, toHtml: toHtml, pictogramsFor: pictogramsFor, pictogramsForCodes: pictogramsForCodes, loadAssets: loadAssets, toPdf: toPdf };
 })(window);

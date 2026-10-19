@@ -1211,3 +1211,127 @@ textarea {
     font-weight: inherit;
   }
 }
+
+/* 라벨 출력 */
+.lb-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 560px);
+  gap: 1.2rem;
+  align-items: start;
+}
+
+.lb-col {
+  display: grid;
+  gap: 1.2rem;
+  min-width: 0;
+}
+
+.lb-sticky {
+  position: sticky;
+  top: 1rem;
+}
+
+.lb-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1rem;
+}
+
+.lb-span {
+  grid-column: 1 / -1;
+}
+
+.lb-results {
+  list-style: none;
+  margin: 0 0 0.6rem;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
+  max-height: 22rem;
+  overflow-y: auto;
+}
+
+.lb-hit {
+  width: 100%;
+  display: flex;
+  gap: 0.7rem;
+  align-items: baseline;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 0.45rem;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lb-hit:hover,
+.lb-hit.is-on {
+  border-color: var(--accent);
+  background: #fff7f0;
+}
+
+.lb-hit b {
+  flex: none;
+  min-width: 7.5rem;
+}
+
+.lb-ghs-pick {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.2rem, 1fr));
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+}
+
+.lb-ghs-opt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.4rem 0.3rem;
+  border: 1px solid var(--line);
+  border-radius: 0.45rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.lb-ghs-opt:has(input:checked) {
+  border-color: var(--accent);
+  background: #fff7f0;
+  color: var(--ink);
+}
+
+.lb-ghs-opt img {
+  width: 2.6rem;
+  height: 2.6rem;
+}
+
+.lb-preview-wrap {
+  overflow-x: auto;
+  padding: 0.8rem;
+  margin-bottom: 0.8rem;
+  border-radius: 0.45rem;
+  background: #3a3a3a;
+}
+
+.lb-preview {
+  width: max-content;
+  margin: 0 auto;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.35);
+}
+
+@media (max-width: 1000px) {
+  .lb-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lb-sticky {
+    position: static;
+  }
+}
+
+@media (max-width: 560px) {
+  .lb-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
