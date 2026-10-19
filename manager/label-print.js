@@ -1,11 +1,12 @@
-// 관리자 패널: 제품 라벨 출력 (가로 130mm × 세로 100mm, Zebra ZT421)
-//  품명·제품코드로 등록된 MSDS를 찾아, MSDS의 유해·위험문구(H코드)로 GHS 그림문자와 신호어를 불러와 라벨에 넣는다.
+// 관리자 패널: 제품 라벨 출력 (가로 130mm × 세로 150mm, Zebra ZT421)
+//  품명·제품코드로 등록된 MSDS를 찾아, MSDS의 유해·위험문구(H코드)로 GHS 그림문자와 신호어를 불러오고,
+//  유해·위험문구·예방조치문구·공급원도 MSDS에서 가져와 라벨 아래쪽에 넣는다.
 //  - MSDS 읽는 순서: 원본 보관함의 엑셀 → 홈페이지에 걸린 엑셀 → PDF 글자
 //  - 출력: [인쇄] 브라우저 인쇄(ZDesigner 드라이버), [ZPL 저장] 라벨 전체를 그림으로 바꾼 ZPL 파일 (한글 글꼴이 프린터에 없어도 됨)
 (function () {
   var A = window.DY_ADMIN;
   var LABEL_W_MM = 130;
-  var LABEL_H_MM = 100;
+  var LABEL_H_MM = 150;
   var SETTINGS_KEY = "dy-label-settings";
   var LOT_KEY = "dy-label-lot";
   var GHS_CODES = ["GHS01", "GHS02", "GHS03", "GHS04", "GHS05", "GHS06", "GHS07", "GHS08", "GHS09"];
@@ -29,7 +30,17 @@
     ["weight", "실중량"],
     ["kind", "종류"]
   ];
-  var DEFAULTS = { dry: "200℃ X 10분", keep: "12개월", weight: "20KG", dpi: "203", rotate: false };
+  var DEFAULTS = {
+    dry: "200℃ X 10분",
+    keep: "12개월",
+    weight: "20KG",
+    dpi: "203",
+    rotate: false,
+    notice: "※ 기타 자세한 사항은 물질안전보건자료(MSDS)를 참조하시기 바랍니다.",
+    supplier: ""
+  };
+  // 문구 앞 코드: "H351", "P301+P312" 등
+  var STMT_CODE_RE = /^([HP]\d{3}[A-Za-z]?(?:\s*\+\s*[HP]\d{3}[A-Za-z]?)*)\s*[:：]?\s*/;
 
   var LABEL_CSS =
     ".lb-label{width:" + LABEL_W_MM + "mm;height:" + LABEL_H_MM + "mm;padding:2.5mm;box-sizing:border-box;background:#fff;color:#000;overflow:hidden;" +
@@ -43,6 +54,7 @@
     ".lb-name{border-top:0.25mm solid #000;border-bottom:0.25mm solid #000;padding:1.4mm 2mm;text-align:center;white-space:nowrap;" +
     "font-family:'HY견명조','HYGyeonMyeongJo','Batang','바탕','Noto Serif KR',serif;font-weight:700;font-size:10mm;line-height:1.15;}" +
     ".lb-body{flex:1;display:flex;gap:2mm;padding:2mm 3mm 2mm 4mm;min-height:0;}" +
+    ".lb-label.has-hz .lb-body{flex:none;height:55mm;}" +
     ".lb-fields{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;font-size:4.6mm;line-height:1.2;min-width:0;}" +
     ".lb-row{display:flex;align-items:baseline;white-space:nowrap;}" +
     ".lb-key{display:flex;justify-content:space-between;width:19mm;flex:none;}" +
@@ -51,7 +63,17 @@
     ".lb-haz{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2mm;}" +
     ".lb-ghs{display:flex;flex-wrap:wrap;justify-content:center;}" +
     ".lb-ghs img{display:block;}" +
-    ".lb-signal{font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;font-weight:700;font-size:5mm;line-height:1;}";
+    ".lb-signal{font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;font-weight:700;font-size:5mm;line-height:1;}" +
+    // 유해·위험문구 / 예방조치문구 (첫 번째 라벨 견본처럼 왼쪽에 세로 제목)
+    ".lb-hz{flex:1;min-height:0;display:flex;border-top:0.25mm solid #000;font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;}" +
+    ".lb-hz-col{display:flex;min-width:0;}" +
+    ".lb-hz-col.h{flex:0 0 33%;}" +
+    ".lb-hz-col.p{flex:1;border-left:0.25mm solid #000;}" +
+    ".lb-hz-tag{flex:none;width:5.2mm;border-right:0.25mm solid #000;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:2.9mm;line-height:1.08;font-weight:700;}" +
+    ".lb-hz-text{flex:1;min-width:0;overflow:hidden;padding:1mm 1.4mm;font-size:2.7mm;line-height:1.32;word-break:keep-all;overflow-wrap:anywhere;}" +
+    ".lb-hz-text p{margin:0;}" +
+    ".lb-foot{flex:none;border-top:0.25mm solid #000;padding:0.8mm 2mm;text-align:center;font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;font-size:2.4mm;line-height:1.35;}" +
+    ".lb-foot b{font-weight:700;}";
 
   function readJson(key, fallback) {
     try {
@@ -129,15 +151,50 @@
     return { kind: resin + "계", resin: resin };
   }
 
+  // 코드로 시작하는 줄마다 문구 하나. 코드 없는 줄은 앞 문구에 이어 붙이고, 같은 문구는 한 번만 둔다.
+  function statements(lines, letter) {
+    var out = [];
+    lines.forEach(function (l) {
+      l = String(l).replace(/\s+/g, " ").trim();
+      if (!l) {
+        return;
+      }
+      if (new RegExp("^" + letter + "\\d{3}").test(l) || !out.length) {
+        out.push(l);
+      } else {
+        out[out.length - 1] += " " + l;
+      }
+    });
+    return out.filter(function (x, i) { return out.indexOf(x) === i; });
+  }
+
+  function supplierLine(name, addr, tel) {
+    return [name && "공급원: " + name, addr, tel && "Tel " + tel].filter(Boolean).join(" · ");
+  }
+
   function infoFromModel(model) {
-    var out = { codes: [], signal: "", usage: "" };
+    var out = { codes: [], signal: "", usage: "", h: [], p: [], supplier: "" };
+    var hLines = [];
+    var pLines = [];
+    var sup = {};
     model.sections.forEach(function (s) {
       walkItems(s.blocks, function (item) {
         if (s.num === 2 && /신호어/.test(item.label) && item.lines.length) {
           out.signal = item.lines[0];
         }
+        if (s.num === 2 && /유해\W{0,2}위험\s*문구/.test(item.label)) {
+          hLines = hLines.concat(item.lines);
+        }
+        if (s.num === 2 && /^(예방|대응|저장|폐기)$|예방\s*조치\s*문구/.test(item.label.replace(/\s+/g, ""))) {
+          pLines = pLines.concat(item.lines);
+        }
         if (s.num === 1 && /권고\s*용도/.test(item.label) && item.lines.length && !out.usage) {
           out.usage = item.lines.join(" ");
+        }
+        if (s.num === 1 && item.lines.length) {
+          if (/회사\s*명/.test(item.label) && !sup.name) { sup.name = item.lines.join(" "); }
+          if (/^주\s*소$/.test(item.label) && !sup.addr) { sup.addr = item.lines.join(" "); }
+          if (/긴급\s*전화|전화\s*번호/.test(item.label) && !sup.tel) { sup.tel = item.lines.join(" "); }
         }
       });
       if (s.num === 2) {
@@ -146,6 +203,9 @@
         });
       }
     });
+    out.h = statements(hLines, "H");
+    out.p = statements(pLines, "P");
+    out.supplier = supplierLine(sup.name, sup.addr, sup.tel);
     return out;
   }
 
@@ -172,7 +232,34 @@
     var sec2 = start >= 0 ? flat.slice(start, end > start ? end : undefined) : flat;
     var signal = (sec2.match(/신호어\s*[:：]?\s*(위험|경고)/) || [])[1] || "";
     var usage = (flat.match(/권고\s*용도\s*[:：]?\s*([^\n]+)/) || [])[1] || "";
-    return { codes: sec2.match(/H\d{3}/g) || [], signal: signal, usage: usage };
+    function pick(re) {
+      return ((flat.match(re) || [])[1] || "").trim();
+    }
+    return {
+      codes: sec2.match(/H\d{3}/g) || [],
+      signal: signal,
+      usage: usage,
+      h: textStatements(sec2, "H"),
+      p: textStatements(sec2, "P"),
+      supplier: supplierLine(pick(/회사\s*명\s*[:：]?\s*([^\n]+)/), pick(/주\s*소\s*[:：]?\s*([^\n]+)/), pick(/긴급\s*전화\s*번호\s*[:：]?\s*([^\n]+)/))
+    };
+  }
+
+  // PDF 글자에서 문구 찾기: 코드부터 다음 코드 앞까지를 문구 하나로 본다
+  function textStatements(sec2, letter) {
+    var out = [];
+    var re = new RegExp("(" + letter + "\\d{3}(?:\\s*\\+\\s*" + letter + "\\d{3})*)\\s*([\\s\\S]*?)(?=[HP]\\d{3}|$)", "g");
+    var m;
+    while ((m = re.exec(sec2))) {
+      var t = m[2].replace(/\s+/g, " ")
+        .split(/예방\s*조치\s*문구|다\s*\.\s*유해/)[0]
+        .replace(/\s*(예방|대응|저장|폐기)\s*[:：]?\s*$/, "")
+        .trim();
+      if (t) {
+        out.push(m[1].replace(/\s+/g, "") + " " + t);
+      }
+    }
+    return out.filter(function (x, i) { return out.indexOf(x) === i; });
   }
 
   async function download(sb, bucket, path) {
@@ -229,6 +316,9 @@
           signal: info.signal,
           kind: k.kind,
           resin: k.resin,
+          h: info.h,
+          p: info.p,
+          supplier: info.supplier,
           source: t.label
         };
       } catch (err) {
@@ -265,16 +355,34 @@
       haz = '<div class="lb-haz"><div class="lb-ghs" style="width:' + (lay.size * lay.cols) + 'mm">' + imgs + "</div>" +
         (d.signal ? '<div class="lb-signal">' + esc(d.signal) + "</div>" : "") + "</div>";
     }
-    return '<div class="lb-label"><div class="lb-frame"><div class="lb-inner">' +
+    function tag(text) {
+      return '<div class="lb-hz-tag">' + text.split("").map(function (ch) { return "<span>" + esc(ch) + "</span>"; }).join("") + "</div>";
+    }
+    function stmt(line) {
+      return d.showCodes ? line : line.replace(STMT_CODE_RE, "");
+    }
+    var hz = "";
+    if (d.h.length || d.p.length) {
+      hz = '<div class="lb-hz">' +
+        '<div class="lb-hz-col h">' + tag("유해위험문구") + '<div class="lb-hz-text"><p>' + d.h.map(function (l) { return esc(stmt(l)); }).join(" / ") + "</p></div></div>" +
+        '<div class="lb-hz-col p">' + tag("예방조치문구") + '<div class="lb-hz-text">' + d.p.map(function (l) { return "<p>· " + esc(stmt(l)) + "</p>"; }).join("") + "</div></div>" +
+        "</div>";
+    }
+    var foot = d.notice || d.supplier
+      ? '<div class="lb-foot">' + (d.notice ? "<b>" + esc(d.notice) + "</b>" : "") + (d.notice && d.supplier ? "<br>" : "") + esc(d.supplier) + "</div>"
+      : "";
+    return '<div class="lb-label' + (hz ? " has-hz" : "") + '"><div class="lb-frame"><div class="lb-inner">' +
       '<div class="lb-head"><div class="lb-code">' + esc(d.code) + "</div>" +
       (d.resin ? '<div class="lb-resin">(' + esc(d.resin) + ")</div>" : "") + "</div>" +
       '<div class="lb-name">' + esc(d.name) + "</div>" +
       '<div class="lb-body"><div class="lb-fields">' + rows + "</div>" + haz + "</div>" +
+      hz + foot +
       "</div></div></div>";
   }
 
-  // 한 줄 글자가 칸을 넘으면 글자 크기를 줄인다
+  // 한 줄 글자가 칸을 넘으면 글자 크기를 줄인다. 문구 칸은 넘치지 않을 때까지 줄이고, 최소 크기에서도 넘치면 true를 돌려준다.
   function fitText(root) {
+    var overflow = false;
     [".lb-name", ".lb-code"].forEach(function (sel) {
       var node = root.querySelector(sel);
       if (!node) {
@@ -297,6 +405,19 @@
         node.style.fontSize = size + "px";
       }
     });
+    Array.prototype.forEach.call(root.querySelectorAll(".lb-hz-text"), function (node) {
+      node.style.fontSize = "";
+      var size = parseFloat(node.ownerDocument.defaultView.getComputedStyle(node).fontSize);
+      var guard = 0;
+      while (node.scrollHeight > node.clientHeight + 1 && size > 5.5 && guard++ < 60) {
+        size -= 0.25;
+        node.style.fontSize = size + "px";
+      }
+      if (node.scrollHeight > node.clientHeight + 1) {
+        overflow = true;
+      }
+    });
+    return overflow;
   }
 
   function imagesReady(root) {
@@ -502,11 +623,18 @@
         el("option", { value: "203", text: "203 dpi (8 dots/mm)" }),
         el("option", { value: "300", text: "300 dpi (12 dots/mm)" })
       ]),
-      rotate: el("input", { type: "checkbox" })
+      rotate: el("input", { type: "checkbox" }),
+      h: el("textarea", { rows: "4", maxlength: "3000" }),
+      p: el("textarea", { rows: "10", maxlength: "6000" }),
+      showCodes: el("input", { type: "checkbox" }),
+      notice: el("input", { type: "text", maxlength: "200", value: saved.notice }),
+      supplier: el("input", { type: "text", maxlength: "300", value: saved.supplier })
     };
     f.lot.value = suggestLot(f.date.value);
     f.dpi.value = saved.dpi;
     f.rotate.checked = !!saved.rotate;
+    f.showCodes.checked = !!saved.showCodes;
+    var fitWarn = el("p", { class: "a-msg is-error", hidden: true, text: "문구가 길어 라벨 칸을 넘칩니다. 가장 작은 글씨로도 잘리니 [예방조치문구]에서 덜 중요한 줄을 지워 주세요." });
 
     var ghsBoxes = {};
     var ghsPick = el("div", { class: "lb-ghs-pick" }, GHS_CODES.map(function (c) {
@@ -525,7 +653,7 @@
 
     main.replaceChildren(
       el("h1", { text: "라벨 출력" }),
-      el("p", { class: "panel-lede", text: "품명을 입력해 등록된 MSDS를 고르면 제품코드·품명과 MSDS의 그림문자·신호어·종류를 불러옵니다. 라벨 크기 가로 130mm × 세로 100mm (Zebra ZT421)." }),
+      el("p", { class: "panel-lede", text: "품명을 입력해 등록된 MSDS를 고르면 제품코드·품명과 MSDS의 그림문자·신호어·종류·유해위험문구·예방조치문구를 불러옵니다. 라벨 크기 가로 130mm × 세로 150mm (Zebra ZT421)." }),
       el("div", { class: "lb-grid" }, [
         el("div", { class: "lb-col" }, [
           el("section", { class: "a-card" }, [
@@ -549,25 +677,39 @@
               field("신호어", f.signal)
             ]),
             el("div", { class: "a-field" }, ["그림문자", el("small", { text: "MSDS에서 불러온 그림문자가 체크됩니다. 필요하면 직접 바꿀 수 있습니다." }), ghsPick])
+          ]),
+          el("section", { class: "a-card" }, [
+            el("h2", { text: "3. 유해·위험문구 · 예방조치문구" }),
+            el("p", { class: "a-hint", text: "MSDS 2번 항목의 문구를 한 줄에 하나씩 불러옵니다. 라벨 칸에 다 들어가도록 글씨가 자동으로 작아집니다. 너무 작으면 덜 중요한 줄을 지워 주세요." }),
+            field("유해·위험문구", f.h, "한 줄에 하나 · 라벨에는 ' / '로 이어서 표시"),
+            field("예방조치문구", f.p, "한 줄에 하나 · 라벨에는 '·' 목록으로 표시"),
+            el("label", { class: "a-check" }, [f.showCodes, "문구 앞 코드(H351, P280 등)도 라벨에 표시"]),
+            field("하단 안내 문구", f.notice),
+            field("공급원", f.supplier, "MSDS 1번 항목의 회사명·주소·전화번호")
           ])
         ]),
         el("div", { class: "lb-col" }, [
           el("section", { class: "a-card lb-sticky" }, [
-            el("h2", { text: "3. 미리보기 · 출력" }),
+            el("h2", { text: "4. 미리보기 · 출력" }),
             el("div", { class: "lb-preview-wrap" }, [preview]),
+            fitWarn,
             el("div", { class: "lb-form-grid" }, [
               field("매수", f.copies),
               field("프린터 해상도 (ZPL)", f.dpi, "ZT421 뒷면 라벨에서 확인"),
               el("label", { class: "a-check lb-span" }, [f.rotate, "ZPL을 90° 돌려서 출력 (라벨이 세로로 들어갈 때)"])
             ]),
             el("div", { class: "a-row" }, [printBtn, zplBtn]),
-            el("p", { class: "a-hint", text: "[인쇄] Windows 프린터 목록에서 ZDesigner ZT421을 고르고, 드라이버의 용지(라벨) 크기를 130 × 100mm, 여백 없음, 배율 100%로 맞춰 주세요. " +
+            el("p", { class: "a-hint", text: "[인쇄] Windows 프린터 목록에서 ZDesigner ZT421을 고르고, 드라이버의 용지(라벨) 크기를 130 × 150mm, 여백 없음, 배율 100%로 맞춰 주세요. " +
               "[ZPL 파일 저장] 라벨을 그림으로 바꾼 ZPL을 저장합니다. Zebra Setup Utilities의 [파일 보내기]나 프린터 웹 화면(Directories → 파일 보내기)으로 보내면 드라이버 설정과 관계없이 정확한 크기로 찍힙니다." }),
             msg
           ])
         ])
       ])
     );
+
+    function lines(text) {
+      return String(text).split("\n").map(function (l) { return l.trim(); }).filter(Boolean);
+    }
 
     function data() {
       return {
@@ -581,6 +723,11 @@
         weight: f.weight.value.trim(),
         kind: f.kind.value.trim(),
         signal: f.signal.value,
+        h: lines(f.h.value),
+        p: lines(f.p.value),
+        showCodes: f.showCodes.checked,
+        notice: f.notice.value.trim(),
+        supplier: f.supplier.value.trim(),
         pictos: GHS_CODES.filter(function (c) { return ghsBoxes[c].checked; })
       };
     }
@@ -588,8 +735,8 @@
     function draw() {
       preview.innerHTML = buildLabelHtml(data(), ghsSrc);
       var label = preview.querySelector(".lb-label");
-      imagesReady(label).then(function () { fitText(label); });
-      fitText(label);
+      imagesReady(label).then(function () { fitWarn.hidden = !fitText(label); });
+      fitWarn.hidden = !fitText(label);
     }
 
     Object.keys(f).forEach(function (k) {
@@ -605,7 +752,16 @@
     f.lot.addEventListener("input", function () { f.lot.dataset.touched = "1"; });
 
     function remember() {
-      writeJson(SETTINGS_KEY, { dry: f.dry.value.trim(), keep: f.keep.value.trim(), weight: f.weight.value.trim(), dpi: f.dpi.value, rotate: f.rotate.checked });
+      writeJson(SETTINGS_KEY, {
+        dry: f.dry.value.trim(),
+        keep: f.keep.value.trim(),
+        weight: f.weight.value.trim(),
+        dpi: f.dpi.value,
+        rotate: f.rotate.checked,
+        showCodes: f.showCodes.checked,
+        notice: f.notice.value.trim(),
+        supplier: f.supplier.value.trim()
+      });
       if (/^DYP\d{4}\d+$/.test(f.lot.value.trim())) {
         writeJson(LOT_KEY, f.lot.value.trim());
       }
@@ -706,6 +862,8 @@
       f.name.value = r.product_name || r.title || "";
       GHS_CODES.forEach(function (c) { ghsBoxes[c].checked = false; });
       f.signal.value = "";
+      f.h.value = "";
+      f.p.value = "";
       drawResults();
       draw();
       setMsg(hazMsg, "MSDS에서 그림문자를 읽는 중...");
@@ -721,11 +879,17 @@
           f.resin.value = info.resin;
           f.kind.value = info.kind;
         }
+        f.h.value = info.h.join("\n");
+        f.p.value = info.p.join("\n");
+        if (info.supplier) {
+          f.supplier.value = info.supplier;
+        }
         draw();
         setMsg(hazMsg, (info.source + "에서 불러옴 · ") +
           (info.pictos.length ? "그림문자 " + info.pictos.map(function (c) { return GHS_NAME[c]; }).join(", ") : "그림문자 없음") +
           (info.signal ? " · 신호어 " + info.signal : "") +
-          (info.codes.length ? " · " + info.codes.join(" ") : ""), info.pictos.length || info.codes.length ? "ok" : null);
+          (info.codes.length ? " · " + info.codes.join(" ") : "") +
+          " · 유해·위험문구 " + info.h.length + "줄, 예방조치문구 " + info.p.length + "줄", info.pictos.length || info.codes.length ? "ok" : null);
       } catch (err) {
         if (seq !== loadSeq) {
           return;
