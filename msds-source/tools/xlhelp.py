@@ -17,23 +17,39 @@ def _restore(ws,merges,hs,brks,at,n):
         if n<0 and at<=r<at-n: continue
         ws.row_dimensions[r+n if r>=at else r].height=h
     for m in merges:
-        if n<0 and m.min_row>=at and m.max_row<at-n: continue
-        if m.min_row>=at: m.shift(row_shift=n)
+        if n<0:
+            d0,d1=at,at-n-1                      # 지워진 행 범위
+            if m.max_row<d0: pass
+            elif m.min_row>d1: m.shift(row_shift=n)
+            elif m.min_row>=d0 and m.max_row<=d1: continue
+            else:                                # 일부만 겹치는 병합은 줄인다
+                lo=min(m.min_row,d0) if m.min_row<d0 else d0
+                hi=m.max_row+n if m.max_row>d1 else d0-1
+                if hi<lo or (hi==lo and m.min_col==m.max_col): continue
+                m=CellRange(min_col=m.min_col,min_row=lo,max_col=m.max_col,max_row=hi)
+        elif m.min_row>=at: m.shift(row_shift=n)
+        if m.min_row==m.max_row and m.min_col==m.max_col: continue
         ws.merge_cells(str(m))
     ws.row_breaks=RowBreak()
     for b in brks: ws.row_breaks.append(Break(id=b+n if b>=at else b))
 def delete_row(ws,r):
     merges,hs,brks=_snap(ws); ws.delete_rows(r,1); _restore(ws,merges,hs,brks,r,-1)
+def snap_row(ws,k):
+    return {'styles':[copy.copy(ws.cell(k,c)._style) for c in range(1,6)],
+            'merges':[(m.min_col,m.max_col) for m in ws.merged_cells.ranges if m.min_row==m.max_row==k],
+            'height':ws.row_dimensions[k].height or 20}
 def insert_before(ws,r,items,tpl=None):
-    tpl=tpl or r-1; n=len(items)
+    snap=tpl if isinstance(tpl,dict) else None
+    tpl=None if snap else (tpl or r-1); n=len(items)
+    if snap is None: snap=snap_row(ws,tpl)
     merges,hs,brks=_snap(ws)
-    tmerge=[(m.min_col,m.max_col) for m in merges if m.min_row==m.max_row==tpl]
+    tmerge=snap['merges']
     ws.insert_rows(r,n); _restore(ws,merges,hs,brks,r,n)
     for i,(a,b) in enumerate(items):
         rr=r+i
-        for c in range(1,6): ws.cell(rr,c)._style=copy.copy(ws.cell(tpl,c)._style)
+        for c in range(1,6): ws.cell(rr,c)._style=copy.copy(snap['styles'][c-1])
         ws.cell(rr,1).value=(IND+a) if a else None; ws.cell(rr,2).value=b
-        ws.row_dimensions[rr].height=hs.get(tpl) or 20
+        ws.row_dimensions[rr].height=snap['height']
         for c1,c2 in tmerge: ws.merge_cells(start_row=rr,start_column=c1,end_row=rr,end_column=c2)
 def sec_range(ws,n):
     a=next(k for k in range(1,ws.max_row+1) if re.match(rf'^{n}\.\s*',norm(ws.cell(k,1).value)) and ws.cell(k,1).fill.fgColor.rgb.endswith('E6E6FA'))
@@ -54,7 +70,7 @@ def rng(v):
       하한은 단위 1칸 아래로 내려가지 않음 / 0.01 미만은 KEEP()에서 제외"""
     import math
     s=repr(v); d=len(s.split('.')[1].rstrip('0')) if '.' in s else 0
-    if d>=3: v=int(v*100+1e-9)/100; st=0.01
+    if d>=3 and v<1: v=int(v*100+1e-9)/100; st=0.01      # 1 미만 소수 셋째 자리 이상: 둘째 자리 ±0.01
     else: st=2 if v>=50 else 1 if v>=1 else 0.1 if v>=0.1 else 0.01
     u=1 if st==2 else st
     c=math.ceil(round(v/u-0.5,9))*u
