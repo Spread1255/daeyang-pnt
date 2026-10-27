@@ -40,6 +40,20 @@
     supplier: ""
   };
   // 문구 앞 코드: "H351", "P301+P312" 등
+  // 라벨에 넣는 예방조치문구 줄 수: 그림문자 1개면 그 그림문자로 4줄, 2개면 그림문자마다 2줄
+  var P_LINES = 4;
+  // 그림문자별로 우선 고를 예방조치문구 (GHS 기준 그 유해성에 해당하는 대표 문구, 앞쪽이 우선)
+  var P_BY_GHS = {
+    GHS01: ["P210", "P234", "P240", "P250", "P230", "P370+P380", "P372", "P373", "P401"],
+    GHS02: ["P210", "P233", "P240", "P241", "P242", "P243", "P370+P378", "P403+P235"],
+    GHS03: ["P210", "P220", "P221", "P280", "P370+P378", "P501"],
+    GHS04: ["P410+P403", "P410", "P403"],
+    GHS05: ["P280", "P260", "P303+P361+P353", "P305+P351+P338", "P301+P330+P331", "P310", "P264", "P363", "P405"],
+    GHS06: ["P264", "P270", "P280", "P301+P310", "P302+P352", "P304+P340", "P260", "P310", "P405"],
+    GHS07: ["P264", "P280", "P302+P352", "P305+P351+P338", "P270", "P301+P312", "P261", "P304+P340", "P332+P313", "P337+P313", "P362+P364", "P330", "P321"],
+    GHS08: ["P201", "P308+P313", "P202", "P260", "P284", "P342+P311", "P301+P310", "P331", "P314", "P405"],
+    GHS09: ["P273", "P391", "P501"]
+  };
   var STMT_CODE_RE = /^([HP]\d{3}[A-Za-z]?(?:\s*\+\s*[HP]\d{3}[A-Za-z]?)*)\s*[:：]?\s*/;
 
   var LABEL_CSS =
@@ -70,7 +84,7 @@
     ".lb-hz-col.h{flex:0 0 33%;}" +
     ".lb-hz-col.p{flex:1;border-left:0.25mm solid #000;}" +
     ".lb-hz-tag{flex:none;width:5.2mm;border-right:0.25mm solid #000;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:2.9mm;line-height:1.08;font-weight:700;}" +
-    ".lb-hz-text{flex:1;min-width:0;overflow:hidden;padding:1mm 1.4mm;font-size:2.7mm;line-height:1.32;word-break:keep-all;overflow-wrap:anywhere;}" +
+    ".lb-hz-text{flex:1;min-width:0;overflow:hidden;padding:1.2mm 1.6mm;font-size:3.4mm;line-height:1.4;word-break:keep-all;overflow-wrap:anywhere;}" +
     ".lb-hz-text p{margin:0;}" +
     ".lb-foot{flex:none;border-top:0.25mm solid #000;padding:0.8mm 2mm;text-align:center;font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;font-size:2.4mm;line-height:1.35;}" +
     ".lb-foot b{font-weight:700;}";
@@ -326,6 +340,39 @@
       }
     }
     throw lastErr || new Error("읽을 수 있는 MSDS 파일이 없습니다");
+  }
+
+  // 그림문자에 맞춰 예방조치문구를 P_LINES 줄 고른다. 그림문자마다 몫(1개 4줄, 2개 2줄씩, 3개 2·1·1줄 …)을 나누고,
+  // 그 그림문자의 우선 문구 중 MSDS에 있는 것을 고른다. 모자라면 MSDS 순서대로 남은 문구로 채운다.
+  function selectPrecautions(all, pictos) {
+    var codeOf = function (line) {
+      var m = String(line).match(STMT_CODE_RE);
+      return m ? m[1].replace(/\s+/g, "") : "";
+    };
+    var used = [];
+    var take = function (line) {
+      if (line && used.indexOf(line) < 0 && used.length < P_LINES) {
+        used.push(line);
+        return true;
+      }
+      return false;
+    };
+    var list = pictos.slice(0, P_LINES);
+    list.forEach(function (g, i) {
+      var quota = Math.floor(P_LINES / list.length) + (i < P_LINES % list.length ? 1 : 0);
+      (P_BY_GHS[g] || []).forEach(function (code) {
+        if (quota <= 0) {
+          return;
+        }
+        var hit = all.filter(function (l) { return codeOf(l) === code && used.indexOf(l) < 0; })[0];
+        if (take(hit)) {
+          quota--;
+        }
+      });
+    });
+    all.forEach(take);
+    // 그림문자 순서대로 묶어서 보여 준다
+    return used;
   }
 
   // ---------- 라벨 그리기 ----------
@@ -592,6 +639,7 @@
     var archiveBy = {};
     var ghsSrc = {};
     var current = null; // 고른 MSDS 행
+    var allP = []; // MSDS의 예방조치문구 전체
     var loadSeq = 0;
 
     if (!document.getElementById("lb-style")) {
@@ -638,7 +686,7 @@
 
     var ghsBoxes = {};
     var ghsPick = el("div", { class: "lb-ghs-pick" }, GHS_CODES.map(function (c) {
-      var box = el("input", { type: "checkbox", value: c, onchange: draw });
+      var box = el("input", { type: "checkbox", value: c, onchange: function () { autoP(false); draw(); } });
       ghsBoxes[c] = box;
       return el("label", { class: "lb-ghs-opt", title: c + " " + GHS_NAME[c] }, [box, el("img", { src: "ghs/" + c + ".svg", alt: "" }), el("span", { text: GHS_NAME[c] })]);
     }));
@@ -680,9 +728,13 @@
           ]),
           el("section", { class: "a-card" }, [
             el("h2", { text: "3. 유해·위험문구 · 예방조치문구" }),
-            el("p", { class: "a-hint", text: "MSDS 2번 항목의 문구를 한 줄에 하나씩 불러옵니다. 라벨 칸에 다 들어가도록 글씨가 자동으로 작아집니다. 너무 작으면 덜 중요한 줄을 지워 주세요." }),
+            el("p", { class: "a-hint", text: "MSDS 2번 항목의 문구를 한 줄에 하나씩 불러옵니다. 예방조치문구는 그림문자에 해당하는 문구로 4줄만 넣습니다. 칸을 넘치면 글씨가 자동으로 작아집니다." }),
             field("유해·위험문구", f.h, "한 줄에 하나 · 라벨에는 ' / '로 이어서 표시"),
-            field("예방조치문구", f.p, "한 줄에 하나 · 라벨에는 '·' 목록으로 표시"),
+            field("예방조치문구", f.p, "그림문자에 맞춰 MSDS에서 4줄을 고릅니다 (그림문자 1개: 4줄, 2개: 각 2줄) · 라벨에는 '·' 목록으로 표시"),
+            el("div", { class: "a-row" }, [
+              el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "그림문자에 맞춰 4줄 다시 고르기", onclick: function () { autoP(true); draw(); } }),
+              el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "MSDS 예방조치문구 전체 넣기", onclick: function () { f.p.value = allP.join("\n"); f.p.dataset.touched = "1"; draw(); } })
+            ]),
             el("label", { class: "a-check" }, [f.showCodes, "문구 앞 코드(H351, P280 등)도 라벨에 표시"]),
             field("하단 안내 문구", f.notice),
             field("공급원", f.supplier, "MSDS 1번 항목의 회사명·주소·전화번호")
@@ -732,6 +784,15 @@
       };
     }
 
+    // 직접 고친 예방조치문구는 그림문자를 바꿔도 덮어쓰지 않는다 (force면 다시 고른다)
+    function autoP(force) {
+      if (!force && f.p.dataset.touched) {
+        return;
+      }
+      delete f.p.dataset.touched;
+      f.p.value = selectPrecautions(allP, GHS_CODES.filter(function (c) { return ghsBoxes[c].checked; })).join("\n");
+    }
+
     function draw() {
       preview.innerHTML = buildLabelHtml(data(), ghsSrc);
       var label = preview.querySelector(".lb-label");
@@ -750,6 +811,7 @@
       }
     });
     f.lot.addEventListener("input", function () { f.lot.dataset.touched = "1"; });
+    f.p.addEventListener("input", function () { f.p.dataset.touched = "1"; });
 
     function remember() {
       writeJson(SETTINGS_KEY, {
@@ -864,6 +926,8 @@
       f.signal.value = "";
       f.h.value = "";
       f.p.value = "";
+      allP = [];
+      delete f.p.dataset.touched;
       drawResults();
       draw();
       setMsg(hazMsg, "MSDS에서 그림문자를 읽는 중...");
@@ -880,7 +944,8 @@
           f.kind.value = info.kind;
         }
         f.h.value = info.h.join("\n");
-        f.p.value = info.p.join("\n");
+        allP = info.p;
+        autoP(true);
         if (info.supplier) {
           f.supplier.value = info.supplier;
         }
