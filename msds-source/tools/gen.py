@@ -7,7 +7,7 @@ from ex import txt, sections
 def nkey(n): return re.sub(r'[\s#]','',re.sub(r'\(IN\)$','',str(n).strip().upper()))
 ALIAS={  # 원료명 → CAS
  'HC7803':'27923-68-8','HC6011':'114267-10-6','HC5803':'114267-10-6','HC6805':'114267-10-6','PC2802':'40471-09-8',
- 'YD013K':'25036-25-3','KER3002':'25036-25-3','KER3003':'25036-25-3','XG665':'37953-21-2',
+ 'YD013K':'25036-25-3','E-12':'25036-25-3','QM1260':'57843-53-5','S7000':'1317-65-3','CTCOPPER':'7440-50-8','KER3002':'25036-25-3','KER3003':'25036-25-3','XG665':'37953-21-2',
  'ADP964':'25214-38-4','XG603-1A':'54553-90-1','PCA-501':'6334-25-4','XL552':'6334-25-4','XL-552':'6334-25-4',
  'LA-100':'9003-49-0','L-88':'9003-49-0','BENZOIN':'119-53-9','JS-250':'9002-88-4','CERA-969':'9002-88-4',
  'VISCOGEL':'68953-58-2','PANGELB20':'63800-37-3','AHA-2139':'9010-77-9','CT-0230':'60621-79-6','SONOX626':'26741-53-7',
@@ -111,7 +111,7 @@ def build(p,no,out):
         if not cas: rep['unknown'].append(raw); continue
         if not KEEP(val): rep['excluded'].append((raw,val)); continue
         hit=next((c for c in comp if c[0]==cas),None)
-        if hit: hit[1].append(raw); hit[2]=round(hit[2]+val,6)
+        if hit: hit[1].append(raw); hit[2]=round(hit[2]+val,p.get('nd',6))
         else: comp.append([cas,[raw],float(val)])
     if rep['unknown']: return None,rep
     wb=openpyxl.load_workbook(TPL)
@@ -221,5 +221,5 @@ def build(p,no,out):
                 nx=norm(ws.cell(k+1,1).value) if k+1<b else '-'
                 child=(k+1<b) and ws.cell(k+1,2).value and not (nx.startswith(('-','*')) or nx in ('ACGIH 규정',) or re.match(r'^[가-하]\.',nx))
                 if not child: ws.cell(k,2).value='자료없음'
-    apply_sec2(ws)
+    apply_sec2(ws,p.get('carc','2'))
     wb.save(out); return out,rep

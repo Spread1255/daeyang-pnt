@@ -87,11 +87,14 @@ SEC2_PREV=['P201 사용 전 취급 설명서를 확보하시오.','P202 모든 �
 SEC2_RESP=['P301+P312 삼켰다면: 불편함을 느끼면 의료기관/의사의 진찰을 받으시오.','P302+P352 피부에 묻으면: 다량의 물로 씻으시오.',
  'P308+P313 노출되거나 노출이 우려되면:의학적인 조치/조언을 받으시오.','P321 적절한 처치를 하시오.','P330 입을 씻어내시오.',
  'P332+P313 피부 자극이 나타나면: 의학적인 조치/조언을 받으시오.','P362+P364 오염된 의류를 벗고 다시 사용 전 세척하시오.']
-def apply_sec2(ws):
+def apply_sec2(ws,carc='2'):
     a,b=sec_range(ws,2)
     assert norm(ws.cell(a+1,1).value).startswith('가.') and a==15
-    for i,t in enumerate(SEC2_CLASS): ws.cell(16+i,2).value=t
-    for i,t in enumerate(SEC2_H): ws.cell(23+i,2).value=t
+    cls,hs=list(SEC2_CLASS),list(SEC2_H)
+    if carc=='1A':  # 발암성 1A 원료 함유(예: YELLOW P210) — 구분2 대신 1A, H350, 신호어 위험
+        cls[2]='발암성 : 구분1A'; hs[0]='H350 암을 일으킬 수 있음'; ws.cell(22,2).value='위험'
+    for i,t in enumerate(cls): ws.cell(16+i,2).value=t
+    for i,t in enumerate(hs): ws.cell(23+i,2).value=t
     r_resp=row_of(ws,lambda t:t=='대응',a,b); r_store=row_of(ws,lambda t:t=='저장',a,b); r_prev=row_of(ws,lambda t:t=='예방',a,b)
     n_prev=r_resp-r_prev; n_resp=r_store-r_resp
     insert_before(ws,r_store,[(None,None)]*(len(SEC2_RESP)-n_resp))
