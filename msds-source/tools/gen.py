@@ -7,7 +7,7 @@ from ex import txt, sections
 def nkey(n): return re.sub(r'[\s#]','',re.sub(r'\(IN\)$','',str(n).strip().upper()))
 ALIAS={  # 원료명 → CAS
  'HC7803':'27923-68-8','HC6011':'114267-10-6','HC5803':'114267-10-6','HC6805':'114267-10-6','PC2802':'40471-09-8',
- 'YD013K':'25036-25-3','E-12':'25036-25-3','CC2682':'40471-09-8','QM1260':'57843-53-5','S7000':'1317-65-3','CTCOPPER':'7440-50-8','KER3002':'25036-25-3','KER3003':'25036-25-3','XG665':'37953-21-2',
+ 'YD013K':'25036-25-3','E-12':'25036-25-3','RICHGOLD(CU)':'7440-50-8','RICHGOLD(ZN)':'7440-66-6','PALEGOLD(CU)':'7440-50-8','PALEGOLD(ZN)':'7440-66-6','CC2682':'40471-09-8','QM1260':'57843-53-5','S7000':'1317-65-3','CTCOPPER':'7440-50-8','KER3002':'25036-25-3','KER3003':'25036-25-3','XG665':'37953-21-2',
  'ADP964':'25214-38-4','XG603-1A':'54553-90-1','PCA-501':'6334-25-4','XL552':'6334-25-4','XL-552':'6334-25-4',
  'LA-100':'9003-49-0','L-88':'9003-49-0','BENZOIN':'119-53-9','JS-250':'9002-88-4','CERA-969':'9002-88-4',
  'VISCOGEL':'68953-58-2','PANGELB20':'63800-37-3','AHA-2139':'9010-77-9','CT-0230':'60621-79-6','SONOX626':'26741-53-7',
@@ -23,7 +23,7 @@ _t=openpyxl.load_workbook(TPL)['Sheet1']
 TROW={_t.cell(r,4).value:[_t.cell(r,1).value,_t.cell(r,3).value] for r in range(38,50)}  # IV064 3번 표 (CAS→[물질명, 이명])
 NAME3={**TROW,
  '40471-09-8':['폴리에스테르 수지','1,4-벤젠다이카복실산, 2,2-다이메틸-1,3-프로판다이올, 1,2-에탄다이올 및 헥산다이오산 함유 1,3-벤젠다이카복실산 중합체'],
- '6334-25-4':["N,N,N',N'-Tetrakis(2-hydroxyethyl)adipamide",None],
+ '6334-25-4':['폴리에스테르 경화제',"N,N,N',N'-Tetrakis(2-hydroxyethyl)adipamide"],
  '9010-77-9':['아크릴산-에틸렌 공중합체(ACRYLIC ACID-ETHYLENE COPOLYMER)','2-프로페노 산, 중합물 ,함유 에텐(2-PROPENOIC ACID, POLYMER WITH ETHENE);'],
  '21645-51-2':['수산화알루미늄',None],
  '26741-53-7':['3,9-비스(2,4-비스(1,1-다이메틸에틸)펜옥시)-2,4,8,10-테트라옥사-3,9-디포스파스피로[5.5]언데칸','SONOX626'],
@@ -33,7 +33,10 @@ NAME3={**TROW,
  '25214-38-4':['폴리에스테르 수지','1,3-Benzenedicarboxylic acid, polymer with 1,4-benzenedicarboxylic acid and 2,2-dimethyl-1,3-propanediol'],
  '37953-21-2':['아크릴 수지','Styrene-butyl acrylate-glycidyl methacrylate-methyl methacrylate copolymer'],
  '60621-79-6':['아크릴 공중합체','Butyl acrylate-methyl methacrylate-styrene-glycidyl methacrylate-α-methyl styrene copolymer'],
- '54553-90-1':['Benzene-1,2,4,5-tetracarboxylic acid, compound with 4,5-dihydro-2-phenyl-1H-imidazole (1:1)',None],
+ # 경화제: 물질명은 '에폭시/폴리에스테르 경화제', 화학명은 이명 칸 (기존 BLACK 무광 MSDS 기준)
+ '54553-90-1':['에폭시 경화제','benzene-1,2,4,5-tetracarboxylic acid, compound with 4,5-dihydro-2-phenyl-1H-imidazole (1:1)'],
+ '57843-53-5':['폴리에스테르 경화제','N,N,N,N-테트라키스(2-하이드록시프로필)아디프아미이드'],
+ '7440-50-8':['구리',None],'7440-66-6':['아연','Zinc'],'7429-90-5':['알루미늄','Aluminum'],
 }
 TLABEL={'에폭시 수지':'25036-25-3','에폭시수지':'25036-25-3','벤조인':'119-53-9','폴리에틸렌(POLYETHYLENE)':'9002-88-4','Barite (Ba(SO4))':'13462-86-7',
  '이산화티타늄':'13463-67-7','C.I. 색소 황색 83(C.I. PIGMENT YELLOW 83)':'5567-15-7','Limestone':'1317-65-3','산화철':'1309-37-1'}
@@ -95,7 +98,7 @@ def kname(cas):
     if not s: return None
     s3=[clean(x) for x in s[3]]
     nm=s3[2] if len(s3)>2 else None
-    al=s3[4] if len(s3)>4 and s3[3]=='이명(관용명)' and s3[4]!='CAS 번호' else None
+    al=s3[4] if len(s3)>4 and s3[3]=='이명(관용명)' and s3[4] not in ('CAS 번호','자료없음') else None
     return [nm,al]
 
 COLOR={'BE':'베이지색','BK':'흑색','BL':'청색','BR':'갈색','GY':'회색','IV':'아이보리색','RD':'적색','WH':'백색','YL':'황색','GD':'금색','GN':'녹색','SI':'은색'}
@@ -125,9 +128,9 @@ def build(p,no,out):
     for i,(cas,raws,v) in enumerate(comp):
         nm=NAME3.get(cas) or kname(cas) or [raws[0],None]
         r=38+i
-        ws.cell(r,1).value=nm[0]; ws.cell(r,3).value=nm[1]; ws.cell(r,4).value=cas; ws.cell(r,5).value=rng_item(cas,v)
+        ws.cell(r,1).value=nm[0]; ws.cell(r,3).value=nm[1]; ws.cell(r,4).value=cas; ws.cell(r,5).value=p.get('rng',{}).get(cas,rng_item(cas,v))
         L=max(len(nm[0] or ''),len(nm[1] or '')); ws.row_dimensions[r].height=56.25 if L>90 else 45 if L>60 else (33.75 if L>34 else 24.75)
-        present.add(cas); rep['rows'].append((', '.join(raws),cas,v,rng_item(cas,v)))
+        present.add(cas); rep['rows'].append((', '.join(raws),cas,v,p.get('rng',{}).get(cas,rng_item(cas,v))))
     short={}
     for cas,raws,v in comp:
         nm=(NAME3.get(cas) or kname(cas) or [raws[0]])[0]
