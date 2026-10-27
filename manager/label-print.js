@@ -758,7 +758,7 @@
               field("저장기간", f.keep),
               field("실중량", f.weight),
               field("종류", f.kind),
-              field("신호어", f.signal)
+              field("신호어", f.signal, "MSDS를 불러오면 '위험'으로 표시 · 필요하면 바꿀 수 있음")
             ]),
             el("div", { class: "a-field" }, ["그림문자", el("small", { text: "MSDS에서 불러온 그림문자가 체크됩니다. 필요하면 직접 바꿀 수 있습니다." }), ghsPick])
           ]),
@@ -977,7 +977,8 @@
         }
         r.pictos = info.pictos;
         info.pictos.forEach(function (c) { ghsBoxes[c].checked = true; });
-        f.signal.value = info.signal === "위험" || info.signal === "경고" ? info.signal : "";
+        // 라벨 신호어는 회사 기준으로 "위험"으로 표시한다 (MSDS에 신호어나 그림문자가 있을 때)
+        f.signal.value = info.signal || info.pictos.length ? "위험" : "";
         if (info.resin) {
           f.resin.value = info.resin;
           f.kind.value = info.kind;
