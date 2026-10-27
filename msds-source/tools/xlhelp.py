@@ -87,21 +87,30 @@ SEC2_PREV=['P201 사용 전 취급 설명서를 확보하시오.','P202 모든 �
 SEC2_RESP=['P301+P312 삼켰다면: 불편함을 느끼면 의료기관/의사의 진찰을 받으시오.','P302+P352 피부에 묻으면: 다량의 물로 씻으시오.',
  'P308+P313 노출되거나 노출이 우려되면:의학적인 조치/조언을 받으시오.','P321 적절한 처치를 하시오.','P330 입을 씻어내시오.',
  'P332+P313 피부 자극이 나타나면: 의학적인 조치/조언을 받으시오.','P362+P364 오염된 의류를 벗고 다시 사용 전 세척하시오.']
+CARC_P={'P201','P202','P308+P313','P405'}  # 발암성에만 붙는 예방조치문구
 def apply_sec2(ws,carc='2'):
+    """carc: '2'(기본), '1A'(H350·위험), None(이산화티타늄 없음 → 발암성·H351·GHS08·발암성 전용 P문구 뺌)"""
     a,b=sec_range(ws,2)
     assert norm(ws.cell(a+1,1).value).startswith('가.') and a==15
     cls,hs=list(SEC2_CLASS),list(SEC2_H)
+    prev,resp,store=list(SEC2_PREV),list(SEC2_RESP),['P405 잠금장치를 하여 저장하시오.']
     if carc=='1A':  # 발암성 1A 원료 함유(예: YELLOW P210) — 구분2 대신 1A, H350, 신호어 위험
         cls[2]='발암성 : 구분1A'; hs[0]='H350 암을 일으킬 수 있음'; ws.cell(22,2).value='위험'
-    for i,t in enumerate(cls): ws.cell(16+i,2).value=t
-    for i,t in enumerate(hs): ws.cell(23+i,2).value=t
-    r_resp=row_of(ws,lambda t:t=='대응',a,b); r_store=row_of(ws,lambda t:t=='저장',a,b); r_prev=row_of(ws,lambda t:t=='예방',a,b)
-    n_prev=r_resp-r_prev; n_resp=r_store-r_resp
-    insert_before(ws,r_store,[(None,None)]*(len(SEC2_RESP)-n_resp))
-    insert_before(ws,r_resp,[(None,None)]*(len(SEC2_PREV)-n_prev))
-    r_prev=row_of(ws,lambda t:t=='예방',a,b+20); r_resp=row_of(ws,lambda t:t=='대응',a,b+20)
-    for i,t in enumerate(SEC2_PREV): ws.cell(r_prev+i,2).value=t
-    for i,t in enumerate(SEC2_RESP): ws.cell(r_resp+i,2).value=t
+    if carc is None:
+        cls=cls[:2]; hs=hs[1:]
+        keep=lambda t:t.split()[0] not in CARC_P
+        prev=[t for t in prev if keep(t)]; resp=[t for t in resp if keep(t)]; store=[]
+    def fit(label,nxt,vals):  # label 블록 행 수를 vals에 맞추고 값 채움
+        r=row_of(ws,lambda t:t==label,a,b+20); e=row_of(ws,lambda t:t==nxt,r+1,b+20); n=e-r
+        if len(vals)>n: insert_before(ws,e,[(None,None)]*(len(vals)-n))
+        for k in range(r+n-1,r+max(len(vals),1)-1,-1): delete_row(ws,k)
+        if not vals: delete_row(ws,r); return
+        for k,t in enumerate(vals): ws.cell(r+k,2).value=t
+    fit('저장','폐기',store); fit('대응','저장' if store else '폐기',resp); fit('예방','대응',prev)
+    for k,t in enumerate(hs): ws.cell(23+k,2).value=t
+    for k in range(23+len(hs),26): delete_row(ws,23+len(hs))
+    for k,t in enumerate(cls): ws.cell(16+k,2).value=t
+    for k in range(16+len(cls),19): delete_row(ws,16+len(cls))
 
 # 수지(폴리에스테르·에폭시·아크릴 수지) — 1 이상이면 정수로 버린 값 ±2 (22 → 20 ∽ 24, 18.6 → 16 ∽ 20, 57 → 55 ∽ 59)
 RESIN_CAS={'27923-68-8','114267-10-6','25036-25-3','40471-09-8','37953-21-2','25214-38-4'}

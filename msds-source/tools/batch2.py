@@ -30,7 +30,7 @@ for k,code,name,num,opt in JOBS:
     if 'base' in opt: items=expand(items,name,opt['base'])
     no=f'AA14944-{num:010d}'
     fn=f"{code} {re.sub(r'^(내장형|외장형)\s*','',name)} MSDS".replace('/','-')
-    out,rep=build(dict(code=code,name=name,items=items,carc=opt.get('carc','2'),nd=2 if 'base' in opt else 6),no,f'{OUT}/{fn}.xlsx')
+    out,rep=build(dict(code=code,name=name,items=items,carc=opt.get('carc'),nd=2 if 'base' in opt else 6),no,f'{OUT}/{fn}.xlsx')
     print(num,code,'OK' if out else rep['unknown'],rep['excluded'])
     for r in rep['rows']: print('    ',r)
     res.append(dict(code=code,name=name,no=no,file=fn if out else None,status='생성' if out else '보류',excluded=rep['excluded'],rows=rep['rows'],k=k))

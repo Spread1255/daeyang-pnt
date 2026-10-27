@@ -224,5 +224,6 @@ def build(p,no,out):
                 nx=norm(ws.cell(k+1,1).value) if k+1<b else '-'
                 child=(k+1<b) and ws.cell(k+1,2).value and not (nx.startswith(('-','*')) or nx in ('ACGIH 규정',) or re.match(r'^[가-하]\.',nx))
                 if not child: ws.cell(k,2).value='자료없음'
-    apply_sec2(ws,p.get('carc','2'))
+    # 발암성: 이산화티타늄이 없으면 발암성·H351·GHS08 표시 안 함
+    apply_sec2(ws,p.get('carc') or ('2' if '13463-67-7' in present else None))
     wb.save(out); return out,rep
