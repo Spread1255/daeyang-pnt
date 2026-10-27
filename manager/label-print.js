@@ -37,7 +37,8 @@
     dpi: "203",
     rotate: false,
     notice: "※ 기타 자세한 사항은 물질안전보건자료(MSDS)를 참조하시기 바랍니다.",
-    supplier: ""
+    supplier: "",
+    qr: "https://daeyangpnt.co.kr/msds"
   };
   // 문구 앞 코드: "H351", "P301+P312" 등
   // 라벨에 넣는 예방조치문구 줄 수: 그림문자 1개면 그 그림문자로 4줄, 2개면 그림문자마다 2줄
@@ -68,14 +69,17 @@
     ".lb-name{border-top:0.25mm solid #000;border-bottom:0.25mm solid #000;padding:1.4mm 2mm;text-align:center;white-space:nowrap;" +
     "font-family:'HY견명조','HYGyeonMyeongJo','Batang','바탕','Noto Serif KR',serif;font-weight:700;font-size:10mm;line-height:1.15;}" +
     ".lb-body{flex:1;display:flex;gap:2mm;padding:2mm 3mm 2mm 4mm;min-height:0;}" +
-    ".lb-label.has-hz .lb-body{flex:none;height:55mm;}" +
+    ".lb-label.has-hz .lb-body,.lb-label.has-warn .lb-body{flex:none;height:46mm;}" +
+    ".lb-qr{flex:none;align-self:center;width:30mm;height:30mm;}" +
+    ".lb-qr img{display:block;width:100%;height:100%;}" +
+    // 종류 아래 그림문자 줄 (그림문자 + 신호어)
+    ".lb-warn{flex:none;border-top:0.25mm solid #000;display:flex;align-items:center;justify-content:center;gap:3mm;padding:1.2mm 3mm;}" +
     ".lb-fields{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;font-size:4.6mm;line-height:1.2;min-width:0;}" +
     ".lb-row{display:flex;align-items:baseline;white-space:nowrap;}" +
     ".lb-key{display:flex;justify-content:space-between;width:19mm;flex:none;}" +
     ".lb-colon{margin:0 2mm 0 1.6mm;flex:none;}" +
     ".lb-val{overflow:hidden;}" +
-    ".lb-haz{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2mm;}" +
-    ".lb-ghs{display:flex;flex-wrap:wrap;justify-content:center;}" +
+    ".lb-ghs{display:flex;justify-content:center;gap:1.5mm;}" +
     ".lb-ghs img{display:block;}" +
     ".lb-signal{font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;font-weight:700;font-size:5mm;line-height:1;}" +
     // 유해·위험문구 / 예방조치문구 (첫 번째 라벨 견본처럼 왼쪽에 세로 제목)
@@ -376,12 +380,41 @@
   }
 
   // ---------- 라벨 그리기 ----------
-  function ghsLayout(n) {
-    // 그림문자 수에 따라 크기·칸 수를 정한다 (mm)
-    if (n <= 1) { return { size: 26, cols: 1 }; }
-    if (n === 2) { return { size: 21, cols: 1 }; }
-    if (n <= 4) { return { size: 20, cols: 2 }; }
-    return { size: 15.5, cols: 3 };
+  // 그림문자 한 줄 크기(mm): 많으면 줄인다
+  function ghsSize(n) {
+    return n <= 4 ? 20 : n <= 5 ? 17 : 14;
+  }
+
+  // QR 코드 → PNG 그림 (data URL). 글자가 없거나 도구가 없으면 ""
+  function qrDataUrl(text) {
+    if (!text || !window.qrcode) {
+      return "";
+    }
+    try {
+      window.qrcode.stringToBytes = window.qrcode.stringToBytesFuncs && window.qrcode.stringToBytesFuncs["UTF-8"] || window.qrcode.stringToBytes;
+      var qr = window.qrcode(0, "M");
+      qr.addData(text);
+      qr.make();
+      // 칸 하나를 정수 픽셀로 그린 PNG (그림 변환·인쇄에서 흐려지지 않게)
+      var n = qr.getModuleCount();
+      var cell = Math.max(4, Math.ceil(600 / n));
+      var canvas = document.createElement("canvas");
+      canvas.width = canvas.height = n * cell;
+      var ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#000";
+      for (var r = 0; r < n; r++) {
+        for (var c = 0; c < n; c++) {
+          if (qr.isDark(r, c)) {
+            ctx.fillRect(c * cell, r * cell, cell, cell);
+          }
+        }
+      }
+      return canvas.toDataURL("image/png");
+    } catch (e) {
+      return "";
+    }
   }
 
   function buildLabelHtml(d, ghsSrc) {
@@ -393,15 +426,17 @@
       var val = f[0] === "date" ? koDate(d.date) : d[f[0]];
       return '<div class="lb-row"><span class="lb-key">' + key + '</span><span class="lb-colon">:</span><span class="lb-val">' + esc(val) + "</span></div>";
     }).join("");
-    var haz = "";
+    var warn = "";
     if (d.pictos.length || d.signal) {
-      var lay = ghsLayout(d.pictos.length);
+      var size = ghsSize(d.pictos.length);
       var imgs = d.pictos.map(function (c) {
-        return '<img src="' + esc(ghsSrc[c] || "ghs/" + c + ".svg") + '" alt="' + c + '" style="width:' + lay.size + "mm;height:" + lay.size + 'mm">';
+        return '<img src="' + esc(ghsSrc[c] || "ghs/" + c + ".svg") + '" alt="' + c + '" style="width:' + size + "mm;height:" + size + 'mm">';
       }).join("");
-      haz = '<div class="lb-haz"><div class="lb-ghs" style="width:' + (lay.size * lay.cols) + 'mm">' + imgs + "</div>" +
+      warn = '<div class="lb-warn"><div class="lb-ghs">' + imgs + "</div>" +
         (d.signal ? '<div class="lb-signal">' + esc(d.signal) + "</div>" : "") + "</div>";
     }
+    var qrSrc = qrDataUrl(d.qr);
+    var qr = qrSrc ? '<div class="lb-qr"><img src="' + qrSrc + '" alt="QR"></div>' : "";
     function tag(text) {
       return '<div class="lb-hz-tag">' + text.split("").map(function (ch) { return "<span>" + esc(ch) + "</span>"; }).join("") + "</div>";
     }
@@ -418,12 +453,12 @@
     var foot = d.notice || d.supplier
       ? '<div class="lb-foot">' + (d.notice ? "<b>" + esc(d.notice) + "</b>" : "") + (d.notice && d.supplier ? "<br>" : "") + esc(d.supplier) + "</div>"
       : "";
-    return '<div class="lb-label' + (hz ? " has-hz" : "") + '"><div class="lb-frame"><div class="lb-inner">' +
+    return '<div class="lb-label' + (hz ? " has-hz" : "") + (warn ? " has-warn" : "") + '"><div class="lb-frame"><div class="lb-inner">' +
       '<div class="lb-head"><div class="lb-code">' + esc(d.code) + "</div>" +
       (d.resin ? '<div class="lb-resin">(' + esc(d.resin) + ")</div>" : "") + "</div>" +
       '<div class="lb-name">' + esc(d.name) + "</div>" +
-      '<div class="lb-body"><div class="lb-fields">' + rows + "</div>" + haz + "</div>" +
-      hz + foot +
+      '<div class="lb-body"><div class="lb-fields">' + rows + "</div>" + qr + "</div>" +
+      warn + hz + foot +
       "</div></div></div>";
   }
 
@@ -676,6 +711,7 @@
       p: el("textarea", { rows: "10", maxlength: "6000" }),
       showCodes: el("input", { type: "checkbox" }),
       notice: el("input", { type: "text", maxlength: "200", value: saved.notice }),
+      qr: el("input", { type: "text", maxlength: "500", value: saved.qr, placeholder: "예: https://daeyangpnt.co.kr/msds" }),
       supplier: el("input", { type: "text", maxlength: "300", value: saved.supplier })
     };
     f.lot.value = suggestLot(f.date.value);
@@ -737,7 +773,8 @@
             ]),
             el("label", { class: "a-check" }, [f.showCodes, "문구 앞 코드(H351, P280 등)도 라벨에 표시"]),
             field("하단 안내 문구", f.notice),
-            field("공급원", f.supplier, "MSDS 1번 항목의 회사명·주소·전화번호")
+            field("공급원", f.supplier, "MSDS 1번 항목의 회사명·주소·전화번호"),
+            field("QR 코드 내용", f.qr, "라벨 오른쪽 위(항목 옆)에 넣을 QR 코드의 주소나 글자 · 비우면 QR 코드 없음")
           ])
         ]),
         el("div", { class: "lb-col" }, [
@@ -780,6 +817,7 @@
         showCodes: f.showCodes.checked,
         notice: f.notice.value.trim(),
         supplier: f.supplier.value.trim(),
+        qr: f.qr.value.trim(),
         pictos: GHS_CODES.filter(function (c) { return ghsBoxes[c].checked; })
       };
     }
@@ -822,7 +860,8 @@
         rotate: f.rotate.checked,
         showCodes: f.showCodes.checked,
         notice: f.notice.value.trim(),
-        supplier: f.supplier.value.trim()
+        supplier: f.supplier.value.trim(),
+        qr: f.qr.value.trim()
       });
       if (/^DYP\d{4}\d+$/.test(f.lot.value.trim())) {
         writeJson(LOT_KEY, f.lot.value.trim());
