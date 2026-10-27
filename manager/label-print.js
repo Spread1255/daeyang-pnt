@@ -67,28 +67,28 @@
     ".lb-code{font-size:8mm;line-height:1.1;white-space:nowrap;letter-spacing:0.2mm;}" +
     ".lb-resin{font-size:3.6mm;line-height:1.3;margin-top:0.6mm;}" +
     ".lb-name{border-top:0.25mm solid #000;border-bottom:0.25mm solid #000;padding:1.4mm 2mm;text-align:center;white-space:nowrap;" +
-    "font-family:'HY견명조','HYGyeonMyeongJo','Batang','바탕','Noto Serif KR',serif;font-weight:700;font-size:10mm;line-height:1.15;}" +
-    ".lb-body{flex:1;display:flex;gap:2mm;padding:2mm 3mm 2mm 4mm;min-height:0;}" +
-    ".lb-label.has-hz .lb-body,.lb-label.has-warn .lb-body{flex:none;height:46mm;}" +
-    ".lb-qr{flex:none;align-self:center;width:30mm;height:30mm;}" +
+    "font-family:'HY견명조','HYGyeonMyeongJo','Batang','바탕','Noto Serif KR',serif;font-weight:700;font-size:8.5mm;line-height:1.15;}" +
+    ".lb-body{flex:1;display:flex;padding:2.5mm 4mm 2.5mm 8mm;min-height:0;}" +
+    // 종류 아래 그림문자 줄: 왼쪽 그림문자 + 신호어, 맨 오른쪽 QR 코드
+    ".lb-warn{flex:none;border-top:0.25mm solid #000;display:flex;align-items:center;justify-content:space-between;gap:3mm;padding:1.5mm 4mm;}" +
+    ".lb-warn-l{display:flex;align-items:center;gap:3mm;}" +
+    ".lb-qr{flex:none;width:21mm;height:21mm;margin-left:auto;}" +
     ".lb-qr img{display:block;width:100%;height:100%;}" +
-    // 종류 아래 그림문자 줄 (그림문자 + 신호어)
-    ".lb-warn{flex:none;border-top:0.25mm solid #000;display:flex;align-items:center;justify-content:center;gap:3mm;padding:1.2mm 3mm;}" +
-    ".lb-fields{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;font-size:4.6mm;line-height:1.2;min-width:0;}" +
+    ".lb-fields{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;font-size:5.4mm;line-height:1.25;min-width:0;}" +
     ".lb-row{display:flex;align-items:baseline;white-space:nowrap;}" +
-    ".lb-key{display:flex;justify-content:space-between;width:19mm;flex:none;}" +
-    ".lb-colon{margin:0 2mm 0 1.6mm;flex:none;}" +
+    ".lb-key{display:flex;justify-content:space-between;width:23mm;flex:none;}" +
+    ".lb-colon{margin:0 3mm 0 2mm;flex:none;}" +
     ".lb-val{overflow:hidden;}" +
-    ".lb-ghs{display:flex;justify-content:center;gap:1.5mm;}" +
+    ".lb-ghs{display:flex;gap:1.5mm;}" +
     ".lb-ghs img{display:block;}" +
     ".lb-signal{font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;font-weight:700;font-size:5mm;line-height:1;}" +
     // 유해·위험문구 / 예방조치문구 (첫 번째 라벨 견본처럼 왼쪽에 세로 제목)
-    ".lb-hz{flex:1;min-height:0;display:flex;border-top:0.25mm solid #000;font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;}" +
+    ".lb-hz{flex:none;height:27mm;display:flex;border-top:0.25mm solid #000;font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;}" +
     ".lb-hz-col{display:flex;min-width:0;}" +
-    ".lb-hz-col.h{flex:0 0 33%;}" +
+    ".lb-hz-col.h{flex:0 0 45%;}" +
     ".lb-hz-col.p{flex:1;border-left:0.25mm solid #000;}" +
     ".lb-hz-tag{flex:none;width:5.2mm;border-right:0.25mm solid #000;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:2.9mm;line-height:1.08;font-weight:700;}" +
-    ".lb-hz-text{flex:1;min-width:0;overflow:hidden;padding:1.2mm 1.6mm;font-size:3.4mm;line-height:1.4;word-break:keep-all;overflow-wrap:anywhere;}" +
+    ".lb-hz-text{flex:1;min-width:0;overflow:hidden;padding:1.2mm 1.6mm;text-align:left;font-size:3.4mm;line-height:1.4;word-break:keep-all;overflow-wrap:anywhere;}" +
     ".lb-hz-text p{margin:0;}" +
     ".lb-foot{flex:none;border-top:0.25mm solid #000;padding:0.8mm 2mm;text-align:center;font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;font-size:2.4mm;line-height:1.35;}" +
     ".lb-foot b{font-weight:700;}";
@@ -426,17 +426,17 @@
       var val = f[0] === "date" ? koDate(d.date) : d[f[0]];
       return '<div class="lb-row"><span class="lb-key">' + key + '</span><span class="lb-colon">:</span><span class="lb-val">' + esc(val) + "</span></div>";
     }).join("");
+    var qrSrc = qrDataUrl(d.qr);
+    var qr = qrSrc ? '<div class="lb-qr"><img src="' + qrSrc + '" alt="QR"></div>' : "";
     var warn = "";
-    if (d.pictos.length || d.signal) {
+    if (d.pictos.length || d.signal || qr) {
       var size = ghsSize(d.pictos.length);
       var imgs = d.pictos.map(function (c) {
         return '<img src="' + esc(ghsSrc[c] || "ghs/" + c + ".svg") + '" alt="' + c + '" style="width:' + size + "mm;height:" + size + 'mm">';
       }).join("");
-      warn = '<div class="lb-warn"><div class="lb-ghs">' + imgs + "</div>" +
-        (d.signal ? '<div class="lb-signal">' + esc(d.signal) + "</div>" : "") + "</div>";
+      warn = '<div class="lb-warn"><div class="lb-warn-l"><div class="lb-ghs">' + imgs + "</div>" +
+        (d.signal ? '<div class="lb-signal">' + esc(d.signal) + "</div>" : "") + "</div>" + qr + "</div>";
     }
-    var qrSrc = qrDataUrl(d.qr);
-    var qr = qrSrc ? '<div class="lb-qr"><img src="' + qrSrc + '" alt="QR"></div>' : "";
     function tag(text) {
       return '<div class="lb-hz-tag">' + text.split("").map(function (ch) { return "<span>" + esc(ch) + "</span>"; }).join("") + "</div>";
     }
@@ -457,7 +457,7 @@
       '<div class="lb-head"><div class="lb-code">' + esc(d.code) + "</div>" +
       (d.resin ? '<div class="lb-resin">(' + esc(d.resin) + ")</div>" : "") + "</div>" +
       '<div class="lb-name">' + esc(d.name) + "</div>" +
-      '<div class="lb-body"><div class="lb-fields">' + rows + "</div>" + qr + "</div>" +
+      '<div class="lb-body"><div class="lb-fields">' + rows + "</div></div>" +
       warn + hz + foot +
       "</div></div></div>";
   }
@@ -774,7 +774,7 @@
             el("label", { class: "a-check" }, [f.showCodes, "문구 앞 코드(H351, P280 등)도 라벨에 표시"]),
             field("하단 안내 문구", f.notice),
             field("공급원", f.supplier, "MSDS 1번 항목의 회사명·주소·전화번호"),
-            field("QR 코드 내용", f.qr, "라벨 오른쪽 위(항목 옆)에 넣을 QR 코드의 주소나 글자 · 비우면 QR 코드 없음")
+            field("QR 코드 내용", f.qr, "그림문자 줄 맨 오른쪽에 넣을 QR 코드의 주소나 글자 · 비우면 QR 코드 없음")
           ])
         ]),
         el("div", { class: "lb-col" }, [
