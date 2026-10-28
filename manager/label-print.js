@@ -1,10 +1,10 @@
-// 관리자 패널: 제품 라벨 출력 (가로 130mm × 세로 100mm, Zebra ZT421)
-//  품명·제품코드로 등록된 MSDS를 찾아, MSDS의 유해·위험문구(H코드)로 GHS 그림문자와 신호어를 불러오고,
-//  유해·위험문구·예방조치문구·공급원도 MSDS에서 가져와 라벨 아래쪽에 넣는다.
-//  - MSDS 읽는 순서: 원본 보관함의 엑셀 → 홈페이지에 걸린 엑셀 → PDF 글자
+// 제품 라벨 출력 화면 (가로 130mm × 세로 100mm, Zebra ZT421) — 홈페이지 관리자와 재고관리 앱이 같은 파일을 쓴다.
+//  window.DY_LABEL_PRINT(main, source) : main 요소에 화면을 그린다. source가 제품 목록과 라벨 내용(그림문자·문구)을 준다.
+//   - 홈페이지 관리자: manager/label-msds.js (등록된 MSDS를 직접 읽음)
+//   - 재고관리 앱: label/label-source.js (홈페이지의 label_products 표를 읽음)
 //  - 출력: [인쇄] 브라우저 인쇄(ZDesigner 드라이버), [ZPL 저장] 라벨 전체를 그림으로 바꾼 ZPL 파일 (한글 글꼴이 프린터에 없어도 됨)
+//  재고관리 앱에는 이 파일을 그대로 복사해 둔다 (spread1255-pocheon-inventory/label/label-print.js). 고치면 두 곳 모두 바꿀 것.
 (function () {
-  var A = window.DY_ADMIN;
   var LABEL_W_MM = 130;
   var LABEL_H_MM = 100;
   var SETTINGS_KEY = "dy-label-settings";
@@ -37,9 +37,12 @@
     dpi: "203",
     rotate: false,
     notice: "※ 기타 자세한 사항은 물질안전보건자료(MSDS)를 참조하시기 바랍니다.",
-    supplier: "",
     qr: "https://daeyangpnt.co.kr/msds"
   };
+  // 라벨 맨 아래 공급원: 주소는 포천 제2공장으로 고정, 회사명·전화번호는 MSDS 값 (없으면 아래 값)
+  var SUPPLIER_NAME = "(주) 대양피앤티";
+  var SUPPLIER_ADDR = "경기도 포천시 일동면 화동로 1544-6";
+  var SUPPLIER_TEL = "031) 987-8587";
   // 문구 앞 코드: "H351", "P301+P312" 등
   // 라벨에 넣는 예방조치문구 줄 수: 그림문자 1개면 그 그림문자로 3줄, 2개면 앞 그림문자 2줄·뒤 그림문자 1줄
   var P_LINES = 3;
@@ -122,13 +125,63 @@
     return m ? m[1] + "년 " + m[2] + "월 " + m[3] + "일" : String(iso || "");
   }
 
+  function el(tag, attrs, children) {
+    var node = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (key) {
+      var value = attrs[key];
+      if (value === null || value === undefined || value === false) {
+        return;
+      }
+      if (key === "class") {
+        node.className = value;
+      } else if (key === "text") {
+        node.textContent = value;
+      } else if (key.indexOf("on") === 0) {
+        node.addEventListener(key.slice(2), value);
+      } else if (value === true) {
+        node.setAttribute(key, "");
+      } else {
+        node.setAttribute(key, value);
+      }
+    });
+    (children || []).forEach(function (child) {
+      if (child === null || child === undefined || child === false) {
+        return;
+      }
+      node.appendChild(typeof child === "string" ? document.createTextNode(child) : child);
+    });
+    return node;
+  }
+
+  // 그림문자 SVG를 data URL로 한 번 읽어 둔다 (인쇄 창·ZPL 그림에서도 같은 그림을 쓰려고)
+  var ghsCache = {};
+  function loadGhs(base) {
+    if (!ghsCache[base]) {
+      ghsCache[base] = Promise.all(GHS_CODES.map(function (c) {
+        return fetch(base + c + ".svg").then(function (res) {
+          if (!res.ok) {
+            throw new Error(c);
+          }
+          return res.blob();
+        }).then(function (blob) {
+          return new Promise(function (resolve) {
+            var fr = new FileReader();
+            fr.onload = function () { resolve(fr.result); };
+            fr.readAsDataURL(blob);
+          });
+        }).catch(function () { return base + c + ".svg"; });
+      })).then(function (list) {
+        var out = {};
+        GHS_CODES.forEach(function (c, i) { out[c] = list[i]; });
+        return out;
+      });
+    }
+    return ghsCache[base];
+  }
+
   function setMsg(node, text, kind) {
     node.textContent = text;
     node.className = "a-msg" + (kind ? " is-" + kind : "");
-  }
-
-  function ext(path) {
-    return (String(path || "").match(/\.([a-z0-9]+)$/i) || [, ""])[1].toLowerCase();
   }
 
   // 제조번호: DYP + 연(2) + 월(2) + 일련번호(4). 같은 달에 마지막으로 쓴 번호가 있으면 다음 번호를 제안한다.
@@ -146,45 +199,6 @@
       return prefix + "0000".slice(next.length) + next;
     }
     return prefix + "0001";
-  }
-
-  // ---------- MSDS에서 그림문자·신호어·종류 읽기 ----------
-  function walkItems(blocks, fn) {
-    (blocks || []).forEach(function (b) {
-      if (b.type === "item") {
-        fn(b);
-      }
-      if (b.blocks) {
-        walkItems(b.blocks, fn);
-      }
-    });
-  }
-
-  // "폴리에스테르계 분체도료 일반용" → { kind: "폴리에스테르계", resin: "폴리에스테르" }
-  function kindFromUsage(text) {
-    var m = String(text || "").match(/([가-힣A-Za-z/·,]+?)\s*계/);
-    if (!m) {
-      return { kind: "", resin: "" };
-    }
-    var resin = m[1];
-    return { kind: resin + "계", resin: resin };
-  }
-
-  // 코드로 시작하는 줄마다 문구 하나. 코드 없는 줄은 앞 문구에 이어 붙이고, 같은 문구는 한 번만 둔다.
-  function statements(lines, letter) {
-    var out = [];
-    lines.forEach(function (l) {
-      l = String(l).replace(/\s+/g, " ").trim();
-      if (!l) {
-        return;
-      }
-      if (new RegExp("^" + letter + "\\d{3}").test(l) || !out.length) {
-        out.push(l);
-      } else {
-        out[out.length - 1] += " " + l;
-      }
-    });
-    return out.filter(function (x, i) { return out.indexOf(x) === i; });
   }
 
   function hazardRank(line) {
@@ -207,161 +221,6 @@
     return [name && "공급원: " + name, addr, tel && "Tel " + tel].filter(Boolean).join(" · ");
   }
 
-  function infoFromModel(model) {
-    var out = { codes: [], signal: "", usage: "", h: [], p: [], supplier: "" };
-    var hLines = [];
-    var pLines = [];
-    var sup = {};
-    model.sections.forEach(function (s) {
-      walkItems(s.blocks, function (item) {
-        if (s.num === 2 && /신호어/.test(item.label) && item.lines.length) {
-          out.signal = item.lines[0];
-        }
-        if (s.num === 2 && /유해\W{0,2}위험\s*문구/.test(item.label)) {
-          hLines = hLines.concat(item.lines);
-        }
-        if (s.num === 2 && /^(예방|대응|저장|폐기)$|예방\s*조치\s*문구/.test(item.label.replace(/\s+/g, ""))) {
-          pLines = pLines.concat(item.lines);
-        }
-        if (s.num === 1 && /권고\s*용도/.test(item.label) && item.lines.length && !out.usage) {
-          out.usage = item.lines.join(" ");
-        }
-        if (s.num === 1 && item.lines.length) {
-          if (/회사\s*명/.test(item.label) && !sup.name) { sup.name = item.lines.join(" "); }
-          if (/^주\s*소$/.test(item.label) && !sup.addr) { sup.addr = item.lines.join(" "); }
-          if (/긴급\s*전화|전화\s*번호/.test(item.label) && !sup.tel) { sup.tel = item.lines.join(" "); }
-        }
-      });
-      if (s.num === 2) {
-        JSON.stringify(s).replace(/H\d{3}/g, function (h) {
-          out.codes.push(h);
-        });
-      }
-    });
-    out.h = statements(hLines, "H");
-    out.p = statements(pLines, "P");
-    out.supplier = supplierLine(sup.name, sup.addr, sup.tel);
-    return out;
-  }
-
-  async function pdfText(bytes) {
-    var pdfjs = window.pdfjsLib;
-    if (!pdfjs) {
-      throw new Error("PDF 읽기 도구를 불러오지 못했습니다.");
-    }
-    var doc = await pdfjs.getDocument({ data: bytes, isEvalSupported: false, disableFontFace: true }).promise;
-    var text = "";
-    for (var n = 1; n <= Math.min(doc.numPages, 3); n++) {
-      var page = await doc.getPage(n);
-      var content = await page.getTextContent();
-      text += content.items.map(function (it) { return it.str + (it.hasEOL ? "\n" : " "); }).join("") + "\n";
-    }
-    doc.destroy();
-    return text;
-  }
-
-  function infoFromText(text) {
-    var flat = text.replace(/[ \t]+/g, " ");
-    var start = flat.search(/2\s*\.\s*유해\s*성/);
-    var end = flat.search(/3\s*\.\s*구성\s*성분/);
-    var sec2 = start >= 0 ? flat.slice(start, end > start ? end : undefined) : flat;
-    var signal = (sec2.match(/신호어\s*[:：]?\s*(위험|경고)/) || [])[1] || "";
-    var usage = (flat.match(/권고\s*용도\s*[:：]?\s*([^\n]+)/) || [])[1] || "";
-    function pick(re) {
-      return ((flat.match(re) || [])[1] || "").trim();
-    }
-    return {
-      codes: sec2.match(/H\d{3}/g) || [],
-      signal: signal,
-      usage: usage,
-      h: textStatements(sec2, "H"),
-      p: textStatements(sec2, "P"),
-      supplier: supplierLine(pick(/회사\s*명\s*[:：]?\s*([^\n]+)/), pick(/주\s*소\s*[:：]?\s*([^\n]+)/), pick(/긴급\s*전화\s*번호\s*[:：]?\s*([^\n]+)/))
-    };
-  }
-
-  // PDF 글자에서 문구 찾기: 코드부터 다음 코드 앞까지를 문구 하나로 본다
-  function textStatements(sec2, letter) {
-    var out = [];
-    var re = new RegExp("(" + letter + "\\d{3}(?:\\s*\\+\\s*" + letter + "\\d{3})*)\\s*([\\s\\S]*?)(?=[HP]\\d{3}|$)", "g");
-    var m;
-    while ((m = re.exec(sec2))) {
-      var t = m[2].replace(/\s+/g, " ")
-        .split(/예방\s*조치\s*문구|다\s*\.\s*유해/)[0]
-        .replace(/\s*(예방|대응|저장|폐기)\s*[:：]?\s*$/, "")
-        .trim();
-      if (t) {
-        out.push(m[1].replace(/\s+/g, "") + " " + t);
-      }
-    }
-    return out.filter(function (x, i) { return out.indexOf(x) === i; });
-  }
-
-  async function download(sb, bucket, path) {
-    var dl = await sb.storage.from(bucket).download(path);
-    if (dl.error) {
-      throw new Error("파일을 받지 못했습니다: " + dl.error.message);
-    }
-    return new Uint8Array(await dl.data.arrayBuffer());
-  }
-
-  // 한 제품의 MSDS에서 { pictos, signal, kind, resin, codes, source } 를 읽는다.
-  async function readHazard(sb, row, archive) {
-    var bucket = window.DY_MSDS_BUCKET || "msds-files";
-    var tries = [];
-    (archive || []).forEach(function (a) {
-      if (a.file_type !== "application/pdf" && /^xlsx?$/.test(ext(a.archive_path))) {
-        tries.push({ bucket: "msds-archive", path: a.archive_path, kind: "xls", label: "원본 보관함 엑셀" });
-      }
-    });
-    if (/^xlsx?$/.test(ext(row.file_path))) {
-      tries.push({ bucket: bucket, path: row.file_path, kind: "xls", label: "등록된 엑셀" });
-    }
-    if (ext(row.file_path) === "pdf") {
-      tries.push({ bucket: bucket, path: row.file_path, kind: "pdf", label: "등록된 PDF" });
-    }
-    (archive || []).forEach(function (a) {
-      if (ext(a.archive_path) === "pdf") {
-        tries.push({ bucket: "msds-archive", path: a.archive_path, kind: "pdf", label: "원본 보관함 PDF" });
-      }
-    });
-    var lastErr = null;
-    for (var i = 0; i < tries.length; i++) {
-      var t = tries[i];
-      try {
-        var bytes = await download(sb, t.bucket, t.path);
-        var info;
-        if (t.kind === "xls") {
-          var model = window.DY_MSDS_FRM.parse(bytes, window.XLSX);
-          if (model.sections.length < 3) {
-            throw new Error("MSDS 양식을 읽지 못했습니다");
-          }
-          info = infoFromModel(model);
-        } else {
-          info = infoFromText(await pdfText(bytes));
-        }
-        // 글자가 없는 PDF(그림으로 만든 PDF)는 다음 파일로 넘어간다
-        if (!info.codes.length && !info.signal && t.kind === "pdf") {
-          throw new Error("PDF에서 글자를 읽지 못했습니다");
-        }
-        var k = kindFromUsage(info.usage);
-        return {
-          pictos: window.DY_MSDS_FRM.pictogramsForCodes(info.codes),
-          codes: info.codes.filter(function (h, j, arr) { return arr.indexOf(h) === j; }),
-          signal: info.signal,
-          kind: k.kind,
-          resin: k.resin,
-          h: sortHazards(info.h),
-          p: info.p,
-          supplier: info.supplier,
-          source: t.label
-        };
-      } catch (err) {
-        lastErr = err;
-      }
-    }
-    throw lastErr || new Error("읽을 수 있는 MSDS 파일이 없습니다");
-  }
 
   // 그림문자에 맞춰 예방조치문구를 P_LINES 줄 고른다. 그림문자마다 몫(1개 3줄, 2개 2·1줄, 3개 1줄씩 …)을 나누고,
   // 그 그림문자의 우선 문구 중 MSDS에 있는 것을 고른다. 모자라면 MSDS 순서대로 남은 문구로 채운다.
@@ -761,14 +620,13 @@
   }
 
   // ---------- 화면 ----------
-  window.DY_LABEL_PRINT = async function (main) {
-    var sb = A.sb;
-    var el = A.el;
+  window.DY_LABEL_PRINT = function (main, src) {
     var saved = Object.assign({}, DEFAULTS, readJson(SETTINGS_KEY, {}));
+    var assetBase = src.assetBase || "ghs/";
     var rows = [];
-    var archiveBy = {};
     var ghsSrc = {};
-    var current = null; // 고른 MSDS 행
+    var pendingCode = "";
+    var current = null; // 고른 제품
     var allP = []; // MSDS의 예방조치문구 전체
     var loadSeq = 0;
 
@@ -808,7 +666,7 @@
       showCodes: el("input", { type: "checkbox" }),
       notice: el("input", { type: "text", maxlength: "200", value: saved.notice }),
       qr: el("input", { type: "text", maxlength: "500", value: saved.qr, placeholder: "예: https://daeyangpnt.co.kr/msds" }),
-      supplier: el("input", { type: "text", maxlength: "300", value: saved.supplier })
+      supplier: el("input", { type: "text", maxlength: "300", value: supplierLine(SUPPLIER_NAME, SUPPLIER_ADDR, SUPPLIER_TEL) })
     };
     f.lot.value = suggestLot(f.date.value);
     f.dpi.value = saved.dpi;
@@ -820,7 +678,7 @@
     var ghsPick = el("div", { class: "lb-ghs-pick" }, GHS_CODES.map(function (c) {
       var box = el("input", { type: "checkbox", value: c, onchange: function () { autoP(false); draw(); } });
       ghsBoxes[c] = box;
-      return el("label", { class: "lb-ghs-opt", title: c + " " + GHS_NAME[c] }, [box, el("img", { src: "ghs/" + c + ".svg", alt: "" }), el("span", { text: GHS_NAME[c] })]);
+      return el("label", { class: "lb-ghs-opt", title: c + " " + GHS_NAME[c] }, [box, el("img", { src: assetBase + c + ".svg", alt: "" }), el("span", { text: GHS_NAME[c] })]);
     }));
 
     var preview = el("div", { class: "lb-preview" });
@@ -833,15 +691,15 @@
 
     main.replaceChildren(
       el("h1", { text: "라벨 출력" }),
-      el("p", { class: "panel-lede", text: "품명을 입력해 등록된 MSDS를 고르면 제품코드·품명과 MSDS의 그림문자·신호어·종류·유해위험문구·예방조치문구를 불러옵니다. 라벨 크기 가로 130mm × 세로 100mm (Zebra ZT421)." }),
+      el("p", { class: "panel-lede", text: src.lede || "" }),
       el("div", { class: "lb-grid" }, [
         el("div", { class: "lb-col" }, [
           el("section", { class: "a-card" }, [
-            el("h2", { text: "1. MSDS에서 제품 찾기" }),
+            el("h2", { text: src.searchTitle || "1. 제품 찾기" }),
             field("품명 · 제품코드", search),
             results,
             hazMsg
-          ]),
+          ].concat(src.extra ? src.extra({ el: el, setMsg: setMsg }) : [])),
           el("section", { class: "a-card" }, [
             el("h2", { text: "2. 라벨 내용" }),
             el("div", { class: "lb-form-grid" }, [
@@ -869,7 +727,7 @@
             ]),
             el("label", { class: "a-check" }, [f.showCodes, "문구 앞 코드(H351, P280 등)도 라벨에 표시"]),
             field("하단 안내 문구", f.notice),
-            field("공급원", f.supplier, "MSDS 1번 항목의 회사명·주소·전화번호"),
+            field("공급원", f.supplier, "주소는 포천 제2공장, 회사명·전화번호는 MSDS 값"),
             field("QR 코드 내용", f.qr, "그림문자 줄 맨 오른쪽에 넣을 QR 코드의 주소나 글자 · 비우면 QR 코드 없음")
           ])
         ]),
@@ -963,7 +821,6 @@
         rotate: f.rotate.checked,
         showCodes: f.showCodes.checked,
         notice: f.notice.value.trim(),
-        supplier: f.supplier.value.trim(),
         qr: f.qr.value.trim()
       });
       if (/^DYP\d{4}\d+$/.test(f.lot.value.trim())) {
@@ -1033,18 +890,18 @@
         return;
       }
       var hits = rows.filter(function (r) {
-        return norm(r.product_name || r.title).indexOf(q) >= 0 || norm(r.product_code).indexOf(q) >= 0;
+        return norm(r.product_name).indexOf(q) >= 0 || norm(r.product_code).indexOf(q) >= 0;
       }).slice(0, 12);
       if (!hits.length) {
-        results.appendChild(el("li", { class: "a-empty", text: "일치하는 MSDS가 없습니다. MSDS 탭에서 먼저 등록하거나 아래 칸에 직접 입력해 주세요." }));
+        results.appendChild(el("li", { class: "a-empty", text: src.emptyText || "일치하는 제품이 없습니다. 아래 칸에 직접 입력해 주세요." }));
         return;
       }
       hits.forEach(function (r) {
         results.appendChild(el("li", {}, [el("button", {
           type: "button",
-          class: "lb-hit" + (current && current.id === r.id ? " is-on" : ""),
+          class: "lb-hit" + (current && current.key === r.key ? " is-on" : ""),
           onclick: function () { pick(r); }
-        }, [el("b", { text: r.product_code || "-" }), el("span", { text: r.product_name || r.title || "" })])]));
+        }, [el("b", { text: r.product_code || "-" }), el("span", { text: r.product_name || "" })])]));
       });
     }
 
@@ -1063,7 +920,7 @@
       var seq = ++loadSeq;
       current = r;
       f.code.value = r.product_code || "";
-      f.name.value = r.product_name || r.title || "";
+      f.name.value = r.product_name || "";
       GHS_CODES.forEach(function (c) { ghsBoxes[c].checked = false; });
       f.signal.value = "";
       f.h.value = "";
@@ -1072,9 +929,9 @@
       delete f.p.dataset.touched;
       drawResults();
       draw();
-      setMsg(hazMsg, "MSDS에서 그림문자를 읽는 중...");
+      setMsg(hazMsg, "그림문자·문구를 불러오는 중...");
       try {
-        var info = await readHazard(sb, r, archiveBy[r.id]);
+        var info = await src.load(r);
         if (seq !== loadSeq) {
           return;
         }
@@ -1088,42 +945,67 @@
         f.h.value = info.h.join("\n");
         allP = info.p;
         autoP(true);
-        if (info.supplier) {
-          f.supplier.value = info.supplier;
-        }
+        f.supplier.value = supplierLine(info.supplierName || SUPPLIER_NAME, SUPPLIER_ADDR, info.tel || SUPPLIER_TEL);
         draw();
+        var savedNote = "";
+        if (src.afterLoad) {
+          try {
+            savedNote = await src.afterLoad(r, info);
+          } catch (err) {
+            savedNote = "라벨용 정보 저장 실패: " + (err && err.message || err);
+          }
+          if (seq !== loadSeq) {
+            return;
+          }
+        }
         setMsg(hazMsg, (info.source + "에서 불러옴 · ") +
           (info.pictos.length ? "그림문자 " + info.pictos.map(function (c) { return GHS_NAME[c]; }).join(", ") : "그림문자 없음") +
           (info.signal ? " · 신호어 " + info.signal : "") +
           (info.codes.length ? " · " + info.codes.join(" ") : "") +
-          " · 유해·위험문구 " + info.h.length + "줄, 예방조치문구 " + info.p.length + "줄", info.pictos.length || info.codes.length ? "ok" : null);
+          " · 유해·위험문구 " + info.h.length + "줄, 예방조치문구 " + info.p.length + "줄" +
+          (savedNote ? " · " + savedNote : ""), /실패/.test(savedNote) ? "error" : info.pictos.length || info.codes.length ? "ok" : null);
       } catch (err) {
         if (seq !== loadSeq) {
           return;
         }
-        setMsg(hazMsg, "MSDS 내용을 읽지 못했습니다 (" + (err && err.message || err) + "). 그림문자를 직접 체크해 주세요.", "error");
+        setMsg(hazMsg, "그림문자·문구를 불러오지 못했습니다 (" + (err && err.message || err) + "). 그림문자를 직접 체크해 주세요.", "error");
       }
     }
 
-    draw();
-    setMsg(hazMsg, "MSDS 목록을 불러오는 중...");
-    var res = await Promise.all([
-      sb.from("resources").select("id, title, product_code, product_name, file_path, file_type").eq("category", "msds").order("product_code", { ascending: true }),
-      sb.from("msds_archive").select("resource_id, archive_path, file_type, created_at").order("created_at", { ascending: true }),
-      window.DY_MSDS_FRM ? window.DY_MSDS_FRM.loadAssets() : Promise.resolve({ ghs: {} })
-    ]);
-    if (res[0].error) {
-      setMsg(hazMsg, "MSDS 목록을 불러오지 못했습니다. 제품 정보를 직접 입력해 주세요.", "error");
-      return;
-    }
-    rows = res[0].data;
-    (res[1].data || []).forEach(function (a) {
-      if (a.resource_id) {
-        (archiveBy[a.resource_id] = archiveBy[a.resource_id] || []).push(a);
+    // 제품코드로 바로 고르기 (재고관리 앱의 품목 상세에서 [라벨 출력]을 눌렀을 때)
+    function pickCode(code) {
+      var n = norm(code);
+      var hit = rows.filter(function (r) { return norm(r.product_code) === n; })[0];
+      if (hit) {
+        search.value = hit.product_code;
+        pick(hit);
+        return true;
       }
-    });
-    ghsSrc = (res[2] && res[2].ghs) || {};
-    setMsg(hazMsg, "등록된 MSDS " + rows.length + "개에서 찾습니다.");
+      if (!rows.length) {
+        pendingCode = code;
+      }
+      search.value = code;
+      drawResults();
+      return false;
+    }
+
     draw();
+    setMsg(hazMsg, "제품 목록을 불러오는 중...");
+    Promise.all([src.list(), loadGhs(assetBase)]).then(function (res) {
+      rows = res[0];
+      ghsSrc = res[1];
+      setMsg(hazMsg, "제품 " + rows.length + "개에서 찾습니다.");
+      draw();
+      if (pendingCode) {
+        var code = pendingCode;
+        pendingCode = "";
+        pickCode(code);
+      }
+    }).catch(function (err) {
+      setMsg(hazMsg, "제품 목록을 불러오지 못했습니다 (" + (err && err.message || err) + "). 제품 정보를 직접 입력해 주세요.", "error");
+    });
+
+    return { pickCode: pickCode };
   };
+  window.DY_LABEL_PRINT.sortHazards = sortHazards;
 })();

@@ -1918,7 +1918,7 @@
       window.DY_DEVICE_LOG(main);
     },
     labels: function () {
-      window.DY_LABEL_PRINT(main);
+      window.DY_LABEL_PRINT(main, window.DY_LABEL_MSDS_SOURCE(sb));
     }
   };
 
