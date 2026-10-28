@@ -41,8 +41,8 @@
     qr: "https://daeyangpnt.co.kr/msds"
   };
   // 문구 앞 코드: "H351", "P301+P312" 등
-  // 라벨에 넣는 예방조치문구 줄 수: 그림문자 1개면 그 그림문자로 4줄, 2개면 그림문자마다 2줄
-  var P_LINES = 4;
+  // 라벨에 넣는 예방조치문구 줄 수: 그림문자 1개면 그 그림문자로 3줄, 2개면 앞 그림문자 2줄·뒤 그림문자 1줄
+  var P_LINES = 3;
   // 그림문자별로 우선 고를 예방조치문구 (GHS 기준 그 유해성에 해당하는 대표 문구, 앞쪽이 우선)
   var P_BY_GHS = {
     GHS01: ["P210", "P234", "P240", "P250", "P230", "P370+P380", "P372", "P373", "P401"],
@@ -363,7 +363,7 @@
     throw lastErr || new Error("읽을 수 있는 MSDS 파일이 없습니다");
   }
 
-  // 그림문자에 맞춰 예방조치문구를 P_LINES 줄 고른다. 그림문자마다 몫(1개 4줄, 2개 2줄씩, 3개 2·1·1줄 …)을 나누고,
+  // 그림문자에 맞춰 예방조치문구를 P_LINES 줄 고른다. 그림문자마다 몫(1개 3줄, 2개 2·1줄, 3개 1줄씩 …)을 나누고,
   // 그 그림문자의 우선 문구 중 MSDS에 있는 것을 고른다. 모자라면 MSDS 순서대로 남은 문구로 채운다.
   function selectPrecautions(all, pictos) {
     var codeOf = function (line) {
@@ -860,11 +860,11 @@
           ]),
           el("section", { class: "a-card" }, [
             el("h2", { text: "3. 유해·위험문구 · 예방조치문구" }),
-            el("p", { class: "a-hint", text: "MSDS 2번 항목의 문구를 한 줄에 하나씩 불러옵니다. 예방조치문구는 그림문자에 해당하는 문구로 4줄만 넣습니다. 칸을 넘치면 글씨가 자동으로 작아집니다." }),
+            el("p", { class: "a-hint", text: "MSDS 2번 항목의 문구를 한 줄에 하나씩 불러옵니다. 예방조치문구는 그림문자에 해당하는 문구로 3줄만 넣습니다. 칸을 넘치면 글씨가 자동으로 작아집니다." }),
             field("유해·위험문구", f.h, "한 줄에 하나 · 라벨에는 '·' 목록으로 표시"),
-            field("예방조치문구", f.p, "그림문자에 맞춰 MSDS에서 4줄을 고릅니다 (그림문자 1개: 4줄, 2개: 각 2줄) · 라벨에는 '·' 목록으로 표시"),
+            field("예방조치문구", f.p, "그림문자에 맞춰 MSDS에서 3줄을 고릅니다 (그림문자 1개: 3줄, 2개: 2줄 + 1줄) · 라벨에는 '·' 목록으로 표시"),
             el("div", { class: "a-row" }, [
-              el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "그림문자에 맞춰 4줄 다시 고르기", onclick: function () { autoP(true); draw(); } }),
+              el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "그림문자에 맞춰 3줄 다시 고르기", onclick: function () { autoP(true); draw(); } }),
               el("button", { class: "a-btn a-btn--ghost a-btn--sm", type: "button", text: "MSDS 예방조치문구 전체 넣기", onclick: function () { f.p.value = allP.join("\n"); f.p.dataset.touched = "1"; draw(); } })
             ]),
             el("label", { class: "a-check" }, [f.showCodes, "문구 앞 코드(H351, P280 등)도 라벨에 표시"]),
