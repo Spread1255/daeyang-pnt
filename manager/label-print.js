@@ -79,6 +79,7 @@
     ".lb-key{display:flex;justify-content:space-between;width:19mm;flex:none;}" +
     ".lb-colon{margin:0 3mm 0 2mm;flex:none;}" +
     ".lb-val{overflow:hidden;}" +
+    ".lb-no{flex:none;align-self:flex-end;min-width:17mm;text-align:right;white-space:nowrap;font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;font-weight:700;font-size:5mm;line-height:1;padding-bottom:0.5mm;}" +
     ".lb-ghs{display:flex;gap:1.5mm;}" +
     ".lb-ghs img{display:block;}" +
     ".lb-signal{font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;font-weight:700;font-size:5mm;line-height:1;}" +
@@ -184,6 +185,22 @@
       }
     });
     return out.filter(function (x, i) { return out.indexOf(x) === i; });
+  }
+
+  function hazardRank(line) {
+    var m = String(line).match(/^H(\d{3})/);
+    var c = m ? Number(m[1]) : 0;
+    if (c >= 340 && c <= 373) { return 0; }
+    if (c >= 310 && c <= 329) { return 1; }
+    if (c >= 300 && c <= 339) { return 2; }
+    return 3;
+  }
+
+  // 유해·위험문구를 암·생식독성 등 → 피부·눈 자극 → 삼키면 유해 같은 급성독성 → 그 밖 순서로 (같은 묶음은 MSDS 순서)
+  function sortHazards(list) {
+    return list.map(function (l, i) { return { l: l, i: i, r: hazardRank(l) }; })
+      .sort(function (a, b) { return a.r - b.r || a.i - b.i; })
+      .map(function (x) { return x.l; });
   }
 
   function supplierLine(name, addr, tel) {
@@ -334,7 +351,7 @@
           signal: info.signal,
           kind: k.kind,
           resin: k.resin,
-          h: info.h,
+          h: sortHazards(info.h),
           p: info.p,
           supplier: info.supplier,
           source: t.label
@@ -457,7 +474,8 @@
       '<div class="lb-head"><div class="lb-code">' + esc(d.code) + "</div>" +
       (d.resin ? '<div class="lb-resin">(' + esc(d.resin) + ")</div>" : "") + "</div>" +
       '<div class="lb-name">' + esc(d.name) + "</div>" +
-      '<div class="lb-body"><div class="lb-fields">' + rows + "</div></div>" +
+      '<div class="lb-body"><div class="lb-fields">' + rows + "</div>" +
+      (d.no ? '<div class="lb-no"' + (d.noHidden ? ' style="visibility:hidden"' : "") + ">No. " + esc(d.no) + "</div>" : "") + "</div>" +
       warn + hz + foot +
       "</div></div></div>";
   }
@@ -499,6 +517,14 @@
         overflow = true;
       }
     });
+    // 유해위험문구와 예방조치문구 글씨 크기를 작은 쪽에 맞춘다
+    var texts = root.querySelectorAll(".lb-hz-text");
+    if (texts.length > 1) {
+      var min = Math.min.apply(null, Array.prototype.map.call(texts, function (node) {
+        return parseFloat(node.ownerDocument.defaultView.getComputedStyle(node).fontSize);
+      }));
+      Array.prototype.forEach.call(texts, function (node) { node.style.fontSize = min + "px"; });
+    }
     return overflow;
   }
 
@@ -509,15 +535,14 @@
   }
 
   // ---------- 브라우저 인쇄 (라벨 크기 쪽으로) ----------
-  function printLabels(d, ghsSrc, copies) {
+  function printLabels(d, ghsSrc, copies, start) {
     return new Promise(function (resolve) {
       var frame = document.createElement("iframe");
       frame.setAttribute("aria-hidden", "true");
       frame.style.cssText = "position:fixed;right:0;bottom:0;width:0;height:0;border:0;";
-      var one = buildLabelHtml(d, ghsSrc);
       var pages = [];
       for (var i = 0; i < copies; i++) {
-        pages.push(one);
+        pages.push(buildLabelHtml(Object.assign({}, d, { no: start + i }), ghsSrc));
       }
       frame.srcdoc = '<!doctype html><html lang="ko"><head><meta charset="utf-8"><base href="' + document.baseURI + '"><style>' + LABEL_CSS +
         "@page{size:" + LABEL_W_MM + "mm " + LABEL_H_MM + "mm;margin:0;}html,body{margin:0;padding:0;background:#fff;}" +
@@ -588,14 +613,14 @@
     return out + tail;
   }
 
-  function canvasToZpl(canvas, copies) {
+  // 흑백 비트맵 행들(16진 글자). 검정 = 1
+  function bitmapRows(canvas) {
     var w = canvas.width;
     var h = canvas.height;
     var px = canvas.getContext("2d").getImageData(0, 0, w, h).data;
     var bpr = Math.ceil(w / 8);
     var HEX = "0123456789ABCDEF";
     var parts = [];
-    var prev = null;
     for (var y = 0; y < h; y++) {
       var hex = "";
       for (var bx = 0; bx < bpr; bx++) {
@@ -612,11 +637,66 @@
         }
         hex += HEX[byte >> 4] + HEX[byte & 15];
       }
-      parts.push(zplRow(hex, prev));
-      prev = hex;
+      parts.push(hex);
     }
-    var total = bpr * h;
-    return "^XA\n^CI28\n^PW" + w + "\n^LL" + h + "\n^LH0,0\n^FO0,0^GFA," + total + "," + total + "," + bpr + "," + parts.join("") + "^FS\n^PQ" + copies + "\n^XZ\n";
+    return { bpr: bpr, rows: parts };
+  }
+
+  // 작은 그림 → ^GFA (압축)
+  function gfa(canvas) {
+    var b = bitmapRows(canvas);
+    var prev = null;
+    var data = b.rows.map(function (hex) {
+      var out = zplRow(hex, prev);
+      prev = hex;
+      return out;
+    }).join("");
+    var total = b.bpr * b.rows.length;
+    return "^GFA," + total + "," + total + "," + b.bpr + "," + data;
+  }
+
+  // 번호 글자 그림 (화면 라벨과 같은 글꼴). 돌려 찍을 때는 그림도 90° 돌린다.
+  function numberCanvas(text, box, rotate) {
+    var c = document.createElement("canvas");
+    c.width = box.w;
+    c.height = box.h;
+    var ctx = c.getContext("2d");
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.fillStyle = "#000";
+    ctx.font = box.font;
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, box.w - 1, box.h / 2);
+    if (!rotate) {
+      return c;
+    }
+    var r = document.createElement("canvas");
+    r.width = box.h;
+    r.height = box.w;
+    var rc = r.getContext("2d");
+    rc.translate(box.h, 0);
+    rc.rotate(Math.PI / 2);
+    rc.drawImage(c, 0, 0);
+    return r;
+  }
+
+  var ZPL_GRF = "R:DYLABEL.GRF";
+
+  function labelsToZpl(base, box, rotate, copies, start) {
+    var w = base.canvas.width;
+    var h = base.canvas.height;
+    var b = bitmapRows(base.canvas);
+    var out = ["~DG" + ZPL_GRF + "," + (b.bpr * b.rows.length) + "," + b.bpr + "," + b.rows.join("")];
+    // 돌려 찍을 때 번호 칸 위치: (x, y) → (H - y - 높이, x)
+    var fx = rotate ? base.H - box.y - box.h : box.x;
+    var fy = rotate ? box.x : box.y;
+    for (var i = 0; i < copies; i++) {
+      out.push("^XA^CI28^PW" + w + "^LL" + h + "^LH0,0^FO0,0^XG" + ZPL_GRF + ",1,1^FS" +
+        "^FO" + fx + "," + fy + gfa(numberCanvas("No. " + (start + i), box, rotate)) + "^FS^PQ1^XZ");
+    }
+    out.push("^XA^ID" + ZPL_GRF + "^FS^XZ");
+    return out.join("\n") + "\n";
   }
 
   async function labelCanvas(d, ghsSrc, dpi, rotate) {
@@ -625,7 +705,7 @@
     }
     var holder = document.createElement("div");
     holder.style.cssText = "position:fixed;left:-10000px;top:0;";
-    holder.innerHTML = "<style>" + LABEL_CSS + "</style>" + buildLabelHtml(d, ghsSrc);
+    holder.innerHTML = "<style>" + LABEL_CSS + "</style>" + buildLabelHtml(Object.assign({}, d, { no: d.no || 1, noHidden: true }), ghsSrc);
     document.body.appendChild(holder);
     try {
       var node = holder.querySelector(".lb-label");
@@ -634,7 +714,22 @@
         await document.fonts.ready;
       }
       fitText(node);
-      var shot = await window.html2canvas(node, { scale: dpi / 96, backgroundColor: "#ffffff", logging: false, useCORS: true });
+      var k = dpi / 96;
+      var lr = node.getBoundingClientRect();
+      var noEl = node.querySelector(".lb-no");
+      var box = null;
+      if (noEl) {
+        var nr = noEl.getBoundingClientRect();
+        var cs = getComputedStyle(noEl);
+        box = {
+          x: Math.round((nr.left - lr.left) * k),
+          y: Math.round((nr.top - lr.top) * k),
+          w: Math.ceil(nr.width * k) + 2,
+          h: Math.ceil(nr.height * k) + 2,
+          font: cs.fontWeight + " " + Math.round(parseFloat(cs.fontSize) * k) + "px " + cs.fontFamily
+        };
+      }
+      var shot = await window.html2canvas(node, { scale: k, backgroundColor: "#ffffff", logging: false, useCORS: true });
       var W = Math.round(LABEL_W_MM / 25.4 * dpi);
       var H = Math.round(LABEL_H_MM / 25.4 * dpi);
       var out = document.createElement("canvas");
@@ -648,7 +743,7 @@
         ctx.rotate(Math.PI / 2);
       }
       ctx.drawImage(shot, 0, 0, W, H);
-      return out;
+      return { canvas: out, box: box, H: H };
     } finally {
       holder.remove();
     }
@@ -702,6 +797,7 @@
         el("option", { value: "경고", text: "경고" })
       ]),
       copies: el("input", { type: "number", min: "1", max: "500", value: "1" }),
+      start: el("input", { type: "number", min: "1", max: "99999", value: "1" }),
       dpi: el("select", {}, [
         el("option", { value: "203", text: "203 dpi (8 dots/mm)" }),
         el("option", { value: "300", text: "300 dpi (12 dots/mm)" })
@@ -758,7 +854,7 @@
               field("저장기간", f.keep),
               field("실중량", f.weight),
               field("종류", f.kind),
-              field("신호어", f.signal, "MSDS를 불러오면 '위험'으로 표시 · 필요하면 바꿀 수 있음")
+              field("신호어", f.signal, "MSDS에 적힌 신호어(위험/경고) · 필요하면 바꿀 수 있음")
             ]),
             el("div", { class: "a-field" }, ["그림문자", el("small", { text: "MSDS에서 불러온 그림문자가 체크됩니다. 필요하면 직접 바꿀 수 있습니다." }), ghsPick])
           ]),
@@ -783,7 +879,8 @@
             el("div", { class: "lb-preview-wrap" }, [preview]),
             fitWarn,
             el("div", { class: "lb-form-grid" }, [
-              field("매수", f.copies),
+              field("매수", f.copies, "장마다 번호가 1번부터 차례로 찍힘"),
+              field("시작 번호", f.start, "QR 코드 위 번호 · 이어서 뽑을 때 바꿈"),
               field("프린터 해상도 (ZPL)", f.dpi, "ZT421 뒷면 라벨에서 확인"),
               el("label", { class: "a-check lb-span" }, [f.rotate, "ZPL을 90° 돌려서 출력 (라벨이 세로로 들어갈 때)"])
             ]),
@@ -798,6 +895,11 @@
 
     function lines(text) {
       return String(text).split("\n").map(function (l) { return l.trim(); }).filter(Boolean);
+    }
+
+    function startNo() {
+      var n = Math.round(Number(f.start.value));
+      return n >= 1 ? n : 1;
     }
 
     function data() {
@@ -818,6 +920,7 @@
         notice: f.notice.value.trim(),
         supplier: f.supplier.value.trim(),
         qr: f.qr.value.trim(),
+        no: startNo(),
         pictos: GHS_CODES.filter(function (c) { return ghsBoxes[c].checked; })
       };
     }
@@ -884,7 +987,7 @@
           return null;
         }
       }
-      return { d: d, n: n };
+      return { d: d, n: n, start: startNo() };
     }
 
     async function onPrint() {
@@ -893,9 +996,9 @@
         return;
       }
       setMsg(msg, "인쇄 창을 여는 중...");
-      await printLabels(c.d, ghsSrc, c.n);
+      await printLabels(c.d, ghsSrc, c.n, c.start);
       remember();
-      setMsg(msg, "인쇄 창을 열었습니다. 다음 제조번호를 쓰려면 [제조번호]를 확인해 주세요.", "ok");
+      setMsg(msg, "인쇄 창을 열었습니다 (No. " + c.start + " ~ No. " + (c.start + c.n - 1) + "). 다음 제조번호를 쓰려면 [제조번호]를 확인해 주세요.", "ok");
     }
 
     async function onZpl() {
@@ -906,11 +1009,11 @@
       zplBtn.disabled = true;
       setMsg(msg, "ZPL 파일을 만드는 중...");
       try {
-        var canvas = await labelCanvas(c.d, ghsSrc, Number(f.dpi.value), f.rotate.checked);
+        var base = await labelCanvas(c.d, ghsSrc, Number(f.dpi.value), f.rotate.checked);
         var name = (c.d.code + " " + c.d.lot).replace(/[\\/:*?"<>|#]+/g, "_").trim() + ".zpl";
-        saveFile(canvasToZpl(canvas, c.n), name);
+        saveFile(labelsToZpl(base, base.box, f.rotate.checked, c.n, c.start), name);
         remember();
-        setMsg(msg, "ZPL 파일을 저장했습니다: " + name + " (" + canvas.width + "×" + canvas.height + " dots, " + c.n + "매)", "ok");
+        setMsg(msg, "ZPL 파일을 저장했습니다: " + name + " (" + base.canvas.width + "×" + base.canvas.height + " dots, " + c.n + "매, No. " + c.start + " ~ No. " + (c.start + c.n - 1) + ")", "ok");
       } catch (err) {
         setMsg(msg, "ZPL 파일을 만들지 못했습니다: " + (err && err.message || err), "error");
       } finally {
@@ -977,8 +1080,7 @@
         }
         r.pictos = info.pictos;
         info.pictos.forEach(function (c) { ghsBoxes[c].checked = true; });
-        // 라벨 신호어는 회사 기준으로 "위험"으로 표시한다 (MSDS에 신호어나 그림문자가 있을 때)
-        f.signal.value = info.signal || info.pictos.length ? "위험" : "";
+        f.signal.value = info.signal === "위험" || info.signal === "경고" ? info.signal : "";
         if (info.resin) {
           f.resin.value = info.resin;
           f.kind.value = info.kind;
