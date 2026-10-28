@@ -51,3 +51,4 @@ jobs:
             .github/**
             CLAUDE.md
             README.md
+            label-design/**
