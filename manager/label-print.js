@@ -1,4 +1,4 @@
-// 제품 라벨 출력 화면 (가로 130mm × 세로 100mm, Zebra ZT421) — 홈페이지 관리자와 재고관리 앱이 같은 파일을 쓴다.
+// 제품 라벨 출력 화면 (가로 130mm × 세로 120mm, Zebra ZT421) — 홈페이지 관리자와 재고관리 앱이 같은 파일을 쓴다.
 //  window.DY_LABEL_PRINT(main, source) : main 요소에 화면을 그린다. source가 제품 목록과 라벨 내용(그림문자·문구)을 준다.
 //   - 홈페이지 관리자: manager/label-msds.js (등록된 MSDS를 직접 읽음)
 //   - 재고관리 앱: label/label-source.js (홈페이지의 label_products 표를 읽음)
@@ -6,7 +6,7 @@
 //  재고관리 앱에는 이 파일을 그대로 복사해 둔다 (spread1255-pocheon-inventory/label/label-print.js). 고치면 두 곳 모두 바꿀 것.
 (function () {
   var LABEL_W_MM = 130;
-  var LABEL_H_MM = 100;
+  var LABEL_H_MM = 120;
   var SETTINGS_KEY = "dy-label-settings";
   var LOT_KEY = "dy-label-lot";
   var GHS_CODES = ["GHS01", "GHS02", "GHS03", "GHS04", "GHS05", "GHS06", "GHS07", "GHS08", "GHS09"];
@@ -66,35 +66,35 @@
     ".lb-label *{box-sizing:border-box;}" +
     ".lb-frame{height:100%;border:0.7mm solid #000;padding:0.6mm;}" +
     ".lb-inner{height:100%;border:0.25mm solid #000;display:flex;flex-direction:column;}" +
-    ".lb-head{text-align:center;padding:0.8mm 2mm 0.5mm;}" +
-    ".lb-code{font-size:5.5mm;line-height:1.1;white-space:nowrap;letter-spacing:0.2mm;}" +
-    ".lb-resin{font-size:2.6mm;line-height:1.2;margin-top:0.2mm;}" +
-    ".lb-name{border-top:0.25mm solid #000;border-bottom:0.25mm solid #000;padding:0.6mm 2mm;text-align:center;white-space:nowrap;" +
-    "font-family:'HY견명조','HYGyeonMyeongJo','Batang','바탕','Noto Serif KR',serif;font-weight:700;font-size:6.3mm;line-height:1.15;}" +
-    ".lb-body{flex:1;display:flex;padding:0.8mm 4mm 0.8mm 8mm;min-height:0;}" +
+    ".lb-head{text-align:center;padding:1.2mm 2mm 0.8mm;}" +
+    ".lb-code{font-size:6.5mm;line-height:1.1;white-space:nowrap;letter-spacing:0.2mm;}" +
+    ".lb-resin{font-size:3mm;line-height:1.25;margin-top:0.4mm;}" +
+    ".lb-name{border-top:0.25mm solid #000;border-bottom:0.25mm solid #000;padding:1mm 2mm;text-align:center;white-space:nowrap;" +
+    "font-family:'HY견명조','HYGyeonMyeongJo','Batang','바탕','Noto Serif KR',serif;font-weight:700;font-size:7.5mm;line-height:1.15;}" +
+    ".lb-body{flex:1;display:flex;padding:1.5mm 4mm 1.5mm 8mm;min-height:0;}" +
     // 종류 아래 그림문자 줄: 왼쪽 그림문자 + 신호어, 맨 오른쪽 QR 코드
-    ".lb-warn{flex:none;border-top:0.25mm solid #000;display:flex;align-items:center;justify-content:space-between;gap:3mm;padding:0.8mm 4mm;}" +
+    ".lb-warn{flex:none;border-top:0.25mm solid #000;display:flex;align-items:center;justify-content:space-between;gap:3mm;padding:1.2mm 4mm;}" +
     ".lb-warn-l{display:flex;align-items:center;gap:3mm;}" +
-    ".lb-qr{flex:none;width:13mm;height:13mm;margin-left:auto;}" +
+    ".lb-qr{flex:none;width:17mm;height:17mm;margin-left:auto;}" +
     ".lb-qr img{display:block;width:100%;height:100%;}" +
-    ".lb-fields{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;font-size:3.3mm;line-height:1.15;min-width:0;}" +
+    ".lb-fields{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;font-size:4.2mm;line-height:1.2;min-width:0;}" +
     ".lb-row{display:flex;align-items:baseline;white-space:nowrap;}" +
-    ".lb-key{display:flex;justify-content:space-between;width:15mm;flex:none;}" +
+    ".lb-key{display:flex;justify-content:space-between;width:19mm;flex:none;}" +
     ".lb-colon{margin:0 3mm 0 2mm;flex:none;}" +
     ".lb-val{overflow:hidden;}" +
-    ".lb-no{flex:none;align-self:flex-end;min-width:17mm;text-align:right;white-space:nowrap;font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;font-weight:700;font-size:4mm;line-height:1;padding-bottom:0.3mm;}" +
+    ".lb-no{flex:none;align-self:flex-end;min-width:17mm;text-align:right;white-space:nowrap;font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;font-weight:700;font-size:5mm;line-height:1;padding-bottom:0.5mm;}" +
     ".lb-ghs{display:flex;gap:1.5mm;}" +
     ".lb-ghs img{display:block;}" +
-    ".lb-signal{font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;font-weight:700;font-size:4mm;line-height:1;}" +
+    ".lb-signal{font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;font-weight:700;font-size:5mm;line-height:1;}" +
     // 유해·위험문구 / 예방조치문구 (첫 번째 라벨 견본처럼 왼쪽에 세로 제목)
-    ".lb-hz{flex:none;height:19mm;display:flex;border-top:0.25mm solid #000;font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;}" +
+    ".lb-hz{flex:none;height:24mm;display:flex;border-top:0.25mm solid #000;font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;}" +
     ".lb-hz-col{display:flex;min-width:0;}" +
     ".lb-hz-col.h{flex:0 0 45%;}" +
     ".lb-hz-col.p{flex:1;border-left:0.25mm solid #000;}" +
     ".lb-hz-tag{flex:none;width:5.2mm;border-right:0.25mm solid #000;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:2.9mm;line-height:1.08;font-weight:700;}" +
     ".lb-hz-text{flex:1;min-width:0;overflow:hidden;padding:1.2mm 1.6mm;text-align:left;font-size:3.4mm;line-height:1.4;word-break:keep-all;overflow-wrap:anywhere;}" +
     ".lb-hz-text p{margin:0;}" +
-    ".lb-foot{flex:none;border-top:0.25mm solid #000;padding:0.5mm 2mm;text-align:center;font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;font-size:2mm;line-height:1.35;}" +
+    ".lb-foot{flex:none;border-top:0.25mm solid #000;padding:0.8mm 2mm;text-align:center;font-family:'Malgun Gothic','맑은 고딕','Pretendard',sans-serif;font-size:2.4mm;line-height:1.35;}" +
     ".lb-foot b{font-weight:400;}";
 
   function readJson(key, fallback) {
@@ -258,7 +258,7 @@
   // ---------- 라벨 그리기 ----------
   // 그림문자 한 줄 크기(mm): 많으면 줄인다
   function ghsSize(n) {
-    return n <= 4 ? 12 : n <= 5 ? 11 : 10;
+    return n <= 4 ? 16 : n <= 5 ? 14 : 12;
   }
 
   // QR 코드 → PNG 그림 (data URL). 글자가 없거나 도구가 없으면 ""
@@ -743,7 +743,7 @@
               el("label", { class: "a-check lb-span" }, [f.rotate, "ZPL을 90° 돌려서 출력 (라벨이 세로로 들어갈 때)"])
             ]),
             el("div", { class: "a-row" }, [printBtn, zplBtn]),
-            el("p", { class: "a-hint", text: "[인쇄] Windows 프린터 목록에서 ZDesigner ZT421을 고르고, 드라이버의 용지(라벨) 크기를 130 × 100mm, 여백 없음, 배율 100%로 맞춰 주세요. " +
+            el("p", { class: "a-hint", text: "[인쇄] Windows 프린터 목록에서 ZDesigner ZT421을 고르고, 드라이버의 용지(라벨) 크기를 130 × 120mm, 여백 없음, 배율 100%로 맞춰 주세요. " +
               "[ZPL 파일 저장] 라벨을 그림으로 바꾼 ZPL을 저장합니다. Zebra Setup Utilities의 [파일 보내기]나 프린터 웹 화면(Directories → 파일 보내기)으로 보내면 드라이버 설정과 관계없이 정확한 크기로 찍힙니다." }),
             msg
           ])
