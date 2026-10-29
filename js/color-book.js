@@ -6,7 +6,7 @@
 
   const CHART = window.COLOR_CHART || [];
 
-  // ver.4(최신): 페이지 3~10의 칩을 차례로 이으면 COLOR_CHART 순서와 같다.
+  // ver.4(최신): 페이지 5~12의 칩을 차례로 이으면 COLOR_CHART 순서와 같다.
   const V4_CHIPS = window.COLORBOOK_CHIPS || {};
   const v4Start = {};
   let chipCount = 0;
@@ -28,6 +28,7 @@
     v4: {
       dir: "images/colorbook",
       name: "대양피앤티 디지털 컬러북",
+      count: 16,
       chips: function (num) {
         return (V4_CHIPS[num] || []).map(function (box, i) {
           return { box: box, color: CHART[v4Start[num] + i] };
@@ -37,6 +38,7 @@
     v3: {
       dir: "images/colorbook-v3",
       name: "대양피앤티 컬러북 ver.3",
+      count: 12,
       chips: function (num) {
         return (V3_CHIPS[num] || []).map(function (chip) {
           return { box: chip, color: byCode[chip[4]] };
@@ -45,18 +47,18 @@
     }
   };
 
-  const PAGE_COUNT = 12;
   let BOOK = BOOKS.v4;
   let PAGES = [];
 
   function pagesFor(book) {
     const list = [];
-    for (let i = 1; i <= PAGE_COUNT; i++) {
+    const count = book.count;
+    for (let i = 1; i <= count; i++) {
       const n = ("0" + i).slice(-2);
       list.push({
         num: i,
         src: book.dir + "/page-" + n + ".jpg",
-        alt: i === 1 ? book.name + " 표지" : i === PAGE_COUNT ? book.name + " 뒤표지" : book.name + " " + i + "페이지"
+        alt: i === 1 ? book.name + " 표지" : i === count ? book.name + " 뒤표지" : book.name + " " + i + "페이지"
       });
     }
     return list;
