@@ -194,6 +194,11 @@
         codes.push(h);
       });
     });
+    return pictogramsForCodes(codes);
+  }
+
+  // H코드 목록 → GHS 그림문자 (라벨 출력에서도 쓴다)
+  function pictogramsForCodes(codes) {
     var found = {};
     var why = {};
     codes.forEach(function (h) {
@@ -355,6 +360,8 @@
     return new Promise(function (resolve) {
       var frame = document.createElement("iframe");
       frame.setAttribute("aria-hidden", "true");
+      // 파일 속 HTML이 스크립트를 실행하지 못하게 막는다 (그리기용으로 내용만 읽는다).
+      frame.setAttribute("sandbox", "allow-same-origin");
       frame.style.cssText = "position:fixed;left:-10000px;top:0;width:" + Math.ceil(CONTENT_W) + "px;height:1200px;border:0;visibility:hidden;";
       frame.onload = function () {
         var doc = frame.contentDocument;
@@ -474,5 +481,5 @@
     }
   }
 
-  root.DY_MSDS_FRM = { parse: parse, toHtml: toHtml, pictogramsFor: pictogramsFor, loadAssets: loadAssets, toPdf: toPdf };
+  root.DY_MSDS_FRM = { parse: parse, toHtml: toHtml, pictogramsFor: pictogramsFor, pictogramsForCodes: pictogramsForCodes, loadAssets: loadAssets, toPdf: toPdf };
 })(window);

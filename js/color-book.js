@@ -4,26 +4,65 @@
     return;
   }
 
-  const PAGE_COUNT = 12;
-  const PAGES = [];
-  for (let i = 1; i <= PAGE_COUNT; i++) {
-    const n = ("0" + i).slice(-2);
-    PAGES.push({
-      num: i,
-      src: "images/colorbook/page-" + n + ".jpg",
-      alt: i === 1 ? "대양피엔티 디지털 컬러북 표지" : i === PAGE_COUNT ? "대양피엔티 디지털 컬러북 뒤표지" : "대양피엔티 디지털 컬러북 " + i + "페이지"
-    });
-  }
-
-  // 페이지별 색상 칩 → 색상표 번호. 페이지 3~10의 칩을 차례로 이으면 COLOR_CHART 순서와 같다.
-  const CHIPS = window.COLORBOOK_CHIPS || {};
   const CHART = window.COLOR_CHART || [];
-  const chipStart = {};
+
+  // ver.4(최신): 페이지 5~12의 칩을 차례로 이으면 COLOR_CHART 순서와 같다.
+  const V4_CHIPS = window.COLORBOOK_CHIPS || {};
+  const v4Start = {};
   let chipCount = 0;
-  Object.keys(CHIPS).map(Number).sort(function (a, b) { return a - b; }).forEach(function (num) {
-    chipStart[num] = chipCount;
-    chipCount += CHIPS[num].length;
+  Object.keys(V4_CHIPS).map(Number).sort(function (a, b) { return a - b; }).forEach(function (num) {
+    v4Start[num] = chipCount;
+    chipCount += V4_CHIPS[num].length;
   });
+
+  // ver.3(이전): 칩마다 제품 코드가 적혀 있어 코드로 색상표 항목을 찾는다.
+  const V3_CHIPS = window.COLORBOOK_V3_CHIPS || {};
+  const byCode = {};
+  CHART.forEach(function (color) {
+    byCode[color[1]] = color;
+  });
+
+  // 페이지 번호 → [{ box: [왼쪽, 위, 너비, 높이], color: 색상표 항목 }]
+  // 색상표에 없는 코드(단종 색상)는 칩 링크를 만들지 않는다.
+  const BOOKS = {
+    v4: {
+      dir: "images/colorbook",
+      name: "대양피앤티 디지털 컬러북",
+      count: 16,
+      chips: function (num) {
+        return (V4_CHIPS[num] || []).map(function (box, i) {
+          return { box: box, color: CHART[v4Start[num] + i] };
+        });
+      }
+    },
+    v3: {
+      dir: "images/colorbook-v3",
+      name: "대양피앤티 컬러북 ver.3",
+      count: 12,
+      chips: function (num) {
+        return (V3_CHIPS[num] || []).map(function (chip) {
+          return { box: chip, color: byCode[chip[4]] };
+        });
+      }
+    }
+  };
+
+  let BOOK = BOOKS.v4;
+  let PAGES = [];
+
+  function pagesFor(book) {
+    const list = [];
+    const count = book.count;
+    for (let i = 1; i <= count; i++) {
+      const n = ("0" + i).slice(-2);
+      list.push({
+        num: i,
+        src: book.dir + "/page-" + n + ".jpg",
+        alt: i === 1 ? book.name + " 표지" : i === count ? book.name + " 뒤표지" : book.name + " " + i + "페이지"
+      });
+    }
+    return list;
+  }
 
   const FLIP_MS = 800;
   const ZOOM_MIN = 1;
@@ -77,16 +116,13 @@
 
   // 칩 위에 투명한 링크를 깔아 누르면 색상표에서 그 색을 찾아 보여준다.
   function chipsHTML(page) {
-    const list = CHIPS[page.num];
-    if (!list) {
-      return "";
-    }
-    return list.map(function (box, i) {
-      const color = CHART[chipStart[page.num] + i];
+    return BOOK.chips(page.num).map(function (chip) {
+      const box = chip.box;
+      const color = chip.color;
       if (!color) {
         return "";
       }
-      const label = color[1] + " " + color[2];
+      const label = color[1] + " " + (window.I18N ? window.I18N.paintName(color[2]) : color[2]);
       return '<a class="cbook-chip" href="/colors?q=' + encodeURIComponent(color[1]) + '"' +
         ' style="left:' + box[0] + "%;top:" + box[1] + "%;width:" + box[2] + "%;height:" + box[3] + '%"' +
         ' title="' + escapeAttr(label) + '" aria-label="' + escapeAttr(label) + '" draggable="false"></a>';
@@ -331,6 +367,43 @@
     build(single.matches ? pageIndex : Math.round(pageIndex / 2));
   });
 
-  build(0);
-  applyZoom();
+  // ---------- 컬러북 선택 (ver.4 / ver.3). 주소에 ?book=v3 를 남겨 바로 열 수 있게 한다 ----------
+  const pickBtns = Array.prototype.slice.call(document.querySelectorAll(".cbook-pick[data-book]"));
+  let bookId = "";
+
+  function setBook(id) {
+    if (!BOOKS[id] || id === bookId) {
+      return;
+    }
+    bookId = id;
+    BOOK = BOOKS[id];
+    PAGES = pagesFor(BOOK);
+    scale = 1;
+    applyZoom();
+    build(0);
+    pickBtns.forEach(function (btn) {
+      btn.setAttribute("aria-pressed", String(btn.getAttribute("data-book") === id));
+    });
+    try {
+      const url = new URL(window.location.href);
+      if (id === "v4") {
+        url.searchParams.delete("book");
+      } else {
+        url.searchParams.set("book", id);
+      }
+      window.history.replaceState(null, "", url.pathname + url.search + url.hash);
+    } catch (e) {}
+  }
+
+  pickBtns.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      setBook(btn.getAttribute("data-book"));
+    });
+  });
+
+  let initial = "v4";
+  try {
+    initial = new URLSearchParams(window.location.search).get("book") === "v3" ? "v3" : "v4";
+  } catch (e) {}
+  setBook(initial);
 })();
