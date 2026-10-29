@@ -1,0 +1,14 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="admin.css"></head><body>
+<main class="panel-main" id="panel-main"></main>
+<script src="../lib/xlsx.full.min.js"></script><script src="../lib/html2canvas.min.js"></script><script src="../lib/jspdf.umd.min.js"></script><script src="../lib/jszip.min.js"></script>
+<script src="msds-frm.js"></script><script src="msds-gen.js"></script><script src="msds-gen-ui.js"></script>
+<script>
+window.SAVED=[];
+var MATS=window.TEST_MATS;
+function q(table){var rows=table==='msds_materials'?MATS:table==='msds_substances'?[]:[{msds_no:'AA14944-0000000132'},{msds_no:'AA14944-0000000173'}];
+ var p=Promise.resolve({data:rows,error:null}); p.eq=function(){return p;}; return p;}
+var sb={from:function(t){return {select:function(){return q(t);},upsert:function(r){SAVED.push([t,r]);return Promise.resolve({error:null});}};}};
+function el(tag,attrs,children){var n=document.createElement(tag);Object.keys(attrs||{}).forEach(function(k){var v=attrs[k];if(v===null||v===undefined||v===false)return;if(k==='class')n.className=v;else if(k==='text')n.textContent=v;else if(k.indexOf('on')===0)n.addEventListener(k.slice(2),v);else if(v===true)n.setAttribute(k,'');else n.setAttribute(k,v);});(children||[]).forEach(function(c){if(c===null||c===undefined||c===false)return;n.appendChild(typeof c==='string'?document.createTextNode(c):c);});return n;}
+function header(t,l){return [el('h1',{text:t}),el('p',{class:'panel-lede',text:l})];}
+window.START=function(){return DY_MSDS_GEN_UI(document.getElementById('panel-main'),{sb:sb,el:el,header:header});};
+</script></body></html>

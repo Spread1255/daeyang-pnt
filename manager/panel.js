@@ -1,4 +1,4 @@
-// 관리자 패널: 공지사항 / 제휴문의 / 채용 / MSDS / 자료실 / 컬러 연구소
+// 관리자 패널: 공지사항 / 제휴문의 / 채용 / MSDS / MSDS 생성 / 자료실 / 컬러 연구소
 (function () {
   var A = window.DY_ADMIN;
   var sb = A && A.sb;
@@ -1906,12 +1906,18 @@
     load();
   }
 
+  // ---------------- MSDS 생성 (msds-gen-ui.js) ----------------
+  function renderMsdsGen() {
+    return window.DY_MSDS_GEN_UI(main, { sb: sb, el: el, header: header });
+  }
+
   // ---------------- 공통 ----------------
   var TABS = {
     notices: renderNotices,
     inquiries: renderInquiries,
     careers: renderCareers,
     msds: renderMsds,
+    msdsgen: renderMsdsGen,
     resources: renderResources,
     colorlab: renderColorlab
   };

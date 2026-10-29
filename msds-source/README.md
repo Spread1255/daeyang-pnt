@@ -32,3 +32,10 @@ MSDS 작성용 원본·데이터·도구를 보관하는 폴더입니다.
 - 파일명: `코드 제품명(내장형/외장형 제외) MSDS`
 
 작업지시서 원본(.xls)은 원료단가표(거래처·단가)가 들어 있어 여기에 넣지 않았습니다.
+
+## 관리자 'MSDS 생성' 탭 (자동화 생성기)
+- 화면: `manager/msds-gen-ui.js`, 생성 규칙: `manager/msds-gen.js` (위 Python `tools/gen.py`를 옮긴 것)
+- 틀: `manager/msds-template.xlsx` (IV064 KOSHA 양식), 기본 성분 자료: `manager/msds-substances.json` (KOSHA 공개 자료에서 추출)
+- 원료 사전: Supabase `msds_materials` (원료명 → CAS), 관리자가 추가한 성분: `msds_substances` — 둘 다 관리자만 접근
+- 작업지시서는 브라우저 안에서만 읽고 서버로 보내지 않음
+- 검증: `tools/jsgen_test.js` — 140~173 33개를 Python 결과와 비교(내용 동일), `tools/uitest.js` — 화면 동작 확인
