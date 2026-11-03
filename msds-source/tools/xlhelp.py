@@ -34,6 +34,10 @@ def _restore(ws,merges,hs,brks,at,n):
     for b in brks: ws.row_breaks.append(Break(id=b+n if b>=at else b))
 def delete_row(ws,r):
     merges,hs,brks=_snap(ws); ws.delete_rows(r,1); _restore(ws,merges,hs,brks,r,-1)
+def label_h(a):
+    # 이름 칸(A열)이 길면 줄 수만큼 행 높이를 키움 (한 줄 약 55자, 들여쓰기 17자 포함)
+    if not a: return 0
+    return -(-(len(IND)+len(a))//55)*14.25
 def snap_row(ws,k):
     return {'styles':[copy.copy(ws.cell(k,c)._style) for c in range(1,6)],
             'merges':[(m.min_col,m.max_col) for m in ws.merged_cells.ranges if m.min_row==m.max_row==k],
@@ -49,7 +53,7 @@ def insert_before(ws,r,items,tpl=None):
         rr=r+i
         for c in range(1,6): ws.cell(rr,c)._style=copy.copy(snap['styles'][c-1])
         ws.cell(rr,1).value=(IND+a) if a else None; ws.cell(rr,2).value=b
-        ws.row_dimensions[rr].height=snap['height']
+        ws.row_dimensions[rr].height=max(snap['height'],label_h(a))
         for c1,c2 in tmerge: ws.merge_cells(start_row=rr,start_column=c1,end_row=rr,end_column=c2)
 def sec_range(ws,n):
     a=next(k for k in range(1,ws.max_row+1) if re.match(rf'^{n}\.\s*',norm(ws.cell(k,1).value)) and ws.cell(k,1).fill.fgColor.rgb.endswith('E6E6FA'))

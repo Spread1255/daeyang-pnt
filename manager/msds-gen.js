@@ -249,7 +249,9 @@
       var a = items[i][0], b = items[i][1];
       if (a) { (cells[1] = cells[1] || {}).v = IND + a; }
       if (b != null) { (cells[2] = cells[2] || {}).v = b; }
-      add.push({ at: { ht: String(snap.height), customHeight: "true" }, cells: cells });
+      // 이름 칸(A열)이 길면 줄 수만큼 행 높이를 키움 (한 줄 약 55자, 들여쓰기 17자 포함)
+      var ht = a ? Math.max(snap.height, Math.ceil((IND.length + a.length) / 55) * 14.25) : snap.height;
+      add.push({ at: { ht: String(ht), customHeight: "true" }, cells: cells });
       var self = this;
       snap.merges.forEach(function (m) { self.merges.push({ c1: m[0], r1: r + i, c2: m[1], r2: r + i }); });
     }
@@ -333,10 +335,7 @@
   // 틀에 이미 있는 성분 표기 → CAS (없는 성분이면 해당 행 삭제)
   var TLABEL = [["에폭시 수지", "25036-25-3"], ["에폭시수지", "25036-25-3"], ["벤조인", "119-53-9"], ["폴리에틸렌(POLYETHYLENE)", "9002-88-4"],
     ["Barite (Ba(SO4))", "13462-86-7"], ["이산화티타늄", "13463-67-7"], ["C.I. 색소 황색 83(C.I. PIGMENT YELLOW 83)", "5567-15-7"],
-    ["Limestone", "1317-65-3"], ["산화철", "1309-37-1"],
-    // 8·11·12·15번에 원료명 대신 쓸 물질명 (틀에는 없는 성분)
-    ["C.I. 색소 황색 151(C.I. PIGMENT YELLOW 151)", "31837-42-0"],
-    ["구리 폴리클로로프탈로시아닌 녹색(COPPER POLYCHLOROPHTHALOCYANINE GREEN)", "1328-53-6"]];
+    ["Limestone", "1317-65-3"], ["산화철", "1309-37-1"]];
   function tlabel(t) { for (var i = 0; i < TLABEL.length; i++) { if (TLABEL[i][0] === t) { return TLABEL[i][1]; } } return null; }
   var COLOR = { BE: "베이지색", BK: "흑색", BL: "청색", BR: "갈색", GY: "회색", IV: "아이보리색", RD: "적색", WH: "백색", YL: "황색", GD: "금색", GN: "녹색", SI: "은색" };
   var TIO2 = "13463-67-7", P210 = "8007-18-9";
@@ -373,7 +372,7 @@
     comp.forEach(function (c) {
       var s = sub(c.cas), nm = s && s.name ? s.name : c.raws[0];
       var tl = TLABEL.filter(function (x) { return x[1] === c.cas && x[0] !== "에폭시수지"; });
-      short[c.cas] = tl.length ? tl[0][0] : (nm.length <= 30 ? nm : c.raws[0]);
+      short[c.cas] = tl.length ? tl[0][0] : nm; // 8·11·12·15번은 원료명 대신 물질명
     });
     // 1·9·16번
     var name = p.name.trim(), code = p.code.trim();

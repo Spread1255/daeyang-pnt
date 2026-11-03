@@ -40,8 +40,7 @@ NAME3={**TROW,
  '7440-50-8':['구리',None],'7440-66-6':['아연','Zinc'],'7429-90-5':['알루미늄','Aluminum'],
 }
 TLABEL={'에폭시 수지':'25036-25-3','에폭시수지':'25036-25-3','벤조인':'119-53-9','폴리에틸렌(POLYETHYLENE)':'9002-88-4','Barite (Ba(SO4))':'13462-86-7',
- '이산화티타늄':'13463-67-7','C.I. 색소 황색 83(C.I. PIGMENT YELLOW 83)':'5567-15-7','Limestone':'1317-65-3','산화철':'1309-37-1',
- 'C.I. 색소 황색 151(C.I. PIGMENT YELLOW 151)':'31837-42-0','구리 폴리클로로프탈로시아닌 녹색(COPPER POLYCHLOROPHTHALOCYANINE GREEN)':'1328-53-6'}  # 8·11·12·15번 표시 이름 (원료명 대신)
+ '이산화티타늄':'13463-67-7','C.I. 색소 황색 83(C.I. PIGMENT YELLOW 83)':'5567-15-7','Limestone':'1317-65-3','산화철':'1309-37-1'}
 
 # ---------- KOSHA 자료 ----------
 KC={}
@@ -137,7 +136,7 @@ def build(p,no,out):
     for cas,raws,v in comp:
         nm=(NAME3.get(cas) or kname(cas) or [raws[0]])[0]
         tl=[l for l,c in TLABEL.items() if c==cas and l!='에폭시수지']
-        short[cas]=tl[0] if tl else (nm if len(nm)<=30 else raws[0])
+        short[cas]=tl[0] if tl else nm  # 8·11·12·15번은 원료명 대신 물질명 (사용자 결정 2026-11-03)
     # 1·9·16번
     name=p['name'].strip(); code=p['code'].strip()
     ws['B3']=name; ws['B6']=f'{name} ({code})'
