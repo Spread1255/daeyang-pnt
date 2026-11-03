@@ -23,7 +23,7 @@ _t=openpyxl.load_workbook(TPL)['Sheet1']
 TROW={_t.cell(r,4).value:[_t.cell(r,1).value,_t.cell(r,3).value] for r in range(38,50)}  # IV064 3번 표 (CAS→[물질명, 이명])
 NAME3={**TROW,
  '40471-09-8':['폴리에스테르 수지','1,4-벤젠다이카복실산, 2,2-다이메틸-1,3-프로판다이올, 1,2-에탄다이올 및 헥산다이오산 함유 1,3-벤젠다이카복실산 중합체'],
- '6334-25-4':['폴리에스테르 경화제',"N,N,N',N'-Tetrakis(2-hydroxyethyl)adipamide"],
+ '6334-25-4':['HAA 경화제',"N,N,N',N'-Tetrakis(2-hydroxyethyl)adipamide"],
  '9010-77-9':['아크릴산-에틸렌 공중합체(ACRYLIC ACID-ETHYLENE COPOLYMER)','2-프로페노 산, 중합물 ,함유 에텐(2-PROPENOIC ACID, POLYMER WITH ETHENE);'],
  '21645-51-2':['수산화알루미늄',None],
  '26741-53-7':['3,9-비스(2,4-비스(1,1-다이메틸에틸)펜옥시)-2,4,8,10-테트라옥사-3,9-디포스파스피로[5.5]언데칸','SONOX626'],
