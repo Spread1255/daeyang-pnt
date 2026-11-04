@@ -29,3 +29,4 @@
 
 데이터는 Supabase 프로젝트 "대양피앤티 홈페이지"에 저장됩니다 (연결 설정: `js/sb.js`).
 관리자 계정은 Supabase 대시보드 Authentication → Users에서 만들고, 같은 이메일을 `public.admins` 테이블에 넣어야 관리자 권한이 생깁니다.
+- `factory/공장 하자 보수 기록표.xlsx`: 공장 하자 보수 기록용 엑셀 (하자 기록 200줄·요약·드롭다운 목록, A4 가로 인쇄). 양식을 바꾸려면 `factory/make_repair_sheet.py`를 고쳐 다시 만든다 (홈페이지에는 올라가지 않음)
