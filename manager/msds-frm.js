@@ -168,7 +168,28 @@
         inDashGroup = false;
       }
     }
+    fixSupplier(model);
     return model;
+  }
+
+  // 1번 섹션 공급자 주소는 포천 공장으로 (2026-11-04). 전화번호는 포천에 없어서 원본(김포) 번호 그대로.
+  var SUPPLIER_ADDR = "경기도 포천시 일동면 화동로 1544-6";
+  function fixSupplier(model) {
+    model.sections.forEach(function (s) {
+      if (s.num !== 1) {
+        return;
+      }
+      (function walk(blocks) {
+        blocks.forEach(function (b) {
+          if (b.type === "item" && /^주\s*소$/.test(b.label) && b.lines.length) {
+            b.lines = [SUPPLIER_ADDR];
+          }
+          if (b.blocks) {
+            walk(b.blocks);
+          }
+        });
+      })(s.blocks);
+    });
   }
 
   // ---------- 그림문자: H코드 → GHS ----------
